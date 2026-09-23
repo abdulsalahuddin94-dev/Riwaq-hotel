@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Bell, Briefcase, ClipboardCheck, Grid2X2, Home, Languages, User, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,16 @@ export function MobileShell({ title, children }: { title: string; children: Reac
       return "Attendant";
     }
   });
+  const [language, setLanguage] = useState<"en" | "ar">("en");
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    return () => {
+      document.documentElement.lang = "en";
+      document.documentElement.dir = "ltr";
+    };
+  }, [language]);
 
   const tabs = persona === "Supervisor" ? supervisorTabs : persona === "Engineer" ? engineerTabs : attendantTabs;
   const changePersona = (nextPersona: Persona) => {
@@ -47,7 +57,7 @@ export function MobileShell({ title, children }: { title: string; children: Reac
 
   return (
     <div className="mobile-stage">
-      <div className="iphone-device" data-platform="mobile" data-theme="light" dir="ltr">
+      <div className="iphone-device" data-platform="mobile" data-theme="light" dir={language === "ar" ? "rtl" : "ltr"} lang={language}>
         <div className="iphone-side iphone-side-left" />
         <div className="iphone-side iphone-side-right" />
         <div className="iphone-screen">
@@ -56,13 +66,13 @@ export function MobileShell({ title, children }: { title: string; children: Reac
             <b>9:41</b>
             <span>▂▃▅  Wi‑Fi  ▰</span>
           </div>
-          <div className="mobile-app" dir="ltr">
+          <div className="mobile-app">
             <header className="mobile-header">
               <div>
                 <p>TrianglZ Hotel</p>
                 <h1>{title}</h1>
               </div>
-              <Button variant="hmsGhost" size="hmsIcon" aria-label="Language">
+              <Button variant="hmsGhost" size="hmsIcon" aria-label={language === "en" ? "Switch to Arabic" : "Switch to English"} onClick={() => setLanguage((value) => value === "en" ? "ar" : "en")}>
                 <Languages aria-hidden="true" />
               </Button>
             </header>
@@ -71,7 +81,7 @@ export function MobileShell({ title, children }: { title: string; children: Reac
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
-                  <Link key={tab.to} to={tab.to} className={cn("mobile-tab", pathname === tab.to && "mobile-tab-active")}>
+                  <Link key={tab.to} to={tab.to} reloadDocument className={cn("mobile-tab", pathname === tab.to && "mobile-tab-active")}>
                     <Icon aria-hidden="true" />
                     <span>{tab.label}</span>
                   </Link>
@@ -93,7 +103,7 @@ export function MobileShell({ title, children }: { title: string; children: Reac
           </select>
         </label>
         <Button variant="hmsSecondary" size="hmsMd" onClick={resetDemoData}>Reset demo data</Button>
-        <Link to="/m/login" className="desktop-login-link"><Briefcase aria-hidden="true" /> View login screen</Link>
+        <Link to="/m/login" reloadDocument className="desktop-login-link"><Briefcase aria-hidden="true" /> View login screen</Link>
       </div>
     </div>
   );

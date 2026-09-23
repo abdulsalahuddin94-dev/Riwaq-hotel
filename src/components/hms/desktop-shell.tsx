@@ -73,7 +73,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
             const Icon = item.icon;
             const isActive = pathname === item.to;
             return (
-              <Link key={item.to} to={item.to} className={cn("sidebar-link", isActive && "sidebar-link-active")}>
+              <Link key={item.to} to={item.to} reloadDocument className={cn("sidebar-link", isActive && "sidebar-link-active")}>
                 <Icon aria-hidden="true" />
                 {!collapsed ? <span>{item.label}</span> : null}
               </Link>
