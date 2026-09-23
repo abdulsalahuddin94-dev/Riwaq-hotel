@@ -6,8 +6,6 @@ import {
   CalendarDays,
   CheckCircle2,
   ClipboardList,
-  Download,
-  Eye,
   Filter,
   Moon,
   Plus,
@@ -40,13 +38,9 @@ import {
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
 import {
-  buildReport,
-  downloadCsv,
   EventLogDialog,
   NewWorkOrderDialog,
   QueueGuestDialog,
-  type ReportKey,
-  ReportPreviewDialog,
   SettingsDialog,
   type SettingsKey,
   StaffDayDialog,
@@ -54,6 +48,7 @@ import {
 } from "./desktop-dialogs";
 import { DesktopShell, useDesktop } from "./desktop-shell";
 import { FloorBoard, RoomBadges, statusClass } from "./room-components";
+import { ReportsContent } from "./reports-page";
 import { StatusChip } from "./status";
 
 const KPI_STATUSES: { status: RoomStatus; label: string; helper: (n: number, s: ReturnType<typeof useHms>) => string; group?: RoomStatus[] }[] = [
@@ -407,41 +402,9 @@ function AssignContent() {
 
 export function ReportsPage() {
   return (
-    <DesktopShell title="Reports" eyebrow="Daily accountability and compliance">
+    <DesktopShell title="Reports" eyebrow="Housekeeping performance · Wednesday, 23 September">
       <ReportsContent />
     </DesktopShell>
-  );
-}
-
-function ReportsContent() {
-  const s = useHms();
-  const [preview, setPreview] = useState<ReportKey | null>(null);
-  const cards: { key: ReportKey; title: string; copy: string }[] = [
-    { key: "status", title: "Daily Room Status", copy: "Room lifecycle, readiness, attendant, inspector, and duration" },
-    { key: "performance", title: "Attendant Performance", copy: "Credits, average duration, pass rate, and accountability signals" },
-    { key: "compliance", title: "Checklist Compliance", copy: "Each item: how often done, skipped, and photo evidence" },
-    { key: "failures", title: "Inspection Failures", copy: "Failed points, notes, and who re-cleaned" },
-  ];
-  return (
-    <>
-      <section className="reports-grid">
-        {cards.map((c) => (
-          <article className="report-card" key={c.key}>
-            <CalendarDays aria-hidden="true" />
-            <div>
-              <h2>{c.title}</h2>
-              <p>{c.copy}</p>
-              <small className="muted">{buildReport(s, c.key).rows.length} rows today</small>
-            </div>
-            <div className="report-actions">
-              <Button variant="hmsGhost" size="hmsMd" onClick={() => setPreview(c.key)}><Eye aria-hidden="true" /> Preview</Button>
-              <Button variant="hmsSecondary" size="hmsMd" onClick={() => downloadCsv(buildReport(s, c.key))}><Download aria-hidden="true" /> Export</Button>
-            </div>
-          </article>
-        ))}
-      </section>
-      <ReportPreviewDialog reportKey={preview} onClose={() => setPreview(null)} />
-    </>
   );
 }
 

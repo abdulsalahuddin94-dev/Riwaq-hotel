@@ -123,7 +123,9 @@ export function getHms() {
 
 export function demoNow(s: HmsState = load()) {
   if (!s.seededAt) return DEMO_START;
-  return Math.min(23 * 60 + 59, DEMO_START + Math.floor((Date.now() - s.seededAt) / 60000));
+  // The demo clock runs in real time from 11:00 but stops at 12:30 so a long-open demo keeps
+  // believable timers and charts; "Reset demo" restarts it.
+  return Math.min(DEMO_START + 90, DEMO_START + Math.floor((Date.now() - s.seededAt) / 60000));
 }
 
 export function staffName(s: HmsState, id: string | null | undefined) {
