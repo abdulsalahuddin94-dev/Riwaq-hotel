@@ -11,19 +11,6 @@ import { StatusChip } from "./status";
 
 type DemoState = "default" | "loading" | "empty" | "error";
 
-function StateToolbar({ state, onChange }: { state: DemoState; onChange: (state: DemoState) => void }) {
-  return (
-    <div className="state-toolbar" aria-label="Preview component states">
-      <span>View state</span>
-      {(["default", "loading", "empty", "error"] as DemoState[]).map((item) => (
-        <Button key={item} variant={state === item ? "hmsSecondary" : "hmsGhost"} size="hmsSm" onClick={() => onChange(item)}>
-          {item}
-        </Button>
-      ))}
-    </div>
-  );
-}
-
 export function BoardPage() {
   const [state, setState] = useState<DemoState>("default");
   return (
@@ -31,7 +18,6 @@ export function BoardPage() {
       <div className="page-actions-row">
         <div className="live-note"><span /> Live room readiness · updated just now</div>
         <div className="toolbar-actions">
-          <StateToolbar state={state} onChange={setState} />
           <Button variant="hmsSecondary" size="hmsMd"><Filter aria-hidden="true" /> Filters</Button>
           <Button variant="hmsPrimary" size="hmsLg" onClick={() => toast.success("Assignment board updated", { duration: 3000 })}>
             <Sparkles aria-hidden="true" /> Auto-assign

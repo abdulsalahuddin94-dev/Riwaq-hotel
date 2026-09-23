@@ -17,7 +17,6 @@ export function MobileRoomsPage() {
     <MobileShell title="My Rooms">
       <div className="mobile-sync"><Wifi /> Synced <span>8 of 14 complete</span></div>
       <div className="mobile-progress-summary"><div><span style={{ inlineSize: "57%" }} /></div><b>57%</b></div>
-      <div className="mobile-filter-row">{(["default", "loading", "empty", "error"] as State[]).map((item) => <Button key={item} variant={state === item ? "hmsSecondary" : "hmsGhost"} size="hmsSm" onClick={() => setState(item)}>{item === "default" ? "To do" : item}</Button>)}</div>
       {state === "loading" ? <SkeletonState /> : null}
       {state === "empty" ? <EmptyState title="Your supervisor hasn't assigned rooms yet" /> : null}
       {state === "error" ? <ErrorState title="Couldn't load your rooms" onRetry={() => setState("default")} /> : null}
