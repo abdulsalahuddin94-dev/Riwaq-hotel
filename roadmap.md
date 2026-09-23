@@ -3,4 +3,4 @@
 - [x] Build seeded demo state and shared controls
 - [x] Build desktop shell and all primary web routes
 - [x] Build distinct mobile shell and primary mobile routes
-- [ ] Verify navigation, view switching, and responsive layouts
+- [x] Verify navigation, view switching, and responsive layouts
