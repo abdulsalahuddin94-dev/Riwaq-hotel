@@ -4,4 +4,4 @@
 - [x] Build desktop shell and all primary web routes
 - [x] Build distinct mobile shell and primary mobile routes
 - [x] Verify navigation, view switching, and responsive layouts
-- [ ] Redesign the room grid as a professional operations board
+- [x] Redesign the room grid as a professional operations board
