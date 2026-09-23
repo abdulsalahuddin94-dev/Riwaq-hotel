@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from "lucide-react";
-import { fmtDuration, type Room, type RoomStatus } from "@/lib/demo-data";
+import { fmtDuration, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import { activeMinutes, checklistProgress, displayStatus, type HmsState, staffById, stdMinutes } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { StatusChip } from "./status";
@@ -63,35 +63,46 @@ export function RoomTile({
   showAnomaly?: boolean;
 }) {
   const status = displayStatus(room, s.settings);
+  const meta = statusMeta[status];
+  const Icon = meta.icon;
   const badges = badgesFor(room, showAnomaly);
   const attendant = staffById(s, room.attendant);
   const progress = checklistProgress(s, room).percent;
+  const summary = [`Room ${room.number}`, meta.label, attendant?.name ?? "Unassigned", ...badges.map((b) => (b === "Anomaly" ? "Accountability alert" : b))].join(" · ");
   return (
     <button
       className={cn("room-tile", statusClass[status], dimmed && "room-tile-dimmed")}
       type="button"
       onClick={() => onOpen(room.number)}
-      aria-label={`Room ${room.number}, ${status.replace(/_/g, " ").toLowerCase()}. Open details`}
+      title={summary}
+      aria-label={`${summary}. Open details`}
     >
-      <span className="room-status-rail" aria-hidden="true" />
-      <div className="room-tile-top">
-        <bdi>{room.number}</bdi>
-        {badges.length === 0 ? <span className="room-attendant">{attendant?.initials ?? "—"}</span> : null}
-      </div>
-      {badges.length > 0 ? (
-        <div className="room-badges">
-          <span className={cn("room-badge", `badge-${badges[0]?.toLowerCase().replace("-", "")}`)} title={badges.join(", ")}>
-            <BadgeIcon badge={badges[0] as RoomBadge} />
-            <span>{badges[0] === "Anomaly" ? "Alert" : badges[0]}</span>
-          </span>
-          {badges.length > 1 ? <span className="badge-more">+{badges.length - 1}</span> : null}
-        </div>
+      <bdi className="tile-num">{room.number}</bdi>
+      <Icon className="tile-icon" aria-hidden="true" />
+      {badges.length ? (
+        <span className="tile-flags" aria-hidden="true">
+          {badges.slice(0, 2).map((badge) => (
+            <span className={cn("tile-flag", `flag-${badge.toLowerCase().replace("-", "")}`)} key={badge}>
+              <BadgeIcon badge={badge} />
+            </span>
+          ))}
+        </span>
       ) : null}
-      <StatusChip status={status} compact />
+      <span className="room-attendant" aria-hidden="true">{attendant?.initials ?? "—"}</span>
       {status === "CLEANING" ? <span className="tile-progress" style={{ inlineSize: `${progress}%` }} /> : null}
     </button>
   );
 }
+
+const floorSummary: { label: string; statuses: RoomStatus[]; className: string }[] = [
+  { label: "ready", statuses: ["READY"], className: "status-ready" },
+  { label: "inspect", statuses: ["AWAITING_INSPECTION"], className: "status-inspect" },
+  { label: "cleaning", statuses: ["CLEANING"], className: "status-cleaning" },
+  { label: "dirty", statuses: ["DIRTY"], className: "status-dirty" },
+  { label: "occupied", statuses: ["OCCUPIED"], className: "status-occupied" },
+  { label: "DND", statuses: ["DND"], className: "status-dnd" },
+  { label: "blocked", statuses: ["BLOCKED_OOO", "BLOCKED_OOS"], className: "status-blocked" },
+];
 
 export function FloorBoard({
   s,
@@ -112,14 +123,23 @@ export function FloorBoard({
       <div className="floor-board">
         {floors.map((floor) => {
           const floorRooms = rooms.filter((room) => room.floor === floor);
-          const readyCount = floorRooms.filter((room) => displayStatus(room, s.settings) === "READY").length;
           return (
-            <section className="floor-row" key={floor} aria-label={`Floor ${floor}`}>
-              <div className="floor-label">
-                <strong>F{floor}</strong>
-                <span>{readyCount} ready</span>
-              </div>
-              <div className="room-grid" tabIndex={0} aria-label={`Floor ${floor} rooms, scroll horizontally`}>
+            <section className="floor-block" key={floor} aria-label={`Floor ${floor}`}>
+              <header className="floor-head">
+                <strong>Floor {floor}</strong>
+                <span className="floor-counts">
+                  {floorSummary.map((group) => {
+                    const count = floorRooms.filter((room) => group.statuses.includes(displayStatus(room, s.settings))).length;
+                    return count ? (
+                      <span key={group.label}>
+                        <i className={group.className} aria-hidden="true" />
+                        {count} {group.label}
+                      </span>
+                    ) : null;
+                  })}
+                </span>
+              </header>
+              <div className="room-grid">
                 {floorRooms.map((room) => (
                   <RoomTile room={room} s={s} onOpen={onOpen} dimmed={!isMatch(room)} key={room.number} />
                 ))}
