@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { AlertTriangle, CheckCircle2, ChevronRight, CircleUserRound, Languages, RotateCcw, Wifi } from "lucide-react";
+import { AlertTriangle, ChevronRight, CircleUserRound, RotateCcw, Wifi } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { alerts, mobileRooms, rooms, staffProgress, workOrders } from "@/lib/demo-data";
 import { cn } from "@/lib/utils";
 import { EmptyState, ErrorState, SkeletonState } from "./demo-states";
-import { MobileShell } from "./mobile-shell";
+import { MobileShell, useMobilePersona } from "./mobile-shell";
 import { RoomCard } from "./room-components";
 import { StatusChip } from "./status";
 
@@ -31,7 +31,17 @@ export function MobileAlertsPage() {
 }
 
 export function MobileMePage() {
-  return <MobileShell title="Me"><div className="mobile-profile"><span className="demo-pill">DEMO</span><div className="profile-avatar">AK</div><h2>Ahmed Kamal</h2><p>Room Attendant · Morning shift</p></div><div className="mobile-stats"><article><strong>8</strong><span>Completed</span></article><article><strong>14</strong><span>Assigned</span></article><article><strong>48</strong><span>Credits</span></article></div><div className="mobile-settings-list"><button><Languages /> Language <span>English</span></button><button><Wifi /> Sync status <span>Synced</span></button><button><RotateCcw /> Reset demo data <ChevronRight /></button></div></MobileShell>;
+  return <MobileShell title="Me"><MobileProfile /></MobileShell>;
+}
+
+function MobileProfile() {
+  const persona = useMobilePersona();
+  const profile = persona === "Supervisor"
+    ? { initials: "MA", name: "Mona Adel", role: "Floor Supervisor", completed: "8", assigned: "8", metric: "96%", metricLabel: "Avg. score" }
+    : persona === "Engineer"
+      ? { initials: "FK", name: "Fady Khalil", role: "Maintenance Engineer", completed: "4", assigned: "6", metric: "2", metricLabel: "Priority" }
+      : { initials: "AK", name: "Ahmed Kamal", role: "Housekeeper (Room Attendant)", completed: "8", assigned: "14", metric: "48", metricLabel: "Credits" };
+  return <><div className="mobile-profile"><span className="demo-pill">DEMO</span><div className="profile-avatar">{profile.initials}</div><h2>{profile.name}</h2><p>{profile.role} · Morning shift</p></div><div className="mobile-stats"><article><strong>{profile.completed}</strong><span>Completed</span></article><article><strong>{profile.assigned}</strong><span>Assigned</span></article><article><strong>{profile.metric}</strong><span>{profile.metricLabel}</span></article></div><div className="mobile-settings-list"><button><Wifi /> Sync status <span>Synced</span></button><button><RotateCcw /> Reset demo data <ChevronRight /></button></div></>;
 }
 
 export function MobileInspectionsPage() {
