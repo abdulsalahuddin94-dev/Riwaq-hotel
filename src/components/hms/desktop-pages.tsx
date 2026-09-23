@@ -50,7 +50,7 @@ export function BoardPage() {
         })}
         <article className="kpi-item occupancy-kpi"><div><strong>100</strong><span>Total rooms</span><small>5 floors · 16 staff</small></div></article>
       </section>
-      <section className="board-panel">
+      <section className="board-panel board-panel-ops">
         <div className="section-heading">
           <div><h2>Room status by floor</h2><p>Status is derived from occupancy, inspection, and active blocks.</p></div>
           <div className="board-legend">
