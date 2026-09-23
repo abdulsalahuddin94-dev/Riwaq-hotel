@@ -116,8 +116,8 @@ export const rooms: Room[] = Array.from({ length: 100 }, (_, index) => {
   const floor = Math.floor(index / 20) + 1;
   const position = (index % 20) + 1;
   const roomNumber = `${floor}${String(position).padStart(2, "0")}`;
-  const staffer = staff[index % staff.length];
-  const status = plannedStatuses[index];
+  const staffer = staff[index % staff.length] ?? staff[0];
+  const status = plannedStatuses[index] ?? "DIRTY";
   const suite = floor > 1 && position >= 19;
   const type = suite ? "Suite" : position % 5 === 0 ? "King" : position % 4 === 0 ? "Twin" : "Standard";
   const badges: Room["badges"] = [];

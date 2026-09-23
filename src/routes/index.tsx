@@ -5,7 +5,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 // project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
-    throw redirect({ to: "/app/board" });
+    throw redirect({ href: "/app/board" });
   },
   head: () => ({
     meta: [
