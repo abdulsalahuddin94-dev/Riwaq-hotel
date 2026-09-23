@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { MobileAlertsPage } from "@/components/hms/mobile-pages";
+export const Route = createFileRoute("/m/alerts")({ head: () => ({ meta: [{ title: "Alerts — TrianglZ HMS Mobile" }, { name: "description", content: "Housekeeping alerts and escalations." }, { property: "og:title", content: "Alerts — TrianglZ HMS Mobile" }, { property: "og:description", content: "Housekeeping alerts and escalations." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: MobileAlertsPage });

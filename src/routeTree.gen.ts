@@ -10,33 +10,245 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppAssignRouteImport } from './routes/app/assign'
+import { Route as AppBoardRouteImport } from './routes/app/board'
+import { Route as AppEscalationsRouteImport } from './routes/app/escalations'
+import { Route as AppFrontDeskRouteImport } from './routes/app/front-desk'
+import { Route as AppReportsRouteImport } from './routes/app/reports'
+import { Route as AppSettingsRouteImport } from './routes/app/settings'
+import { Route as AppTeamRouteImport } from './routes/app/team'
+import { Route as AppWorkOrdersRouteImport } from './routes/app/work-orders'
+import { Route as MAlertsRouteImport } from './routes/m/alerts'
+import { Route as MFloorRouteImport } from './routes/m/floor'
+import { Route as MInspectionsRouteImport } from './routes/m/inspections'
+import { Route as MLoginRouteImport } from './routes/m/login'
+import { Route as MMeRouteImport } from './routes/m/me'
+import { Route as MRoomsRouteImport } from './routes/m/rooms'
+import { Route as MWorkOrdersRouteImport } from './routes/m/work-orders'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppAssignRoute = AppAssignRouteImport.update({
+  id: '/app/assign',
+  path: '/app/assign',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppBoardRoute = AppBoardRouteImport.update({
+  id: '/app/board',
+  path: '/app/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppEscalationsRoute = AppEscalationsRouteImport.update({
+  id: '/app/escalations',
+  path: '/app/escalations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppFrontDeskRoute = AppFrontDeskRouteImport.update({
+  id: '/app/front-desk',
+  path: '/app/front-desk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/app/reports',
+  path: '/app/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/app/settings',
+  path: '/app/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/app/team',
+  path: '/app/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppWorkOrdersRoute = AppWorkOrdersRouteImport.update({
+  id: '/app/work-orders',
+  path: '/app/work-orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MAlertsRoute = MAlertsRouteImport.update({
+  id: '/m/alerts',
+  path: '/m/alerts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MFloorRoute = MFloorRouteImport.update({
+  id: '/m/floor',
+  path: '/m/floor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MInspectionsRoute = MInspectionsRouteImport.update({
+  id: '/m/inspections',
+  path: '/m/inspections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MLoginRoute = MLoginRouteImport.update({
+  id: '/m/login',
+  path: '/m/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MMeRoute = MMeRouteImport.update({
+  id: '/m/me',
+  path: '/m/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MRoomsRoute = MRoomsRouteImport.update({
+  id: '/m/rooms',
+  path: '/m/rooms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MWorkOrdersRoute = MWorkOrdersRouteImport.update({
+  id: '/m/work-orders',
+  path: '/m/work-orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/app/assign': typeof AppAssignRoute
+  '/app/board': typeof AppBoardRoute
+  '/app/escalations': typeof AppEscalationsRoute
+  '/app/front-desk': typeof AppFrontDeskRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/work-orders': typeof AppWorkOrdersRoute
+  '/m/alerts': typeof MAlertsRoute
+  '/m/floor': typeof MFloorRoute
+  '/m/inspections': typeof MInspectionsRoute
+  '/m/login': typeof MLoginRoute
+  '/m/me': typeof MMeRoute
+  '/m/rooms': typeof MRoomsRoute
+  '/m/work-orders': typeof MWorkOrdersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/app/assign': typeof AppAssignRoute
+  '/app/board': typeof AppBoardRoute
+  '/app/escalations': typeof AppEscalationsRoute
+  '/app/front-desk': typeof AppFrontDeskRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/work-orders': typeof AppWorkOrdersRoute
+  '/m/alerts': typeof MAlertsRoute
+  '/m/floor': typeof MFloorRoute
+  '/m/inspections': typeof MInspectionsRoute
+  '/m/login': typeof MLoginRoute
+  '/m/me': typeof MMeRoute
+  '/m/rooms': typeof MRoomsRoute
+  '/m/work-orders': typeof MWorkOrdersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/app/assign': typeof AppAssignRoute
+  '/app/board': typeof AppBoardRoute
+  '/app/escalations': typeof AppEscalationsRoute
+  '/app/front-desk': typeof AppFrontDeskRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/team': typeof AppTeamRoute
+  '/app/work-orders': typeof AppWorkOrdersRoute
+  '/m/alerts': typeof MAlertsRoute
+  '/m/floor': typeof MFloorRoute
+  '/m/inspections': typeof MInspectionsRoute
+  '/m/login': typeof MLoginRoute
+  '/m/me': typeof MMeRoute
+  '/m/rooms': typeof MRoomsRoute
+  '/m/work-orders': typeof MWorkOrdersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/app/assign'
+    | '/app/board'
+    | '/app/escalations'
+    | '/app/front-desk'
+    | '/app/reports'
+    | '/app/settings'
+    | '/app/team'
+    | '/app/work-orders'
+    | '/m/alerts'
+    | '/m/floor'
+    | '/m/inspections'
+    | '/m/login'
+    | '/m/me'
+    | '/m/rooms'
+    | '/m/work-orders'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/app/assign'
+    | '/app/board'
+    | '/app/escalations'
+    | '/app/front-desk'
+    | '/app/reports'
+    | '/app/settings'
+    | '/app/team'
+    | '/app/work-orders'
+    | '/m/alerts'
+    | '/m/floor'
+    | '/m/inspections'
+    | '/m/login'
+    | '/m/me'
+    | '/m/rooms'
+    | '/m/work-orders'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/app/assign'
+    | '/app/board'
+    | '/app/escalations'
+    | '/app/front-desk'
+    | '/app/reports'
+    | '/app/settings'
+    | '/app/team'
+    | '/app/work-orders'
+    | '/m/alerts'
+    | '/m/floor'
+    | '/m/inspections'
+    | '/m/login'
+    | '/m/me'
+    | '/m/rooms'
+    | '/m/work-orders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
+  AppAssignRoute: typeof AppAssignRoute
+  AppBoardRoute: typeof AppBoardRoute
+  AppEscalationsRoute: typeof AppEscalationsRoute
+  AppFrontDeskRoute: typeof AppFrontDeskRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppTeamRoute: typeof AppTeamRoute
+  AppWorkOrdersRoute: typeof AppWorkOrdersRoute
+  MAlertsRoute: typeof MAlertsRoute
+  MFloorRoute: typeof MFloorRoute
+  MInspectionsRoute: typeof MInspectionsRoute
+  MLoginRoute: typeof MLoginRoute
+  MMeRoute: typeof MMeRoute
+  MRoomsRoute: typeof MRoomsRoute
+  MWorkOrdersRoute: typeof MWorkOrdersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +260,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/assign': {
+      id: '/app/assign'
+      path: '/app/assign'
+      fullPath: '/app/assign'
+      preLoaderRoute: typeof AppAssignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/board': {
+      id: '/app/board'
+      path: '/app/board'
+      fullPath: '/app/board'
+      preLoaderRoute: typeof AppBoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/escalations': {
+      id: '/app/escalations'
+      path: '/app/escalations'
+      fullPath: '/app/escalations'
+      preLoaderRoute: typeof AppEscalationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/front-desk': {
+      id: '/app/front-desk'
+      path: '/app/front-desk'
+      fullPath: '/app/front-desk'
+      preLoaderRoute: typeof AppFrontDeskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/reports': {
+      id: '/app/reports'
+      path: '/app/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/app/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/team': {
+      id: '/app/team'
+      path: '/app/team'
+      fullPath: '/app/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/work-orders': {
+      id: '/app/work-orders'
+      path: '/app/work-orders'
+      fullPath: '/app/work-orders'
+      preLoaderRoute: typeof AppWorkOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/alerts': {
+      id: '/m/alerts'
+      path: '/m/alerts'
+      fullPath: '/m/alerts'
+      preLoaderRoute: typeof MAlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/floor': {
+      id: '/m/floor'
+      path: '/m/floor'
+      fullPath: '/m/floor'
+      preLoaderRoute: typeof MFloorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/inspections': {
+      id: '/m/inspections'
+      path: '/m/inspections'
+      fullPath: '/m/inspections'
+      preLoaderRoute: typeof MInspectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/login': {
+      id: '/m/login'
+      path: '/m/login'
+      fullPath: '/m/login'
+      preLoaderRoute: typeof MLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/me': {
+      id: '/m/me'
+      path: '/m/me'
+      fullPath: '/m/me'
+      preLoaderRoute: typeof MMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/rooms': {
+      id: '/m/rooms'
+      path: '/m/rooms'
+      fullPath: '/m/rooms'
+      preLoaderRoute: typeof MRoomsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/work-orders': {
+      id: '/m/work-orders'
+      path: '/m/work-orders'
+      fullPath: '/m/work-orders'
+      preLoaderRoute: typeof MWorkOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
+  AppAssignRoute: AppAssignRoute,
+  AppBoardRoute: AppBoardRoute,
+  AppEscalationsRoute: AppEscalationsRoute,
+  AppFrontDeskRoute: AppFrontDeskRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppTeamRoute: AppTeamRoute,
+  AppWorkOrdersRoute: AppWorkOrdersRoute,
+  MAlertsRoute: MAlertsRoute,
+  MFloorRoute: MFloorRoute,
+  MInspectionsRoute: MInspectionsRoute,
+  MLoginRoute: MLoginRoute,
+  MMeRoute: MMeRoute,
+  MRoomsRoute: MRoomsRoute,
+  MWorkOrdersRoute: MWorkOrdersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
