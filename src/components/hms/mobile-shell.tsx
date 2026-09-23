@@ -26,14 +26,16 @@ const engineerTabs = [
 
 export function MobileShell({ title, children }: { title: string; children: React.ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const [persona, setPersona] = useState<Persona>(() => {
-    if (typeof window === "undefined") return "Attendant";
+  const [persona, setPersona] = useState<Persona>("Attendant");
+
+  useEffect(() => {
     try {
-      return (window.localStorage.getItem("trianglz-mobile-persona") as Persona) || "Attendant";
+      const savedPersona = window.localStorage.getItem("trianglz-mobile-persona") as Persona | null;
+      if (savedPersona) setPersona(savedPersona);
     } catch {
-      return "Attendant";
+      // Persona persistence is optional in the demo shell.
     }
-  });
+  }, []);
   const [language, setLanguage] = useState<"en" | "ar">("en");
 
   useEffect(() => {

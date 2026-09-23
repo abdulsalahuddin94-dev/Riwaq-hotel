@@ -50,20 +50,27 @@ export function BoardPage() {
         })}
         <article className="kpi-item occupancy-kpi"><div><strong>100</strong><span>Total rooms</span><small>5 floors · 16 staff</small></div></article>
       </section>
-      <section className="board-panel board-panel-ops">
-        <div className="section-heading">
-          <div><h2>Room status by floor</h2><p>Status is derived from occupancy, inspection, and active blocks.</p></div>
-          <div className="board-legend">
-            {["READY", "AWAITING_INSPECTION", "CLEANING", "DIRTY", "DND", "BLOCKED_OOO"].map((status) => (
-              <StatusChip key={status} status={status as keyof typeof statusMeta} compact />
-            ))}
+      <div className="board-workspace">
+        <section className="board-panel board-panel-ops">
+          <div className="section-heading">
+            <div><h2>Room status by floor</h2><p>Status is derived from occupancy, inspection, and active blocks.</p></div>
+            <div className="board-legend">
+              {["READY", "AWAITING_INSPECTION", "CLEANING", "DIRTY", "DND", "BLOCKED_OOO"].map((status) => (
+                <StatusChip key={status} status={status as keyof typeof statusMeta} compact />
+              ))}
+            </div>
           </div>
-        </div>
-        {state === "loading" ? <SkeletonState rows={5} /> : null}
-        {state === "empty" ? <EmptyState title="No rooms match these filters" action="Clear filters" /> : null}
-        {state === "error" ? <ErrorState title="Couldn't load the live board" onRetry={() => setState("default")} /> : null}
-        {state === "default" ? <FloorBoard /> : null}
-      </section>
+          {state === "loading" ? <SkeletonState rows={5} /> : null}
+          {state === "empty" ? <EmptyState title="No rooms match these filters" action="Clear filters" /> : null}
+          {state === "error" ? <ErrorState title="Couldn't load the live board" onRetry={() => setState("default")} /> : null}
+          {state === "default" ? <FloorBoard /> : null}
+        </section>
+        <aside className="timeline-panel" aria-label="Recent housekeeping activity">
+          <div className="timeline-heading"><div><span>Today</span><h2>Staff timeline</h2></div><Button variant="hmsGhost" size="hmsSm">View all</Button></div>
+          <TimelinePanel />
+          <div className="timeline-alert"><AlertTriangle aria-hidden="true" /><div><strong>Attention needed</strong><p>2 priority rooms are approaching their SLA.</p></div></div>
+        </aside>
+      </div>
     </DesktopShell>
   );
 }
