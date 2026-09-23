@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bell, Briefcase, ClipboardCheck, Grid2X2, Home, Languages, User, Wrench } from "lucide-react";
+import { Bell, Briefcase, ClipboardCheck, Grid2X2, Home, User, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { resetDemoData, type Persona } from "@/lib/demo-data";
 import { cn } from "@/lib/utils";
@@ -24,28 +24,31 @@ const engineerTabs = [
   { to: "/m/me", label: "Me", icon: User },
 ] as const;
 
+const MobilePersonaContext = createContext<Persona>("Attendant");
+export const useMobilePersona = () => useContext(MobilePersonaContext);
+
+function personaForRoute(pathname: string): Persona | null {
+  if (pathname === "/m/rooms") return "Attendant";
+  if (pathname === "/m/inspections" || pathname === "/m/floor") return "Supervisor";
+  if (pathname === "/m/work-orders") return "Engineer";
+  return null;
+}
+
+const personaHome = { Attendant: "/m/rooms", Supervisor: "/m/inspections", Engineer: "/m/work-orders" } as const;
+
 export function MobileShell({ title, children }: { title: string; children: React.ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const [persona, setPersona] = useState<Persona>("Attendant");
+  const routePersona = personaForRoute(pathname);
+  const [persona, setPersona] = useState<Persona>(routePersona ?? "Attendant");
 
   useEffect(() => {
     try {
       const savedPersona = window.localStorage.getItem("trianglz-mobile-persona") as Persona | null;
-      if (savedPersona) setPersona(savedPersona);
+      if (!routePersona && savedPersona && ["Attendant", "Supervisor", "Engineer"].includes(savedPersona)) setPersona(savedPersona);
     } catch {
       // Persona persistence is optional in the demo shell.
     }
-  }, []);
-  const [language, setLanguage] = useState<"en" | "ar">("en");
-
-  useEffect(() => {
-    document.documentElement.lang = language;
-    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
-    return () => {
-      document.documentElement.lang = "en";
-      document.documentElement.dir = "ltr";
-    };
-  }, [language]);
+  }, [routePersona]);
 
   const tabs = persona === "Supervisor" ? supervisorTabs : persona === "Engineer" ? engineerTabs : attendantTabs;
   const changePersona = (nextPersona: Persona) => {
@@ -55,11 +58,12 @@ export function MobileShell({ title, children }: { title: string; children: Reac
     } catch {
       // Optional persistence.
     }
+    if (nextPersona === "Attendant" || nextPersona === "Supervisor" || nextPersona === "Engineer") window.location.assign(personaHome[nextPersona]);
   };
 
   return (
     <div className="mobile-stage">
-      <div className="iphone-device" data-platform="mobile" data-theme="light" dir={language === "ar" ? "rtl" : "ltr"} lang={language}>
+      <div className="iphone-device" data-platform="mobile" data-theme="light">
         <div className="iphone-side iphone-side-left" />
         <div className="iphone-side iphone-side-right" />
         <div className="iphone-screen">
@@ -74,11 +78,9 @@ export function MobileShell({ title, children }: { title: string; children: Reac
                 <p>TrianglZ Hotel</p>
                 <h1>{title}</h1>
               </div>
-              <Button variant="hmsGhost" size="hmsIcon" aria-label={language === "en" ? "Switch to Arabic" : "Switch to English"} onClick={() => setLanguage((value) => value === "en" ? "ar" : "en")}>
-                <Languages aria-hidden="true" />
-              </Button>
+              <span className="mobile-role-pill">{persona === "Attendant" ? "Housekeeper" : persona}</span>
             </header>
-            <div className="mobile-scroll-area">{children}</div>
+            <MobilePersonaContext.Provider value={persona}><div className="mobile-scroll-area">{children}</div></MobilePersonaContext.Provider>
             <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -99,7 +101,7 @@ export function MobileShell({ title, children }: { title: string; children: Reac
         <label className="persona-select">
           <span>Demo as</span>
           <select value={persona} onChange={(event) => changePersona(event.target.value as Persona)}>
-            <option>Attendant</option>
+            <option value="Attendant">Housekeeper (Attendant)</option>
             <option>Supervisor</option>
             <option>Engineer</option>
           </select>
