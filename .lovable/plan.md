@@ -1,5 +1,8 @@
 # Initialize the TrianglZ Hotel HMS
 
+## Core application structure
+TrianglZ HMS combines a dense desktop operations dashboard for managers, front desk staff, and administrators with a separate glove-friendly mobile PWA for attendants, supervisors, and engineers. Desktop opens on a populated 100-room Live Board with a collapsible sidebar, while Mobile opens on My Rooms with role-aware bottom navigation inside a 390×844 iPhone frame when viewed on desktop. Both experiences share the exact gold, navy, and room-status system, five mandatory UI states, bilingual direction support, realistic demo activity, and a persistent floating view switcher.
+
 ## Scope
 Build the first clickable application shell from the supplied PRD and design system, without adding production authentication or backend persistence.
 
