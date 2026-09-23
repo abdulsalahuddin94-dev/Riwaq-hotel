@@ -1,65 +1,363 @@
 import { useState } from "react";
-import { AlertTriangle, ChevronRight, CircleUserRound, RotateCcw, Wifi } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { AlertTriangle, Bell, ChevronRight, CircleUserRound, Delete, LogOut, RotateCcw, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { alerts, mobileRooms, rooms, staffProgress, workOrders } from "@/lib/demo-data";
+import { fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
+import {
+  activeMinutes,
+  checklistProgress,
+  demoNow,
+  displayStatus,
+  hms,
+  lastInspection,
+  roomCredits,
+  staffName,
+  useHms,
+} from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
-import { EmptyState, ErrorState, SkeletonState } from "./demo-states";
-import { MobileShell, useMobilePersona } from "./mobile-shell";
-import { RoomCard } from "./room-components";
+import { EmptyState } from "./demo-states";
+import { useMobileAlerts } from "./mobile-alerts";
+import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
+import { RoomBadges, RoomCard, statusClass } from "./room-components";
 import { StatusChip } from "./status";
 
-type State = "default" | "loading" | "empty" | "error";
+/** Priority order for an attendant's list: queue → re-clean → VIP → in progress → to do → waiting → done. */
+function priority(r: Room) {
+  if (r.hk === "INSPECTED") return 90;
+  if (r.hk === "CLEAN") return 80;
+  if (r.dnd) return 70;
+  if (r.queue) return 0;
+  if (r.taskType === "RECLEAN") return 10;
+  if (r.vip) return 20;
+  if (r.hk === "IN_PROGRESS" || r.hk === "PAUSED") return 30;
+  return r.taskType === "STAYOVER" ? 50 : 40;
+}
+
+/* ───────────── Attendant: My Rooms ───────────── */
 
 export function MobileRoomsPage() {
-  const [state, setState] = useState<State>("default");
+  const s = useHms();
+  const [filter, setFilter] = useState<"todo" | "done" | "issues">("todo");
+  const me = personaStaff.Attendant;
+  const mine = s.rooms.filter((r) => r.attendant === me).sort((a, b) => priority(a) - priority(b) || a.number.localeCompare(b.number));
+  const done = mine.filter((r) => r.hk === "CLEAN" || r.hk === "INSPECTED");
+  const issues = mine.filter((r) => r.dnd || r.block || r.taskType === "RECLEAN" || r.refused);
+  const todo = mine.filter((r) => !done.includes(r) && !r.block);
+  const list = filter === "todo" ? todo : filter === "done" ? done : issues;
+  const pct = mine.length ? Math.round((done.length / mine.length) * 100) : 0;
   return (
     <MobileShell title="My Rooms">
-      <div className="mobile-sync"><Wifi /> Synced <span>8 of 14 complete</span></div>
-      <div className="mobile-progress-summary"><div><span style={{ inlineSize: "57%" }} /></div><b>57%</b></div>
-      {state === "loading" ? <SkeletonState /> : null}
-      {state === "empty" ? <EmptyState title="Your supervisor hasn't assigned rooms yet" /> : null}
-      {state === "error" ? <ErrorState title="Couldn't load your rooms" onRetry={() => setState("default")} /> : null}
-      {state === "default" ? <div className="mobile-room-list">{mobileRooms.map((room) => <RoomCard room={room} key={room.number} />)}</div> : null}
+      <div className="mobile-sync"><Wifi aria-hidden="true" /> Synced <span>{done.length} of {mine.length} complete</span></div>
+      <div className="mobile-progress-summary"><div><span style={{ inlineSize: `${pct}%` }} /></div><b>{pct}%</b></div>
+      <div className="m-chips" role="tablist">
+        {([["todo", "To do", todo.length], ["done", "Done", done.length], ["issues", "Issues", issues.length]] as const).map(([k, label, n]) => (
+          <button type="button" role="tab" aria-selected={filter === k} key={k} className={cn("m-chip", filter === k && "m-chip-on")} onClick={() => setFilter(k)}>
+            {label} <b>{n}</b>
+          </button>
+        ))}
+      </div>
+      {list.length === 0 ? (
+        <EmptyState title={filter === "todo" ? "All your rooms are done 🎉" : filter === "done" ? "Nothing finished yet" : "No issues on your rooms"} />
+      ) : (
+        <div className="mobile-room-list">{list.map((room) => <RoomCard room={room} s={s} key={room.number} />)}</div>
+      )}
     </MobileShell>
   );
 }
 
+/* ───────────── Alerts ───────────── */
+
 export function MobileAlertsPage() {
-  return <MobileShell title="Alerts"><div className="mobile-alert-list">{alerts.map((alert) => <article className={cn("mobile-alert", `alert-${alert.tone}`)} key={alert.title}><AlertTriangle /><div><h2>{alert.title}</h2><p>{alert.detail}</p></div><ChevronRight /></article>)}</div></MobileShell>;
+  const alerts = useMobileAlerts();
+  return (
+    <MobileShell title="Alerts">
+      {alerts.length === 0 ? (
+        <EmptyState title="You're all caught up" />
+      ) : (
+        <div className="mobile-alert-list">
+          {alerts.map((alert) => (
+            <Link to={alert.link.to as never} params={alert.link.params as never} className={cn("mobile-alert", `alert-${alert.tone}`)} key={alert.id}>
+              {alert.tone === "error" ? <AlertTriangle aria-hidden="true" /> : alert.tone === "warning" ? <Zap aria-hidden="true" /> : <Bell aria-hidden="true" />}
+              <div><h2>{alert.title}</h2><p>{alert.detail}</p></div>
+              <ChevronRight aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+      )}
+    </MobileShell>
+  );
 }
+
+/* ───────────── Me ───────────── */
 
 export function MobileMePage() {
-  return <MobileShell title="Me"><MobileProfile /></MobileShell>;
+  const s = useHms();
+  const persona = useMobilePersona();
+  const navigate = useNavigate();
+  const id = personaStaff[persona];
+  const person = s.staff.find((p) => p.id === id);
+  let stats: [string, string][] = [];
+  if (persona === "Attendant") {
+    const mine = s.rooms.filter((r) => r.attendant === id);
+    const done = mine.filter((r) => r.hk === "CLEAN" || r.hk === "INSPECTED");
+    const ins = mine.flatMap((r) => r.inspections);
+    stats = [[`${done.length}/${mine.length}`, "Rooms done"], [mine.reduce((a, r) => a + roomCredits(r), 0).toFixed(1), "Credits"], [ins.length ? `${Math.round((ins.filter((i) => i.result === "PASSED").length / ins.length) * 100)}%` : "—", "Pass rate"]];
+  } else if (persona === "Supervisor") {
+    const mine = s.rooms.flatMap((r) => r.inspections).filter((i) => i.by === id);
+    const avg = mine.length ? Math.round(mine.reduce((a, i) => a + i.score, 0) / mine.length) : 0;
+    stats = [[String(mine.length), "Inspected"], [String(mine.filter((i) => i.result === "FAILED").length), "Rejected"], [mine.length ? `${avg}%` : "—", "Avg. score"]];
+  } else {
+    const mine = s.workOrders.filter((w) => w.assignee === id);
+    stats = [[String(mine.filter((w) => ["RESOLVED", "VERIFIED"].includes(w.state)).length), "Resolved"], [String(mine.filter((w) => !["RESOLVED", "VERIFIED"].includes(w.state)).length), "Open"], [String(mine.filter((w) => w.urgency === "P1").length), "P1 jobs"]];
+  }
+  return (
+    <MobileShell title="Me">
+      <div className="mobile-profile">
+        <span className="demo-pill">DEMO</span>
+        <div className="profile-avatar">{person?.initials}</div>
+        <h2>{person?.name}</h2>
+        <p>{person ? roleLabel[person.role] : ""} · Morning shift · started 07:30</p>
+      </div>
+      <div className="mobile-stats">
+        {stats.map(([v, l]) => <article key={l}><strong>{v}</strong><span>{l}</span></article>)}
+      </div>
+      <div className="mobile-settings-list">
+        <button type="button" onClick={() => toast.success("All changes synced", { duration: 2000 })}><Wifi aria-hidden="true" /> Sync status <span>Synced · {fmtTime(demoNow(s))}</span></button>
+        <button type="button" onClick={() => toast.info("Arabic (RTL) is specified in SPEC_DESIGN_SYSTEM §7 — coming in the next build", { duration: 3500 })}>🌐 Language <span>English</span></button>
+        <button type="button" onClick={() => hms.reset()}><RotateCcw aria-hidden="true" /> Reset demo data <ChevronRight aria-hidden="true" /></button>
+        <button type="button" onClick={() => { toast.success("Shift ended · see you tomorrow", { duration: 2500 }); void navigate({ to: "/m/login" }); }}><LogOut aria-hidden="true" /> End shift <ChevronRight aria-hidden="true" /></button>
+      </div>
+    </MobileShell>
+  );
 }
 
-function MobileProfile() {
-  const persona = useMobilePersona();
-  const profile = persona === "Supervisor"
-    ? { initials: "MA", name: "Mona Adel", role: "Floor Supervisor", completed: "8", assigned: "8", metric: "96%", metricLabel: "Avg. score" }
-    : persona === "Engineer"
-      ? { initials: "FK", name: "Fady Khalil", role: "Maintenance Engineer", completed: "4", assigned: "6", metric: "2", metricLabel: "Priority" }
-      : { initials: "AK", name: "Ahmed Kamal", role: "Housekeeper (Room Attendant)", completed: "8", assigned: "14", metric: "48", metricLabel: "Credits" };
-  return <><div className="mobile-profile"><span className="demo-pill">DEMO</span><div className="profile-avatar">{profile.initials}</div><h2>{profile.name}</h2><p>{profile.role} · Morning shift</p></div><div className="mobile-stats"><article><strong>{profile.completed}</strong><span>Completed</span></article><article><strong>{profile.assigned}</strong><span>Assigned</span></article><article><strong>{profile.metric}</strong><span>{profile.metricLabel}</span></article></div><div className="mobile-settings-list"><button><Wifi /> Sync status <span>Synced</span></button><button><RotateCcw /> Reset demo data <ChevronRight /></button></div></>;
-}
+/* ───────────── Supervisor: inspection queue ───────────── */
 
 export function MobileInspectionsPage() {
-  const inspectionRooms = rooms.filter((room) => room.status === "AWAITING_INSPECTION");
-  return <MobileShell title="Inspection Queue"><div className="mobile-callout">2 queue rooms need priority inspection.</div><div className="mobile-room-list">{inspectionRooms.map((room) => <article className="inspection-card" key={room.number}><div><span>Room</span><h2><bdi>{room.number}</bdi></h2></div><StatusChip status={room.status} /><Button variant="hmsPrimary" size="hmsMd" onClick={() => toast.success(`Room ${room.number} approved`, { duration: 3000 })}>Inspect</Button></article>)}</div></MobileShell>;
+  const s = useHms();
+  const me = s.staff.find((p) => p.id === personaStaff.Supervisor);
+  const [scope, setScope] = useState<"mine" | "all">("mine");
+  const now = demoNow(s);
+  const list = s.rooms
+    .filter((r) => r.hk === "CLEAN" && (scope === "all" || (me?.floors ?? []).includes(r.floor)))
+    .sort((a, b) => Number(!!b.queue) - Number(!!a.queue) || Number(!!b.vip) - Number(!!a.vip) || (a.completedAt ?? 0) - (b.completedAt ?? 0));
+  const queued = list.filter((r) => r.queue).length;
+  return (
+    <MobileShell title="Inspection Queue">
+      {queued ? <div className="mobile-callout"><Zap aria-hidden="true" /> {queued} queue room{queued > 1 ? "s" : ""} — guest waiting, inspect first.</div> : null}
+      <div className="m-chips">
+        <button type="button" className={cn("m-chip", scope === "mine" && "m-chip-on")} onClick={() => setScope("mine")}>My floors ({(me?.floors ?? []).join(", ")})</button>
+        <button type="button" className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>All floors</button>
+      </div>
+      {list.length === 0 ? (
+        <EmptyState title="All caught up 🎉 No rooms waiting" />
+      ) : (
+        <div className="mobile-room-list">
+          {list.map((room) => {
+            const left = room.completedAt !== undefined ? room.completedAt + s.settings.queueSlaMin - now : 0;
+            const p = checklistProgress(s, room);
+            return (
+              <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
+                <div>
+                  <span>Room · {room.type} · F{room.floor}</span>
+                  <h2><bdi>{room.number}</bdi></h2>
+                </div>
+                <StatusChip status={displayStatus(room, s.settings)} />
+                <p className="insp-meta">
+                  {staffName(s, room.attendant)} · {fmtDuration(activeMinutes(s, room))} · {p.done}/{p.total} items{p.skipped ? ` (${p.skipped} skipped)` : ""}
+                </p>
+                <RoomBadges room={room} />
+                {room.queue ? <p className={cn("sla-line", left <= 0 && "sla-breached")}>⏱ {left > 0 ? `${left} min left for ${room.queue.guest}` : `SLA breached ${-left} min ago`}</p> : null}
+                <span className="m-card-cta">Inspect <ChevronRight aria-hidden="true" /></span>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </MobileShell>
+  );
 }
+
+/* ───────────── Supervisor: floor board ───────────── */
 
 export function MobileFloorPage() {
-  return <MobileShell title="Floor Board"><div className="mobile-floor-grid">{rooms.slice(20, 40).map((room) => <article key={room.number}><strong><bdi>{room.number}</bdi></strong><StatusChip status={room.status} compact /><span>{room.initials}</span></article>)}</div></MobileShell>;
+  const s = useHms();
+  const me = s.staff.find((p) => p.id === personaStaff.Supervisor);
+  const [floor, setFloor] = useState(me?.floors?.[0] ?? 1);
+  const [open, setOpen] = useState<string | null>(null);
+  const rooms = s.rooms.filter((r) => r.floor === floor);
+  const room = s.rooms.find((r) => r.number === open);
+  const actor = personaStaff.Supervisor;
+  const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
+  const wo = room ? s.workOrders.find((w) => w.room === room.number && w.state !== "VERIFIED") : undefined;
+  return (
+    <MobileShell title="Floor Board">
+      <div className="m-chips">
+        {[1, 2, 3, 4, 5].map((f) => (
+          <button type="button" key={f} className={cn("m-chip", floor === f && "m-chip-on")} onClick={() => setFloor(f)}>F{f}</button>
+        ))}
+      </div>
+      <div className="mobile-floor-grid">
+        {rooms.map((r) => {
+          const st = displayStatus(r, s.settings);
+          return (
+            <button type="button" className={cn("m-floor-tile", statusClass[st])} key={r.number} onClick={() => setOpen(r.number)}>
+              <strong><bdi>{r.number}</bdi></strong>
+              <StatusChip status={st} compact />
+              <span>{r.attendant ? s.staff.find((p) => p.id === r.attendant)?.initials : "—"}{r.queue ? " · ⚡" : ""}{r.anomalies.length ? " · ⚠" : ""}</span>
+            </button>
+          );
+        })}
+      </div>
+      <MobileSheet open={!!room} onClose={() => setOpen(null)} title={room ? `Room ${room.number}` : ""}>
+        {room ? (
+          <div className="m-sheet-stack">
+            <div className="m-row-between"><span>{room.type} · Floor {room.floor}</span><StatusChip status={displayStatus(room, s.settings)} /></div>
+            <dl className="m-facts">
+              <div><dt>Attendant</dt><dd>{staffName(s, room.attendant)}</dd></div>
+              <div><dt>Checklist</dt><dd>{checklistProgress(s, room).done}/{checklistProgress(s, room).total}</dd></div>
+              <div><dt>Time</dt><dd>{fmtDuration(activeMinutes(s, room))}</dd></div>
+              <div><dt>Last inspection</dt><dd>{lastInspection(room) ? `${lastInspection(room)?.result === "PASSED" ? "✔" : "✘"} ${lastInspection(room)?.score}%` : "—"}</dd></div>
+            </dl>
+            {room.block ? <p className="m-note m-note-blocked"><Wrench aria-hidden="true" /> {room.block.reason}</p> : null}
+            {room.hk === "CLEAN" ? (
+              <Button asChild variant="hmsPrimary" size="hmsXl"><Link to="/m/inspections/$roomId" params={{ roomId: room.number }}><ShieldCheck aria-hidden="true" /> Inspect now</Link></Button>
+            ) : null}
+            {wo?.state === "RESOLVED" ? (
+              <Button variant="hmsPrimary" size="hmsXl" onClick={() => { hms.woVerify(wo.id, actor); toast.success(`Room ${room.number} released — post-repair clean queued`, { duration: 3000 }); setOpen(null); }}>
+                Verify repair & release
+              </Button>
+            ) : null}
+            {room.dnd ? (
+              <Button variant="hmsSecondary" size="hmsLg" onClick={() => { hms.clearDnd(room.number, actor, "Welfare check done by supervisor"); toast.success("DND cleared", { duration: 2500 }); }}>Welfare check done · clear DND</Button>
+            ) : null}
+            {!room.block ? (
+              <label className="m-field">
+                Reassign attendant
+                <select value={room.attendant ?? ""} onChange={(e) => { hms.assignRoom(room.number, e.target.value || null, actor); toast.success(e.target.value ? `Assigned to ${staffName(s, e.target.value)}` : "Unassigned", { duration: 2500 }); }}>
+                  <option value="">Unassigned</option>
+                  {attendants.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+                </select>
+              </label>
+            ) : null}
+            {room.hk !== "DIRTY" && room.occupancy === "VACANT" && !room.block ? (
+              <Button variant="hmsGhost" size="hmsLg" onClick={() => { hms.resetStatus(room.number, actor, "Supervisor reset"); toast.success("Reset to dirty", { duration: 2500 }); }}>Reset to dirty</Button>
+            ) : null}
+          </div>
+        ) : null}
+      </MobileSheet>
+    </MobileShell>
+  );
 }
+
+/* ───────────── Engineer: jobs ───────────── */
 
 export function MobileWorkOrdersPage() {
-  return <MobileShell title="My Jobs"><div className="mobile-room-list">{workOrders.map((order, index) => <article className="mobile-job-card" key={order.room}><span className={cn("priority", index < 2 && "priority-critical")}>P{index < 2 ? "1" : "3"}</span><div><h2>{order.title}</h2><p>Room <bdi>{order.room}</bdi> · {order.status}</p></div><Button variant="hmsPrimary" size="hmsMd">Open</Button></article>)}</div></MobileShell>;
+  const s = useHms();
+  const me = personaStaff.Engineer;
+  const [tab, setTab] = useState<"mine" | "open" | "done">("mine");
+  const list = s.workOrders.filter((w) =>
+    tab === "mine" ? w.assignee === me && !["RESOLVED", "VERIFIED"].includes(w.state) : tab === "open" ? !w.assignee && w.state === "OPEN" : ["RESOLVED", "VERIFIED"].includes(w.state),
+  );
+  return (
+    <MobileShell title="My Jobs">
+      <div className="m-chips">
+        {([["mine", "Assigned to me"], ["open", "Unassigned"], ["done", "Resolved"]] as const).map(([k, l]) => (
+          <button type="button" key={k} className={cn("m-chip", tab === k && "m-chip-on")} onClick={() => setTab(k)}>{l}</button>
+        ))}
+      </div>
+      {list.length === 0 ? (
+        <EmptyState title={tab === "mine" ? "No jobs assigned to you" : tab === "open" ? "No unassigned jobs" : "Nothing resolved yet"} />
+      ) : (
+        <div className="mobile-room-list">
+          {list.map((order) => (
+            <Link to="/m/work-orders/$woId" params={{ woId: order.id }} className="mobile-job-card" key={order.id}>
+              <span className={cn("priority", order.urgency === "P1" && "priority-critical")}>{order.urgency}</span>
+              <div><h2>{order.category} · Room <bdi>{order.room}</bdi></h2><p>{order.description}</p><p className="m-muted">{order.id} · {order.state.replace("_", " ").toLowerCase()} · opened {fmtTime(order.createdAt)}</p></div>
+              <ChevronRight aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+      )}
+    </MobileShell>
+  );
 }
 
+/* ───────────── Login (production design preview) ───────────── */
+
 export function MobileLoginPage() {
-  return <MobileShell title="Shift sign-in"><div className="mobile-login"><p>Select your profile</p><div className="avatar-grid">{staffProgress.slice(0, 6).map((person) => <button key={person.name}><span>{person.initials}</span><b>{person.name.split(" ")[0]}</b></button>)}</div><Button variant="hmsPrimary" size="hmsXl"><CircleUserRound /> Continue with PIN</Button></div></MobileShell>;
+  const s = useHms();
+  const navigate = useNavigate();
+  const [who, setWho] = useState<string | null>(null);
+  const [pin, setPin] = useState("");
+  const people = s.staff.filter((p) => ["ATTENDANT", "SUPERVISOR", "ENGINEER"].includes(p.role)).slice(0, 12);
+  const person = people.find((p) => p.id === who);
+  const press = (d: string) => {
+    const next = (pin + d).slice(0, 4);
+    setPin(next);
+    if (next.length === 4 && person) {
+      const persona = person.role === "SUPERVISOR" ? "Supervisor" : person.role === "ENGINEER" ? "Engineer" : "Attendant";
+      hms.setPersona("mobile", persona);
+      toast.success(`Welcome, ${person.name.split(" ")[0]} · shift started (demo: acting as ${persona === "Attendant" ? "Ahmed" : persona === "Supervisor" ? "Mona" : "Fady"})`, { duration: 3500 });
+      void navigate({ to: mobilePersonaHome[persona] });
+    }
+  };
+  return (
+    <MobileShell title="Shift sign-in">
+      <div className="mobile-login">
+        {!person ? (
+          <>
+            <p>Tap your photo to start your shift</p>
+            <div className="avatar-grid">
+              {people.map((p) => (
+                <button type="button" key={p.id} onClick={() => { setWho(p.id); setPin(""); }}>
+                  <span>{p.initials}</span>
+                  <b>{p.name.split(" ")[0]}</b>
+                  <small>{roleLabel[p.role].split(" ").slice(-1)[0]}</small>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="pin-pad">
+            <div className="profile-avatar">{person.initials}</div>
+            <h2>{person.name}</h2>
+            <p>Enter your 4-digit PIN (any digits in the demo)</p>
+            <div className="pin-dots" aria-label={`${pin.length} of 4 digits`}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")} />)}</div>
+            <div className="pin-keys">
+              {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => <button type="button" key={d} onClick={() => press(d)}>{d}</button>)}
+              <button type="button" onClick={() => setWho(null)} aria-label="Back"><CircleUserRound aria-hidden="true" /></button>
+              <button type="button" onClick={() => press("0")}>0</button>
+              <button type="button" onClick={() => setPin((p) => p.slice(0, -1))} aria-label="Delete"><Delete aria-hidden="true" /></button>
+            </div>
+          </div>
+        )}
+      </div>
+    </MobileShell>
+  );
 }
 
 export function DesktopLoginPage() {
-  return <div className="login-screen" data-platform="desktop"><div className="login-panel"><span className="demo-pill">PRODUCTION DESIGN</span><h1>Welcome back</h1><p>Sign in to TrianglZ Hotel HMS.</p><label>Email<input type="email" placeholder="name@trianglzhotel.com" /></label><label>Password<input type="password" placeholder="••••••••" /></label><Button variant="hmsPrimary" size="hmsLg">Sign in</Button></div></div>;
+  const navigate = useNavigate();
+  return (
+    <div className="login-screen" data-platform="desktop">
+      <form
+        className="login-panel"
+        onSubmit={(e) => {
+          e.preventDefault();
+          toast.success("Signed in (demo)", { duration: 2500 });
+          void navigate({ to: "/app/board" });
+        }}
+      >
+        <span className="demo-pill">PRODUCTION DESIGN</span>
+        <h1>Welcome back</h1>
+        <p>Sign in to TrianglZ Hotel HMS.</p>
+        <label>Email<input type="email" placeholder="name@trianglzhotel.com" defaultValue="rania.fathy@trianglzhotel.com" /></label>
+        <label>Password<input type="password" placeholder="••••••••" defaultValue="demo1234" /></label>
+        <Button type="submit" variant="hmsPrimary" size="hmsLg">Sign in</Button>
+        <Link to="/app/board" className="login-skip">Skip — back to demo</Link>
+      </form>
+    </div>
+  );
 }

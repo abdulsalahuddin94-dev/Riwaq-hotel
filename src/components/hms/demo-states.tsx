@@ -11,14 +11,18 @@ export function SkeletonState({ rows = 5 }: { rows?: number }) {
   );
 }
 
-export function EmptyState({ title, action = "Refresh" }: { title: string; action?: string }) {
+export function EmptyState({ title, action, onAction }: { title: string; action?: string; onAction?: () => void }) {
   return (
     <div className="empty-state">
       <div className="empty-illustration" aria-hidden="true">
         <CheckCircle2 />
       </div>
       <p>{title}</p>
-      <Button variant="hmsSecondary" size="hmsSm">{action}</Button>
+      {action && onAction ? (
+        <Button variant="hmsSecondary" size="hmsSm" onClick={onAction}>
+          {action}
+        </Button>
+      ) : null}
     </div>
   );
 }

@@ -26,6 +26,10 @@ import { Route as MLoginRouteImport } from './routes/m/login'
 import { Route as MMeRouteImport } from './routes/m/me'
 import { Route as MRoomsRouteImport } from './routes/m/rooms'
 import { Route as MWorkOrdersRouteImport } from './routes/m/work-orders'
+import { Route as MInspectionsRoomIdRouteImport } from './routes/m/inspections_.$roomId'
+import { Route as MRoomsRoomIdRouteImport } from './routes/m/rooms_.$roomId'
+import { Route as MWorkOrdersWoIdRouteImport } from './routes/m/work-orders_.$woId'
+import { Route as MRoomsRoomIdChecklistRouteImport } from './routes/m/rooms_.$roomId_.checklist'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -112,6 +116,26 @@ const MWorkOrdersRoute = MWorkOrdersRouteImport.update({
   path: '/m/work-orders',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MInspectionsRoomIdRoute = MInspectionsRoomIdRouteImport.update({
+  id: '/m/inspections_/$roomId',
+  path: '/m/inspections/$roomId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MRoomsRoomIdRoute = MRoomsRoomIdRouteImport.update({
+  id: '/m/rooms_/$roomId',
+  path: '/m/rooms/$roomId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MWorkOrdersWoIdRoute = MWorkOrdersWoIdRouteImport.update({
+  id: '/m/work-orders_/$woId',
+  path: '/m/work-orders/$woId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MRoomsRoomIdChecklistRoute = MRoomsRoomIdChecklistRouteImport.update({
+  id: '/m/rooms_/$roomId_/checklist',
+  path: '/m/rooms/$roomId/checklist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +155,10 @@ export interface FileRoutesByFullPath {
   '/m/me': typeof MMeRoute
   '/m/rooms': typeof MRoomsRoute
   '/m/work-orders': typeof MWorkOrdersRoute
+  '/m/inspections/$roomId': typeof MInspectionsRoomIdRoute
+  '/m/rooms/$roomId': typeof MRoomsRoomIdRoute
+  '/m/work-orders/$woId': typeof MWorkOrdersWoIdRoute
+  '/m/rooms/$roomId/checklist': typeof MRoomsRoomIdChecklistRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -150,6 +178,10 @@ export interface FileRoutesByTo {
   '/m/me': typeof MMeRoute
   '/m/rooms': typeof MRoomsRoute
   '/m/work-orders': typeof MWorkOrdersRoute
+  '/m/inspections/$roomId': typeof MInspectionsRoomIdRoute
+  '/m/rooms/$roomId': typeof MRoomsRoomIdRoute
+  '/m/work-orders/$woId': typeof MWorkOrdersWoIdRoute
+  '/m/rooms/$roomId/checklist': typeof MRoomsRoomIdChecklistRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,6 +202,10 @@ export interface FileRoutesById {
   '/m/me': typeof MMeRoute
   '/m/rooms': typeof MRoomsRoute
   '/m/work-orders': typeof MWorkOrdersRoute
+  '/m/inspections_/$roomId': typeof MInspectionsRoomIdRoute
+  '/m/rooms_/$roomId': typeof MRoomsRoomIdRoute
+  '/m/work-orders_/$woId': typeof MWorkOrdersWoIdRoute
+  '/m/rooms_/$roomId_/checklist': typeof MRoomsRoomIdChecklistRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,6 +227,10 @@ export interface FileRouteTypes {
     | '/m/me'
     | '/m/rooms'
     | '/m/work-orders'
+    | '/m/inspections/$roomId'
+    | '/m/rooms/$roomId'
+    | '/m/work-orders/$woId'
+    | '/m/rooms/$roomId/checklist'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,6 +250,10 @@ export interface FileRouteTypes {
     | '/m/me'
     | '/m/rooms'
     | '/m/work-orders'
+    | '/m/inspections/$roomId'
+    | '/m/rooms/$roomId'
+    | '/m/work-orders/$woId'
+    | '/m/rooms/$roomId/checklist'
   id:
     | '__root__'
     | '/'
@@ -229,6 +273,10 @@ export interface FileRouteTypes {
     | '/m/me'
     | '/m/rooms'
     | '/m/work-orders'
+    | '/m/inspections_/$roomId'
+    | '/m/rooms_/$roomId'
+    | '/m/work-orders_/$woId'
+    | '/m/rooms_/$roomId_/checklist'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,6 +297,10 @@ export interface RootRouteChildren {
   MMeRoute: typeof MMeRoute
   MRoomsRoute: typeof MRoomsRoute
   MWorkOrdersRoute: typeof MWorkOrdersRoute
+  MInspectionsRoomIdRoute: typeof MInspectionsRoomIdRoute
+  MRoomsRoomIdRoute: typeof MRoomsRoomIdRoute
+  MWorkOrdersWoIdRoute: typeof MWorkOrdersWoIdRoute
+  MRoomsRoomIdChecklistRoute: typeof MRoomsRoomIdChecklistRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -372,6 +424,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MWorkOrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/m/inspections_/$roomId': {
+      id: '/m/inspections_/$roomId'
+      path: '/m/inspections/$roomId'
+      fullPath: '/m/inspections/$roomId'
+      preLoaderRoute: typeof MInspectionsRoomIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/rooms_/$roomId': {
+      id: '/m/rooms_/$roomId'
+      path: '/m/rooms/$roomId'
+      fullPath: '/m/rooms/$roomId'
+      preLoaderRoute: typeof MRoomsRoomIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/work-orders_/$woId': {
+      id: '/m/work-orders_/$woId'
+      path: '/m/work-orders/$woId'
+      fullPath: '/m/work-orders/$woId'
+      preLoaderRoute: typeof MWorkOrdersWoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/rooms_/$roomId_/checklist': {
+      id: '/m/rooms_/$roomId_/checklist'
+      path: '/m/rooms/$roomId/checklist'
+      fullPath: '/m/rooms/$roomId/checklist'
+      preLoaderRoute: typeof MRoomsRoomIdChecklistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -393,6 +473,10 @@ const rootRouteChildren: RootRouteChildren = {
   MMeRoute: MMeRoute,
   MRoomsRoute: MRoomsRoute,
   MWorkOrdersRoute: MWorkOrdersRoute,
+  MInspectionsRoomIdRoute: MInspectionsRoomIdRoute,
+  MRoomsRoomIdRoute: MRoomsRoomIdRoute,
+  MWorkOrdersWoIdRoute: MWorkOrdersWoIdRoute,
+  MRoomsRoomIdChecklistRoute: MRoomsRoomIdChecklistRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
