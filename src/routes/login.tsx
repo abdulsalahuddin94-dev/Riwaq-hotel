@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { DesktopLoginPage } from "@/components/hms/mobile-pages";
+export const Route = createFileRoute("/login")({ head: () => ({ meta: [{ title: "Sign in — TrianglZ HMS" }, { name: "description", content: "Sign in to TrianglZ Hotel housekeeping operations." }, { property: "og:title", content: "Sign in — TrianglZ HMS" }, { property: "og:description", content: "Sign in to TrianglZ Hotel housekeeping operations." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: DesktopLoginPage });

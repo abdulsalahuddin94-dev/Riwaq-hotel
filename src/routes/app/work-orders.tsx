@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { WorkOrdersPage } from "@/components/hms/desktop-pages";
+export const Route = createFileRoute("/app/work-orders")({ head: () => ({ meta: [{ title: "Work Orders — TrianglZ HMS" }, { name: "description", content: "Maintenance work orders and room blocks." }, { property: "og:title", content: "Work Orders — TrianglZ HMS" }, { property: "og:description", content: "Maintenance work orders and room blocks." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: WorkOrdersPage });

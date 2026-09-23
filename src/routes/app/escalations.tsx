@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { EscalationsPage } from "@/components/hms/desktop-pages";
+export const Route = createFileRoute("/app/escalations")({ head: () => ({ meta: [{ title: "Escalations — TrianglZ HMS" }, { name: "description", content: "Housekeeping SLA breaches and risks." }, { property: "og:title", content: "Escalations — TrianglZ HMS" }, { property: "og:description", content: "Housekeeping SLA breaches and risks." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: EscalationsPage });
