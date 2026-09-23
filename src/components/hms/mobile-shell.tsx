@@ -97,17 +97,20 @@ export function MobileShell({ title, children }: { title: string; children: Reac
         </div>
       </div>
       <div className="mobile-persona-panel">
-        <span className="demo-pill">DEMO</span>
-        <label className="persona-select">
-          <span>Demo as</span>
+        <div className="mobile-persona-heading">
+          <span className="demo-pill">DEMO</span>
+          <div><strong>Preview a role</strong><small>Switch mobile workspace</small></div>
+        </div>
+        <label className="mobile-persona-select">
+          <span>Role</span>
           <select value={persona} onChange={(event) => changePersona(event.target.value as Persona)}>
             <option value="Attendant">Housekeeper (Attendant)</option>
             <option>Supervisor</option>
             <option>Engineer</option>
           </select>
         </label>
-        <Button variant="hmsSecondary" size="hmsMd" onClick={resetDemoData}>Reset demo data</Button>
-        <Link to="/m/login" reloadDocument className="desktop-login-link"><Briefcase aria-hidden="true" /> View login screen</Link>
+        <Button className="mobile-persona-reset" variant="hmsSecondary" size="hmsMd" onClick={resetDemoData}>Reset demo data</Button>
+        <Link to="/m/login" reloadDocument className="mobile-login-link"><Briefcase aria-hidden="true" /> View login screen</Link>
       </div>
     </div>
   );
