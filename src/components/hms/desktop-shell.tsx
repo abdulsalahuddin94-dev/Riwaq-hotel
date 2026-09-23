@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   AlertTriangle,
@@ -38,14 +38,16 @@ const personas: Persona[] = ["Manager", "Front Desk", "Admin"];
 export function DesktopShell({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const [collapsed, setCollapsed] = useState(false);
-  const [persona, setPersona] = useState<Persona>(() => {
-    if (typeof window === "undefined") return "Manager";
+  const [persona, setPersona] = useState<Persona>("Manager");
+
+  useEffect(() => {
     try {
-      return (window.localStorage.getItem("trianglz-demo-persona") as Persona) || "Manager";
+      const savedPersona = window.localStorage.getItem("trianglz-demo-persona") as Persona | null;
+      if (savedPersona) setPersona(savedPersona);
     } catch {
-      return "Manager";
+      // Persona persistence is optional in the demo shell.
     }
-  });
+  }, []);
 
   const changePersona = (nextPersona: Persona) => {
     setPersona(nextPersona);
@@ -84,6 +86,13 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
           {collapsed ? <PanelLeftOpen aria-hidden="true" /> : <PanelLeftClose aria-hidden="true" />}
           {!collapsed ? <span>Collapse</span> : null}
         </Button>
+        {!collapsed ? (
+          <div className="sidebar-property">
+            <span>Property</span>
+            <strong>TrianglZ Hotel</strong>
+            <small>Cairo · 100 rooms</small>
+          </div>
+        ) : null}
       </aside>
       <div className="desktop-main">
         <header className="desktop-topbar">
