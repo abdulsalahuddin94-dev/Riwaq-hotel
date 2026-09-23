@@ -12,7 +12,7 @@ import { StatusChip } from "./status";
 type State = "default" | "loading" | "empty" | "error";
 
 export function MobileRoomsPage() {
-  const [state] = useState<State>("default");
+  const [state, setState] = useState<State>("default");
   return (
     <MobileShell title="My Rooms">
       <div className="mobile-sync"><Wifi /> Synced <span>8 of 14 complete</span></div>
