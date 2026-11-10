@@ -33,6 +33,7 @@ import {
   type WorkOrder,
   zoneLabel,
   type Zone,
+  wingLabel,
 } from "@/lib/demo-data";
 import {
   activeMinutes,
@@ -49,7 +50,7 @@ import {
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
 import { MobileSheet, MobileShell, useMobilePersona } from "./mobile-shell";
-import { RoomBadges } from "./room-components";
+import { HeritageNotice, RoomBadges } from "./room-components";
 import { StatusChip } from "./status";
 
 /* ───────────── Shared bits ───────────── */
@@ -75,7 +76,7 @@ function CameraSheet({ open, onClose, onCapture, title }: { open: boolean; onClo
         <div className="m-viewfinder" aria-hidden="true">
           <span className="vf-corner tl" /><span className="vf-corner tr" /><span className="vf-corner bl" /><span className="vf-corner br" />
           <Camera />
-          <small>Demo camera · photo is simulated</small>
+          <small>Tap to capture</small>
         </div>
         <button type="button" className="m-shutter" aria-label="Take photo" onClick={() => { onCapture(); onClose(); }} />
       </div>
@@ -86,7 +87,7 @@ function CameraSheet({ open, onClose, onCapture, title }: { open: boolean; onClo
 function NotFound({ what, back }: { what: string; back: string }) {
   return (
     <MobileShell title="Not found" back={{ to: back }}>
-      <EmptyState title={`${what} doesn't exist in the demo data`} />
+      <EmptyState title={`${what} was not found`} />
     </MobileShell>
   );
 }
@@ -156,11 +157,12 @@ export function MobileRoomDetailPage({ roomId }: { roomId: string }) {
   else footer = <Button variant="hmsSecondary" size="hmsXl" disabled><CheckCircle2 aria-hidden="true" /> {room.hk === "CLEAN" ? "Waiting for inspection" : "Done · inspected"}</Button>;
 
   return (
-    <MobileShell title={`Room ${room.number}`} subtitle={`${room.type} · Floor ${room.floor} · ${taskLabel[room.taskType]}`} back={{ to: persona === "Supervisor" ? "/m/floor" : "/m/rooms", label: persona === "Supervisor" ? "Floor" : "My Rooms" }} footer={footer}>
+    <MobileShell title={`Room ${room.number}`} subtitle={`${room.type} · ${wingLabel(room.floor)} · ${taskLabel[room.taskType]}`} back={{ to: persona === "Supervisor" ? "/m/floor" : "/m/rooms", label: persona === "Supervisor" ? "Floor" : "My Rooms" }} footer={footer}>
       <div className="m-hero">
         <StatusChip status={status} />
         <RoomBadges room={room} showAnomaly={false} />
       </div>
+      <HeritageNotice room={room} />
 
       {room.queue ? <p className="m-note m-note-warn"><Sparkles aria-hidden="true" /> {room.queue.guest} is waiting in the lobby — this room is your #1.</p> : null}
       {room.arrival && !room.queue ? <p className="m-note">Arrival: {room.arrival.guest} · {room.arrival.eta}</p> : null}
@@ -329,6 +331,7 @@ export function MobileChecklistPage({ roomId }: { roomId: string }) {
 
   return (
     <MobileShell title="Checklist" subtitle={`Room ${room.number} · ${taskLabel[room.taskType]}`} back={{ to: "/m/rooms/$roomId", params: { roomId: room.number }, label: `Room ${room.number}` }} footer={footer}>
+      <HeritageNotice room={room} compact />
       <div className="m-check-summary">
         <ProgressRing value={progress.percent} label={`${progress.done}/${progress.total}`} />
         <div>
@@ -464,7 +467,8 @@ export function MobileInspectionFormPage({ roomId }: { roomId: string }) {
   );
 
   return (
-    <MobileShell title={`Inspect ${room.number}`} subtitle={`${room.type} · Floor ${room.floor}`} back={{ to: "/m/inspections", label: "Queue" }} footer={footer}>
+    <MobileShell title={`Inspect ${room.number}`} subtitle={`${room.type} · ${wingLabel(room.floor)}`} back={{ to: "/m/inspections", label: "Queue" }} footer={footer}>
+      <HeritageNotice room={room} compact />
       <button type="button" className="m-attendant-card" onClick={() => setAttendantOpen(true)}>
         <div>
           <strong>{staffName(s, room.attendant)}</strong>

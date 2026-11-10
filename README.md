@@ -1,24 +1,13 @@
-# Build Companion
+# Riwaq — رِواق
 
-CONTEXT INSTRUCTION FOR AI APP BUILDER:
+**Heritage Hospitality Operations Platform**: a clickable demo for Gulf heritage hotels and palaces. It covers housekeeping, inspection, maintenance and heritage-asset care, with quiet-luxury service.
 
-You are building a production-grade web application based strictly on two authoritative specification files provided in this workspace:
+> Demo/prototype only. There is no backend: data is seeded and kept in your browser. Nothing here is confirmed by a real PMS, and heritage care procedures are placeholders awaiting specialist approval.
 
-1. `SPEC_PRODUCT_PRD.md` (Master PRD built upon SPEC_RESEARCH, SPEC_USER_FLOWS, and SPEC_DATA_SCHEMA)
-
-2. `SPEC_DESIGN_SYSTEM.md` (Visual Design System, Tailwind 2-Layer Tokens [Primitives 50-950 & Semantics], Typography, Component 5 States, Mobile Grid)
-
-RULES TO FOLLOW STRICTLY:
-
-- DO NOT hallucinate arbitrary color schemes or layout systems. Use the exact HSL/HEX color tokens and typography scale defined in `SPEC_DESIGN_SYSTEM.md`.
-
-- Implement mandatory 5 UI states for components (Default, Loading Skeleton, Empty State, Error Fallback, Success Toast).
-
-- Mobile Responsiveness: Follow screen breakpoints (<767px mobile bottom navigation).
-
-BEGIN INITIALIZATION:
-
-Read `SPEC_PRODUCT_PRD.md` and `SPEC_DESIGN_SYSTEM.md` first, summarize the core application structure in 3 sentences, and generate the main layout shell and primary route navigation.
+- Product spec: [`docs/specs/riwaq-product-spec.md`](docs/specs/riwaq-product-spec.md)
+- Decisions and open questions: [`docs/decision-log.md`](docs/decision-log.md)
+- Design direction: [`docs/design-direction.md`](docs/design-direction.md)
+- Agent rules: [`AGENTS.md`](AGENTS.md)
 
 This project was built with [Lovable](https://lovable.dev).
 

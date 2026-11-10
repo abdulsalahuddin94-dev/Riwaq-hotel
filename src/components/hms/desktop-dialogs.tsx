@@ -8,6 +8,7 @@ import {
   fmtDuration,
   fmtTime,
   inspectionPoints,
+  property,
   issueCategories,
   roleLabel,
   roomTypeInfo,
@@ -15,6 +16,7 @@ import {
   type WorkOrder,
   zoneLabel,
   type Zone,
+  wingLabel,
 } from "@/lib/demo-data";
 import {
   activeMinutes,
@@ -409,7 +411,7 @@ export function ReportPreviewDialog({ reportKey, onClose }: { reportKey: ReportK
           <>
             <DialogHeader>
               <DialogTitle>{report.title}</DialogTitle>
-              <DialogDescription>TrianglZ Hotel · 23 September 2026 · {report.rows.length} rows</DialogDescription>
+              <DialogDescription>{property.name} · {report.rows.length} rows</DialogDescription>
             </DialogHeader>
             <div className="report-table-wrap">
               <table className="report-table">
@@ -467,7 +469,7 @@ function PropertySettings() {
     <div className="settings-body">
       <div className="mini-kpis">
         {[1, 2, 3, 4, 5].map((f) => (
-          <div key={f}><strong>{s.rooms.filter((r) => r.floor === f).length}</strong><span>Floor {f}</span></div>
+          <div key={f}><strong>{s.rooms.filter((r) => r.floor === f).length}</strong><span>{wingLabel(f)}</span></div>
         ))}
       </div>
       <div className="dialog-table">

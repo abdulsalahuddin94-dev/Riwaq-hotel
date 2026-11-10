@@ -32,8 +32,8 @@ export type HmsState = SeedState & {
   seq: number;
 };
 
-const STORAGE_KEY = "trianglz-hms-state-v4";
-const VERSION = 4;
+const STORAGE_KEY = "riwaq-demo-state-v1";
+const VERSION = 5;
 
 function freshState(seededAt = 0): HmsState {
   const seed = buildSeed();

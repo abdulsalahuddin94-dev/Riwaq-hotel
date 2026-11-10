@@ -18,7 +18,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { fmtTime, inspectionPoints, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
+import { wingLabel, fmtTime, inspectionPoints, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import { activeMinutes, demoNow, displayStatus, type HmsState, stdMinutes, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { buildReport, downloadCsv, type ReportKey, ReportPreviewDialog } from "./desktop-dialogs";
@@ -26,22 +26,22 @@ import { EmptyState } from "./demo-states";
 
 /* Chart colors are hex (not CSS vars) so PNG export renders them. */
 const C = {
-  data: "#2a78d6", // single data hue
-  dataSoft: "#2a78d61a",
-  gray: "#c9ced9", // de-emphasis
-  ink: "#1c2541",
-  muted: "#67718c",
-  grid: "#eceef2",
-  target: "#886930", // gold-700, reference lines
+  data: "#3f6b4f", // single data hue
+  dataSoft: "#3f6b4f1a",
+  gray: "#d6cbb8", // de-emphasis
+  ink: "#2b1f17",
+  muted: "#7a6a5a",
+  grid: "#efe8dc",
+  target: "#7a5a2f", // brass-700, reference lines
 };
 const STATUS_HEX: Record<string, string> = {
-  Ready: "#2a9d8f",
-  Inspect: "#457b9d",
-  Cleaning: "#f4a261",
-  Dirty: "#d62828",
-  Occupied: "#9aa3b5",
-  DND: "#7b2cbf",
-  Blocked: "#495057",
+  Ready: "#3f7f55",
+  Inspect: "#3e6a8a",
+  Cleaning: "#d08a3a",
+  Dirty: "#b5452a",
+  Occupied: "#a99a86",
+  DND: "#6d3f7a",
+  Blocked: "#4a3f37",
 };
 const AXIS = { fontSize: 12, fill: C.muted };
 
@@ -191,7 +191,7 @@ async function downloadPng(card: HTMLElement | null, title: string) {
   ctx.fillText(title, pad, pad + 14);
   ctx.fillStyle = C.muted;
   ctx.font = "12px Inter, -apple-system, Segoe UI, sans-serif";
-  ctx.fillText("TrianglZ Hotel · 23 Sep 2026", pad, pad + 32);
+  ctx.fillText(`Riwaq · ${property.name}`, pad, pad + 32);
   ctx.drawImage(img, pad, pad + head, width, height);
   canvas.toBlob((blob) => {
     if (!blob) return;
@@ -338,10 +338,10 @@ export function ReportsContent() {
           <span>Floor</span>
           <select value={floor} onChange={(e) => setFloor(e.target.value)}>
             <option value="all">All floors</option>
-            {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>Floor {f}</option>)}
+            {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>{wingLabel(f)}</option>)}
           </select>
         </label>
-        <span className="report-note">Today is live · earlier days are demo history at the same time of day ({fmtTime(d.now)})</span>
+        <span className="report-note">Today is live · earlier days compared at the same time of day ({fmtTime(d.now)})</span>
         <Button variant="hmsGhost" size="hmsMd" className="ms-auto" onClick={() => window.print()}>
           <Printer aria-hidden="true" /> Print / PDF
         </Button>

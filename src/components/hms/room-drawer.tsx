@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { fmtDuration, fmtTime, hkLabel, inspectionPoints, taskLabel, zoneLabel, type Zone } from "@/lib/demo-data";
+import { wingLabel, fmtDuration, fmtTime, hkLabel, inspectionPoints, taskLabel, zoneLabel, type Zone } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
@@ -23,7 +23,7 @@ import {
 } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { QueueGuestDialog, WorkOrderDialog } from "./desktop-dialogs";
-import { RoomBadges } from "./room-components";
+import { HeritageNotice, RoomBadges } from "./room-components";
 import { StatusChip } from "./status";
 
 export function RoomDrawer({ number, onClose }: { number: string | null; onClose: () => void }) {
@@ -68,7 +68,7 @@ function RoomDrawerBody({ number }: { number: string }) {
           <StatusChip status={status} />
         </div>
         <SheetDescription>
-          {room.type} · Floor {room.floor} · {taskLabel[room.taskType]}
+          {room.type} · {wingLabel(room.floor)} · {taskLabel[room.taskType]}
         </SheetDescription>
         <RoomBadges room={room} />
       </SheetHeader>
@@ -76,10 +76,13 @@ function RoomDrawerBody({ number }: { number: string }) {
       <div className={cn("readiness-box", ready ? "readiness-yes" : "readiness-no")}>
         {ready ? <CheckCircle2 aria-hidden="true" /> : <XCircle aria-hidden="true" />}
         <div>
-          <strong>{ready ? "READY for check-in" : "Not ready for check-in"}</strong>
+          <strong>{ready ? "Ready (internal)" : "Not ready for check-in"}</strong>
           <p>{ready ? "Vacant, inspected, and no active blocks." : reasons.join(" · ")}</p>
+          <p className="pms-note">Internal readiness · PMS sync not connected</p>
         </div>
       </div>
+
+      <HeritageNotice room={room} compact />
 
       <dl className="fact-grid">
         <div><dt>Occupancy</dt><dd>{room.occupancy === "OCCUPIED" ? `Occupied${room.guest ? ` · ${room.guest}` : ""}` : "Vacant"}</dd></div>

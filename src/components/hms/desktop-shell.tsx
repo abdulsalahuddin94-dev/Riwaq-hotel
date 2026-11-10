@@ -6,7 +6,9 @@ import {
   BriefcaseBusiness,
   ClipboardList,
   LayoutGrid,
-  LogIn,
+  Check,
+  ChevronDown,
+  LogOut,
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
@@ -18,9 +20,17 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
-import logoAsset from "@/assets/trianglz-logo.png.asset.json";
+import riwaqMark from "@/assets/riwaq-mark.svg";
 import { Button } from "@/components/ui/button";
-import { fmtTime, type Persona } from "@/lib/demo-data";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { fmtTime, type Persona, property } from "@/lib/demo-data";
 import { demoNow, escalations, hms, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { RoomDrawer } from "./room-drawer";
@@ -56,6 +66,55 @@ type DesktopCtx = { openRoom: (number: string) => void };
 const DesktopContext = createContext<DesktopCtx>({ openRoom: () => undefined });
 export const useDesktop = () => useContext(DesktopContext);
 
+const personaAccount: Record<"Manager" | "Front Desk" | "Admin", { id: string; title: string }> = {
+  Manager: { id: "rf", title: "Operations Manager" },
+  "Front Desk": { id: "te", title: "Front Office" },
+  Admin: { id: "km", title: "System Admin" },
+};
+
+function UserMenu({ persona, onSwitch }: { persona: keyof typeof personaAccount; onSwitch: (next: Persona) => void }) {
+  const s = useHms();
+  const navigate = useNavigate();
+  const person = (key: keyof typeof personaAccount) => s.staff.find((m) => m.id === personaAccount[key].id);
+  const me = person(persona);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="user-menu-trigger" aria-label="Account menu">
+        <span className="user-avatar" aria-hidden="true">{me?.initials}</span>
+        <span className="user-menu-text">
+          <strong>{me?.name}</strong>
+          <small>{personaAccount[persona].title}</small>
+        </span>
+        <ChevronDown aria-hidden="true" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="user-menu">
+        <DropdownMenuLabel>Switch account</DropdownMenuLabel>
+        {personas.map((key) => {
+          const k = key as keyof typeof personaAccount;
+          const p = person(k);
+          return (
+            <DropdownMenuItem key={key} onSelect={() => onSwitch(key)} className={cn(key === persona && "user-menu-current")}>
+              <span className="user-avatar user-avatar-sm" aria-hidden="true">{p?.initials}</span>
+              <span className="user-menu-text">
+                <strong>{p?.name}</strong>
+                <small>{personaAccount[k].title}</small>
+              </span>
+              {key === persona ? <Check aria-hidden="true" className="ms-auto" /> : null}
+            </DropdownMenuItem>
+          );
+        })}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => { hms.reset(); toast.success("Sample data restored", { duration: 2000 }); }}>
+          <RotateCcw aria-hidden="true" /> Restore sample data
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void navigate({ to: "/login" })}>
+          <LogOut aria-hidden="true" /> Sign out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function DesktopShell({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const navigate = useNavigate();
@@ -71,7 +130,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
   const changePersona = (next: Persona) => {
     hms.setPersona("desktop", next);
     const home = personaHome[next as keyof typeof personaHome];
-    toast.success(`Now viewing as ${next}`, { duration: 2500 });
+    toast.success(`Signed in as ${personaAccount[next as keyof typeof personaAccount]?.title ?? next}`, { duration: 2500 });
     if (home && !personaNav[next as keyof typeof personaNav].includes(pathname as NavPath)) void navigate({ to: home });
   };
 
@@ -93,11 +152,11 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
         {mobileNav ? <button className="sidebar-scrim" type="button" aria-label="Close menu" onClick={() => setMobileNav(false)} /> : null}
         <aside className={cn("desktop-sidebar", collapsed && "desktop-sidebar-collapsed", mobileNav && "desktop-sidebar-open")}>
           <div className="sidebar-brand">
-            <img src={logoAsset.url} alt="TrianglZ Hotel" />
+            <img src={riwaqMark} alt="" />
             {!collapsed ? (
               <div>
-                <strong>TrianglZ HMS</strong>
-                <span>Housekeeping</span>
+                <strong><span lang="ar">رِواق</span> Riwaq</strong>
+                <span>Heritage hospitality ops</span>
               </div>
             ) : null}
             {mobileNav ? (
@@ -134,8 +193,8 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
           {!collapsed ? (
             <div className="sidebar-property">
               <span>Property</span>
-              <strong>TrianglZ Hotel</strong>
-              <small>Cairo · {s.rooms.length} rooms</small>
+              <strong>{property.name}</strong>
+              <small>{property.location} · {s.rooms.length} keys</small>
             </div>
           ) : null}
         </aside>
@@ -161,24 +220,10 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
                   onChange={(event) => setSearch(event.target.value)}
                 />
               </form>
-              <span className="sync-pill">
-                <span /> Synced · {fmtTime(demoNow(s))} Cairo
+              <span className="sync-pill" title="Board time">
+                <span /> Live · {fmtTime(demoNow(s))}
               </span>
-              <span className="demo-pill">DEMO</span>
-              <label className="persona-select">
-                <span>Demo as</span>
-                <select value={persona} onChange={(event) => changePersona(event.target.value as Persona)}>
-                  {personas.map((item) => (
-                    <option key={item}>{item}</option>
-                  ))}
-                </select>
-              </label>
-              <Button variant="hmsSecondary" size="hmsMd" onClick={() => hms.reset()} title="Restore the seeded demo data">
-                <RotateCcw aria-hidden="true" /> Reset demo
-              </Button>
-              <Link to="/login" className="desktop-login-link">
-                <LogIn aria-hidden="true" /> Login design
-              </Link>
+              <UserMenu persona={persona} onSwitch={changePersona} />
             </div>
           </header>
           <main className="desktop-content">{children}</main>

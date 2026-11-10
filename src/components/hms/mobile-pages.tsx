@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Bell, ChevronRight, CircleUserRound, Delete, LogOut, RotateCcw, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
+import { AlertTriangle, Bell, ChevronRight, CircleUserRound, Delete, LogOut, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
+import { wingLabel, fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
 import {
   activeMinutes,
   checklistProgress,
@@ -48,7 +48,7 @@ export function MobileRoomsPage() {
   const pct = mine.length ? Math.round((done.length / mine.length) * 100) : 0;
   return (
     <MobileShell title="My Rooms">
-      <div className="mobile-sync"><Wifi aria-hidden="true" /> Synced <span>{done.length} of {mine.length} complete</span></div>
+      <div className="mobile-sync"><Wifi aria-hidden="true" /> Saved on this device <span>{done.length} of {mine.length} complete</span></div>
       <div className="mobile-progress-summary"><div><span style={{ inlineSize: `${pct}%` }} /></div><b>{pct}%</b></div>
       <div className="m-chips" role="tablist">
         {([["todo", "To do", todo.length], ["done", "Done", done.length], ["issues", "Issues", issues.length]] as const).map(([k, label, n]) => (
@@ -114,7 +114,6 @@ export function MobileMePage() {
   return (
     <MobileShell title="Me">
       <div className="mobile-profile">
-        <span className="demo-pill">DEMO</span>
         <div className="profile-avatar">{person?.initials}</div>
         <h2>{person?.name}</h2>
         <p>{person ? roleLabel[person.role] : ""} · Morning shift · started 07:30</p>
@@ -123,9 +122,8 @@ export function MobileMePage() {
         {stats.map(([v, l]) => <article key={l}><strong>{v}</strong><span>{l}</span></article>)}
       </div>
       <div className="mobile-settings-list">
-        <button type="button" onClick={() => toast.success("All changes synced", { duration: 2000 })}><Wifi aria-hidden="true" /> Sync status <span>Synced · {fmtTime(demoNow(s))}</span></button>
-        <button type="button" onClick={() => toast.info("Arabic (RTL) is specified in SPEC_DESIGN_SYSTEM §7 — coming in the next build", { duration: 3500 })}>🌐 Language <span>English</span></button>
-        <button type="button" onClick={() => hms.reset()}><RotateCcw aria-hidden="true" /> Reset demo data <ChevronRight aria-hidden="true" /></button>
+        <button type="button" onClick={() => toast.info("All changes are saved on this device.", { duration: 2500 })}><Wifi aria-hidden="true" /> Sync status <span>On device · {fmtTime(demoNow(s))}</span></button>
+        <button type="button" onClick={() => toast.info("Arabic is coming soon", { duration: 2500 })}>🌐 Language <span>English</span></button>
         <button type="button" onClick={() => { toast.success("Shift ended · see you tomorrow", { duration: 2500 }); void navigate({ to: "/m/login" }); }}><LogOut aria-hidden="true" /> End shift <ChevronRight aria-hidden="true" /></button>
       </div>
     </MobileShell>
@@ -213,7 +211,7 @@ export function MobileFloorPage() {
       <MobileSheet open={!!room} onClose={() => setOpen(null)} title={room ? `Room ${room.number}` : ""}>
         {room ? (
           <div className="m-sheet-stack">
-            <div className="m-row-between"><span>{room.type} · Floor {room.floor}</span><StatusChip status={displayStatus(room, s.settings)} /></div>
+            <div className="m-row-between"><span>{room.type} · {wingLabel(room.floor)}</span><StatusChip status={displayStatus(room, s.settings)} /></div>
             <dl className="m-facts">
               <div><dt>Attendant</dt><dd>{staffName(s, room.attendant)}</dd></div>
               <div><dt>Checklist</dt><dd>{checklistProgress(s, room).done}/{checklistProgress(s, room).total}</dd></div>
@@ -299,7 +297,7 @@ export function MobileLoginPage() {
     if (next.length === 4 && person) {
       const persona = person.role === "SUPERVISOR" ? "Supervisor" : person.role === "ENGINEER" ? "Engineer" : "Attendant";
       hms.setPersona("mobile", persona);
-      toast.success(`Welcome, ${person.name.split(" ")[0]} · shift started (demo: acting as ${persona === "Attendant" ? "Ahmed" : persona === "Supervisor" ? "Mona" : "Fady"})`, { duration: 3500 });
+      toast.success(`Welcome, ${person.name.split(" ")[0]} · shift started`, { duration: 3500 });
       void navigate({ to: mobilePersonaHome[persona] });
     }
   };
@@ -323,7 +321,7 @@ export function MobileLoginPage() {
           <div className="pin-pad">
             <div className="profile-avatar">{person.initials}</div>
             <h2>{person.name}</h2>
-            <p>Enter your 4-digit PIN (any digits in the demo)</p>
+            <p>Enter your 4-digit PIN</p>
             <div className="pin-dots" aria-label={`${pin.length} of 4 digits`}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")} />)}</div>
             <div className="pin-keys">
               {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => <button type="button" key={d} onClick={() => press(d)}>{d}</button>)}
@@ -346,17 +344,16 @@ export function DesktopLoginPage() {
         className="login-panel"
         onSubmit={(e) => {
           e.preventDefault();
-          toast.success("Signed in (demo)", { duration: 2500 });
+          toast.success("Signed in", { duration: 2500 });
           void navigate({ to: "/app/board" });
         }}
       >
-        <span className="demo-pill">PRODUCTION DESIGN</span>
         <h1>Welcome back</h1>
-        <p>Sign in to TrianglZ Hotel HMS.</p>
-        <label>Email<input type="email" placeholder="name@trianglzhotel.com" defaultValue="rania.fathy@trianglzhotel.com" /></label>
-        <label>Password<input type="password" placeholder="••••••••" defaultValue="demo1234" /></label>
+        <p>Sign in to Riwaq.</p>
+        <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>
+        <label>Password<input type="password" placeholder="••••••••" defaultValue="riwaq1234" /></label>
         <Button type="submit" variant="hmsPrimary" size="hmsLg">Sign in</Button>
-        <Link to="/app/board" className="login-skip">Skip — back to demo</Link>
+        <Link to="/app/board" className="login-skip">Back to dashboard</Link>
       </form>
     </div>
   );

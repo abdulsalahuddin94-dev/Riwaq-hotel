@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from "lucide-react";
-import { fmtDuration, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
+import { AlertTriangle, ChevronRight, Clock, Crown, Landmark, Moon, RotateCcw, Zap } from "lucide-react";
+import { wingLabel, fmtDuration, heritageNotice, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import { activeMinutes, checklistProgress, displayStatus, type HmsState, staffById, stdMinutes } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { StatusChip } from "./status";
@@ -21,6 +21,33 @@ function BadgeIcon({ badge }: { badge: RoomBadge }) {
   if (badge === "VIP") return <Crown aria-hidden="true" />;
   if (badge === "Anomaly") return <AlertTriangle aria-hidden="true" />;
   return <RotateCcw aria-hidden="true" />;
+}
+
+/** Heritage warning. Text only — never a care recipe until a specialist approves one. */
+export function HeritageNotice({ room, compact = false }: { room: Room; compact?: boolean }) {
+  if (!room.heritage.length) return null;
+  return (
+    <section className={cn("heritage-notice", compact && "heritage-notice-compact")} aria-label={heritageNotice.title}>
+      <Landmark aria-hidden="true" />
+      <div>
+        <strong>
+          {heritageNotice.title}
+        </strong>
+        <ul>
+          {room.heritage.map((asset) => (
+            <li key={asset.id}>
+              {asset.name} <small>({asset.material})</small>
+            </li>
+          ))}
+        </ul>
+        {!compact ? (
+          <p>{heritageNotice.body}</p>
+        ) : (
+          <p>Care procedure awaiting specialist approval — report, don&apos;t treat.</p>
+        )}
+      </div>
+    </section>
+  );
 }
 
 export function RoomBadges({ room, showAnomaly = true, max = 3 }: { room: Room; showAnomaly?: boolean; max?: number }) {
@@ -124,9 +151,9 @@ export function FloorBoard({
         {floors.map((floor) => {
           const floorRooms = rooms.filter((room) => room.floor === floor);
           return (
-            <section className="floor-block" key={floor} aria-label={`Floor ${floor}`}>
+            <section className="floor-block" key={floor} aria-label={wingLabel(floor)}>
               <header className="floor-head">
-                <strong>Floor {floor}</strong>
+                <strong>{wingLabel(floor)}</strong>
                 <span className="floor-counts">
                   {floorSummary.map((group) => {
                     const count = floorRooms.filter((room) => group.statuses.includes(displayStatus(room, s.settings))).length;
@@ -180,7 +207,7 @@ export function RoomCard({ room, s }: { room: Room; s: HmsState }) {
       <div className="mobile-room-main">
         <div>
           <p className="mobile-room-meta">
-            {room.type} · Floor {room.floor}
+            {room.type} · {wingLabel(room.floor)}
           </p>
           <h3>
             <bdi>Room {room.number}</bdi>

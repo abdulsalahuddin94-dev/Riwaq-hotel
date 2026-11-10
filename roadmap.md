@@ -1,8 +1,11 @@
-# Roadmap
-- [x] Port exact HMS design tokens and brand assets
-- [x] Build seeded demo state and shared controls
-- [x] Build desktop shell and all primary web routes
-- [x] Build distinct mobile shell and primary mobile routes
-- [x] Verify navigation, view switching, and responsive layouts
-- [x] Redesign the room grid as a professional operations board
-- [x] Refresh the overall interface with the structured operations direction
+# Roadmap — Riwaq demo
+
+- [x] TrianglZ HMS demo: boards, checklist, inspection, work orders, reports
+- [x] Rebrand to Riwaq: mark, warm heritage palette, wings, Gulf staff and guests
+- [x] Heritage elements per room with "awaiting specialist approval" notices, plus a heritage check step
+- [x] Honest labels: demo data, PMS not connected, internal readiness
+- [ ] Full Arabic RTL with a language switch
+- [ ] Simulated offline outbox with spec §14 sync states
+- [ ] Clearly labelled mock PMS acknowledgement
+- [ ] Block self-approval in inspection
+- [ ] Guest requests (butler) flow

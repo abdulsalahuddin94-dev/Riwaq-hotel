@@ -23,7 +23,7 @@ export function DemoChrome({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem("trianglz-demo-view", isMobileView ? "mobile" : "desktop");
+      window.localStorage.setItem("riwaq-demo-view", isMobileView ? "mobile" : "desktop");
     } catch {
       // Demo view preference is optional.
     }
