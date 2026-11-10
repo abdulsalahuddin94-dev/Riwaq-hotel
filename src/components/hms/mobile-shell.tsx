@@ -16,7 +16,7 @@ const attendantTabs = [
 
 const supervisorTabs = [
   { to: "/m/inspections", label: "Inspect", icon: ClipboardCheck },
-  { to: "/m/floor", label: "Floor", icon: Grid2X2 },
+  { to: "/m/floor", label: "Wings", icon: Grid2X2 },
   { to: "/m/alerts", label: "Alerts", icon: Bell },
   { to: "/m/me", label: "Me", icon: User },
 ] as const;
@@ -121,8 +121,8 @@ export function MobileShell({
                   </Link>
                 ) : null}
                 <div>
-                  <p>{subtitle ?? property.name}</p>
                   <h1>{title}</h1>
+                  <p>{subtitle ?? property.name}</p>
                 </div>
                 {!back ? <span className="mobile-role-pill">{persona === "Attendant" ? "Housekeeper" : persona}</span> : null}
               </header>

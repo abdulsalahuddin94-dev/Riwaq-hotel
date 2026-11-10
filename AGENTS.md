@@ -7,6 +7,20 @@ Riwaq (رِواق) is a heritage hospitality operations platform for Gulf herita
 - `docs/specs/hms-supplementary-spec.md`: supplementary only. Treat its hard numbers and material-care steps as proposals.
 - `docs/decision-log.md`: decisions taken and decisions still OPEN.
 - `docs/design-direction.md`: the visual direction and its reference hotels.
+- `PRODUCT.md` and `DESIGN.md`: product context and design tokens in the [impeccable](https://github.com/pbakaus/impeccable) format.
+
+## Design tooling
+UI work follows two open design skill sets:
+- **impeccable** (pbakaus/impeccable, Apache-2.0): Operate mode for app UI. Run `/impeccable critique` or `/impeccable polish` on a screen before merging UI changes.
+- **Intent** (ghaida/intent, CC0): UX evaluation (heuristics, cognitive walkthrough) and WCAG 2.2 inclusion checks.
+
+Each person installs them in Claude Code once (not auto-enabled from this repo):
+```
+/plugin marketplace add pbakaus/impeccable
+/plugin install impeccable@impeccable
+/plugin marketplace add ghaida/intent
+/plugin install intent@intent
+```
 
 ## Rules
 - Keep everything client-side (`src/lib/hms-store.ts` uses localStorage). Don't add a server, database, auth provider or real PMS without the owner's approval.

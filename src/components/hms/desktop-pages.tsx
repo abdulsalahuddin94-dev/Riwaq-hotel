@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { wingLabel, fmtDuration, fmtTime, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
+import { wingLabel, wingShort, fmtDuration, fmtTime, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
@@ -65,7 +65,7 @@ const DAY = "Wednesday, 23 September";
 
 export function BoardPage() {
   return (
-    <DesktopShell title="Live Board" eyebrow={`Operations · ${DAY}`}>
+    <DesktopShell title="Live Board" eyebrow={DAY}>
       <BoardContent />
     </DesktopShell>
   );
@@ -135,9 +135,9 @@ function BoardContent() {
             ))}
           </div>
           <div className="filter-group">
-            <span>Floor</span>
+            <span>Wing</span>
             <select value={floor} onChange={(e) => setFloor(e.target.value)}>
-              <option value="all">All floors</option>
+              <option value="all">All wings</option>
               {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>{wingLabel(f)}</option>)}
             </select>
             <span>Attendant</span>
@@ -157,22 +157,38 @@ function BoardContent() {
         </section>
       ) : null}
 
-      <section className="kpi-strip" aria-label="Housekeeping status summary">
-        {KPI_STATUSES.map((kpi) => {
-          const group = kpi.group ?? [kpi.status];
-          const value = s.rooms.filter((r) => group.includes(statusOf(r))).length;
-          const Icon = statusMeta[kpi.status].icon;
-          const on = group.every((g) => statuses.includes(g));
+      <section className="readiness-ribbon" aria-label="Room status summary">
+        {(() => {
+          const counts = KPI_STATUSES.map((kpi) => {
+            const group = kpi.group ?? [kpi.status];
+            return { kpi, group, value: s.rooms.filter((r) => group.includes(statusOf(r))).length };
+          });
           return (
-            <button type="button" className={cn("kpi-item", on && "kpi-item-on")} key={kpi.label} onClick={() => toggleStatus(group)} aria-pressed={on}>
-              <div className={cn("kpi-icon", statusMeta[kpi.status].className)}><Icon aria-hidden="true" /></div>
-              <div><strong>{value}</strong><span>{kpi.label}</span><small>{kpi.helper(value, s)}</small></div>
-            </button>
+            <>
+              <div className="ribbon-bar" aria-hidden="true">
+                {counts.map(({ kpi, value }) =>
+                  value ? <span key={kpi.label} className={statusMeta[kpi.status].className} style={{ flexGrow: value }} /> : null,
+                )}
+              </div>
+              <div className="ribbon-legend">
+                {counts.map(({ kpi, group, value }) => {
+                  const Icon = statusMeta[kpi.status].icon;
+                  const on = group.every((g) => statuses.includes(g));
+                  return (
+                    <button type="button" className={cn("ribbon-item", on && "ribbon-item-on")} key={kpi.label} onClick={() => toggleStatus(group)} aria-pressed={on}>
+                      <span className={cn("ribbon-swatch", statusMeta[kpi.status].className)}><Icon aria-hidden="true" /></span>
+                      <strong>{value}</strong>
+                      <span className="ribbon-label">{kpi.label}<small>{kpi.helper(value, s)}</small></span>
+                    </button>
+                  );
+                })}
+                <p className="ribbon-total">
+                  <strong>{s.rooms.length}</strong> keys · {s.rooms.filter((r) => r.occupancy === "OCCUPIED").length} occupied · {s.staff.length} staff on shift
+                </p>
+              </div>
+            </>
           );
-        })}
-        <article className="kpi-item occupancy-kpi">
-          <div><strong>{s.rooms.length}</strong><span>Total rooms</span><small>{s.rooms.filter((r) => r.occupancy === "OCCUPIED").length} occupied · {s.staff.length} staff</small></div>
-        </article>
+        })()}
       </section>
 
       <div className="board-workspace">
@@ -189,7 +205,7 @@ function BoardContent() {
         </section>
         <aside className="timeline-panel" aria-label="Recent housekeeping activity">
           <div className="timeline-heading">
-            <div><span>Today</span><h2>Staff timeline</h2></div>
+            <div><h2>Staff timeline</h2></div>
             <Button variant="hmsGhost" size="hmsSm" onClick={() => setLogOpen(true)}>View all</Button>
           </div>
           <div className="timeline-list">
@@ -402,7 +418,7 @@ function AssignContent() {
 
 export function ReportsPage() {
   return (
-    <DesktopShell title="Reports" eyebrow="Housekeeping performance · Wednesday, 23 September">
+    <DesktopShell title="Reports" eyebrow="Wednesday, 23 September">
       <ReportsContent />
     </DesktopShell>
   );
@@ -492,7 +508,7 @@ function FrontDeskContent() {
               return (
                 <button type="button" key={room.number} className={cn("fd-tile", isReady(s, room) && "fd-tile-ready")} onClick={() => openRoom(room.number)}>
                   <strong><bdi>{room.number}</bdi></strong>
-                  <span>{room.type} · F{room.floor}</span>
+                  <span>{room.type} · {wingShort(room.floor)}</span>
                   <StatusChip status={st} />
                   {e ? <small>Ready in {e}</small> : null}
                   {room.arrival ? <small className="fd-guest">{room.arrival.guest} · {room.arrival.eta}</small> : room.guest ? <small className="fd-guest">{room.guest}</small> : null}

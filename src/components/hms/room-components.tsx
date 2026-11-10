@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { AlertTriangle, ChevronRight, Clock, Crown, Landmark, Moon, RotateCcw, Zap } from "lucide-react";
+import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from "lucide-react";
 import { wingLabel, fmtDuration, heritageNotice, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import { activeMinutes, checklistProgress, displayStatus, type HmsState, staffById, stdMinutes } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
@@ -23,12 +23,24 @@ function BadgeIcon({ badge }: { badge: RoomBadge }) {
   return <RotateCcw aria-hidden="true" />;
 }
 
+/** Riwaq arch: the signature heritage marker, drawn from the brand mark. */
+export function ArchIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 5.5 5 2.5l2 3M10 5.5l2-3 2 3M17 5.5l2-3 2 3" />
+      <path d="M3 21V8h18v13" />
+      <path d="M7 21v-7a5 5 0 0 1 10 0v7" />
+      <path d="M2 21h20" />
+    </svg>
+  );
+}
+
 /** Heritage warning. Text only — never a care recipe until a specialist approves one. */
 export function HeritageNotice({ room, compact = false }: { room: Room; compact?: boolean }) {
   if (!room.heritage.length) return null;
   return (
     <section className={cn("heritage-notice", compact && "heritage-notice-compact")} aria-label={heritageNotice.title}>
-      <Landmark aria-hidden="true" />
+      <ArchIcon />
       <div>
         <strong>
           {heritageNotice.title}
