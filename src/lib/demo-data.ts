@@ -25,7 +25,7 @@ export type RoomStatus =
 export type HkStatus = "DIRTY" | "IN_PROGRESS" | "PAUSED" | "CLEAN" | "INSPECTED";
 export type Occupancy = "VACANT" | "OCCUPIED";
 export type TaskType = "DEPARTURE" | "STAYOVER" | "RECLEAN" | "POST_REPAIR";
-export type RoomType = "Standard" | "King" | "Twin" | "Suite";
+export type RoomType = "Heritage Room" | "Courtyard Room" | "Twin Room" | "Suite";
 export type Role = "ATTENDANT" | "SUPERVISOR" | "MANAGER" | "FRONT_DESK" | "ENGINEER" | "ADMIN";
 export type Persona = "Manager" | "Front Desk" | "Admin" | "Attendant" | "Supervisor" | "Engineer";
 export type Anomaly = "TOO_FAST" | "BULK_TICK" | "NO_START" | "OFFLINE_CONFLICT";
@@ -59,7 +59,7 @@ export type ItemResult = {
 
 export type InspectionPoint = {
   id: string;
-  zone: "Bedroom" | "Bathroom" | "Amenities" | "Safety & electronics";
+  zone: "Bedroom" | "Bathroom" | "Amenities" | "Safety & electronics" | "Heritage";
   label: string;
   weight: 1 | 2 | 3;
   critical: boolean;
@@ -77,6 +77,17 @@ export type Inspection = {
 };
 
 export type Block = { type: "OOO" | "OOS"; reason: string; woId?: string | undefined; since: number };
+
+/** A sensitive heritage element in a room. Care procedures come only from the property's heritage specialist. */
+export type HeritageAsset = {
+  id: string;
+  name: string;
+  nameAr: string;
+  material: string;
+  materialAr: string;
+  /** Demo: no procedure has been approved yet, so staff are told not to treat and to report. */
+  sopStatus: "AWAITING_SPECIALIST_APPROVAL";
+};
 
 export type Room = {
   number: string;
@@ -102,13 +113,14 @@ export type Room = {
   note?: string | undefined;
   anomalies: Anomaly[];
   refused?: boolean | undefined;
+  heritage: HeritageAsset[];
 };
 
 export type WorkOrderState = "OPEN" | "ACCEPTED" | "IN_PROGRESS" | "RESOLVED" | "VERIFIED";
 export type WorkOrder = {
   id: string;
   room: string;
-  category: "Plumbing" | "HVAC" | "Electrical" | "Carpentry" | "Furniture" | "Pest" | "Other";
+  category: "Heritage surface" | "Plumbing" | "HVAC" | "Electrical" | "Carpentry" | "Furniture" | "Pest" | "Other";
   urgency: "P1" | "P2" | "P3";
   state: WorkOrderState;
   description: string;
@@ -178,7 +190,7 @@ export const taskLabel: Record<TaskType, string> = {
 };
 
 export const zoneLabel: Record<Zone, string> = {
-  VENTILATION_WASTE: "1 · Ventilation & waste",
+  VENTILATION_WASTE: "1 · Heritage check, ventilation & waste",
   LINEN_STRIP: "2 · Linen removal & property check",
   DUSTING: "3 · Dusting & disinfection",
   BATHROOM: "4 · Bathroom",
@@ -188,35 +200,77 @@ export const zoneLabel: Record<Zone, string> = {
 };
 
 export const roomTypeInfo: Record<RoomType, { credits: number; departure: number; stayover: number }> = {
-  Standard: { credits: 1, departure: 30, stayover: 15 },
-  King: { credits: 1.2, departure: 32, stayover: 16 },
-  Twin: { credits: 1.2, departure: 34, stayover: 17 },
+  "Heritage Room": { credits: 1, departure: 30, stayover: 15 },
+  "Courtyard Room": { credits: 1.2, departure: 32, stayover: 16 },
+  "Twin Room": { credits: 1.2, departure: 34, stayover: 17 },
   Suite: { credits: 2, departure: 55, stayover: 25 },
+};
+
+/* ───────────────────────── Property ───────────────────────── */
+
+/** Fictional demo property. Launch country and property are OPEN decisions (see docs/decision-log.md). */
+export const property = {
+  name: "Demo Heritage Palace",
+  nameAr: "قصر التراث — بيانات تجريبية",
+  location: "Gulf heritage district · demo",
+  clock: "property time",
+};
+
+/** Floors are presented as wings around the courtyards. */
+export const wings: Record<number, { name: string; nameAr: string }> = {
+  1: { name: "Courtyard Wing", nameAr: "جناح الفناء" },
+  2: { name: "Najdi Wing", nameAr: "الجناح النجدي" },
+  3: { name: "Palm Garden Wing", nameAr: "جناح حديقة النخيل" },
+  4: { name: "Fort Tower", nameAr: "برج الحصن" },
+  5: { name: "Royal Wing", nameAr: "الجناح الملكي" },
+};
+
+export function wingLabel(floor: number) {
+  return wings[floor]?.name ?? `Wing ${floor}`;
+}
+
+/** Example heritage elements. Labels only — never cleaning recipes. */
+const heritageCatalog: Omit<HeritageAsset, "sopStatus">[] = [
+  { id: "door", name: "Carved wooden door", nameAr: "باب خشبي منقوش", material: "Traditional woodwork", materialAr: "خشب تقليدي" },
+  { id: "juss", name: "Gypsum (juss) ornament", nameAr: "زخارف جص", material: "Gypsum ornament", materialAr: "جص" },
+  { id: "mud", name: "Mud-plaster wall", nameAr: "جدار مليّس بالطين", material: "Earth / adobe", materialAr: "طين / لبن" },
+  { id: "lime", name: "Lime-plaster niche", nameAr: "كوة بالجير", material: "Lime plaster", materialAr: "جير" },
+  { id: "coral", name: "Coral-stone wall", nameAr: "جدار من الحجر المرجاني", material: "Coral stone", materialAr: "حجر مرجاني" },
+  { id: "sadu", name: "Woven Sadu textile", nameAr: "منسوج سدو", material: "Woven textile", materialAr: "منسوجات" },
+  { id: "brass", name: "Antique brass coffee pots", nameAr: "دلال نحاس أثرية", material: "Brass", materialAr: "نحاس" },
+  { id: "mashrabiya", name: "Wooden lattice screen", nameAr: "مشربية خشبية", material: "Traditional woodwork", materialAr: "خشب تقليدي" },
+];
+
+export const heritageNotice = {
+  title: "Heritage elements in this room",
+  titleAr: "عناصر تراثية في هذه الغرفة",
+  body: "Care procedure awaiting specialist approval. Do not apply products or treatments to these surfaces. Stop and report any crack, moisture, flaking or damage.",
+  bodyAr: "إجراء العناية بانتظار اعتماد المتخصص. لا تستخدم أي منتج أو معالجة على هذه الأسطح. توقف وأبلغ عن أي شرخ أو رطوبة أو تقشر أو تلف.",
 };
 
 export const pauseReasons = ["Break", "Called to assist", "Missing supplies", "Guest in room"];
 export const skipReasons = ["Not applicable", "Out of stock", "Guest belongings", "Other"];
-export const issueCategories: WorkOrder["category"][] = ["Plumbing", "HVAC", "Electrical", "Carpentry", "Furniture", "Pest", "Other"];
+export const issueCategories: WorkOrder["category"][] = ["Heritage surface", "Plumbing", "HVAC", "Electrical", "Carpentry", "Furniture", "Pest", "Other"];
 
 /* ───────────────────────── Staff ───────────────────────── */
 
 export const seedStaff: Staff[] = [
-  { id: "ak", name: "Ahmed Kamal", initials: "AK", role: "ATTENDANT" },
-  { id: "ms", name: "Maria Santos", initials: "MS", role: "ATTENDANT" },
-  { id: "ya", name: "Youssef Ali", initials: "YA", role: "ATTENDANT" },
-  { id: "ns", name: "Nour Samir", initials: "NS", role: "ATTENDANT" },
-  { id: "of", name: "Omar Farouk", initials: "OF", role: "ATTENDANT" },
-  { id: "ln", name: "Lina Nabil", initials: "LN", role: "ATTENDANT" },
-  { id: "hm", name: "Hana Mostafa", initials: "HM", role: "ATTENDANT" },
-  { id: "ks", name: "Karim Said", initials: "KS", role: "ATTENDANT" },
-  { id: "ma", name: "Mona Adel", initials: "MA", role: "SUPERVISOR", floors: [1, 2, 3] },
-  { id: "sh", name: "Sara Hassan", initials: "SH", role: "SUPERVISOR", floors: [4, 5] },
-  { id: "rf", name: "Rania Fathy", initials: "RF", role: "MANAGER" },
-  { id: "te", name: "Tarek Emad", initials: "TE", role: "FRONT_DESK" },
-  { id: "dm", name: "Dina Magdy", initials: "DM", role: "FRONT_DESK" },
-  { id: "fk", name: "Fady Khalil", initials: "FK", role: "ENGINEER" },
-  { id: "hf", name: "Hany Fawzy", initials: "HF", role: "ENGINEER" },
-  { id: "km", name: "Khaled Mansour", initials: "KM", role: "ADMIN" },
+  { id: "ak", name: "Maria Santos", initials: "MS", role: "ATTENDANT" },
+  { id: "ms", name: "Priya Nair", initials: "PN", role: "ATTENDANT" },
+  { id: "ya", name: "Salem Al Harthy", initials: "SH", role: "ATTENDANT" },
+  { id: "ns", name: "Joy Reyes", initials: "JR", role: "ATTENDANT" },
+  { id: "of", name: "Ramesh Kumar", initials: "RK", role: "ATTENDANT" },
+  { id: "ln", name: "Nora Al Ghamdi", initials: "NG", role: "ATTENDANT" },
+  { id: "hm", name: "Grace Mwangi", initials: "GM", role: "ATTENDANT" },
+  { id: "ks", name: "Tariq Hamdan", initials: "TH", role: "ATTENDANT" },
+  { id: "ma", name: "Noura Al Qahtani", initials: "NQ", role: "SUPERVISOR", floors: [1, 2, 3] },
+  { id: "sh", name: "Sultan Al Mutairi", initials: "SM", role: "SUPERVISOR", floors: [4, 5] },
+  { id: "rf", name: "Hessa Al Suwaidi", initials: "HS", role: "MANAGER" },
+  { id: "te", name: "Faisal Al Shehri", initials: "FS", role: "FRONT_DESK" },
+  { id: "dm", name: "Reem Al Dosari", initials: "RD", role: "FRONT_DESK" },
+  { id: "fk", name: "Mansoor Al Balushi", initials: "MB", role: "ENGINEER" },
+  { id: "hf", name: "Yousef Al Kuwari", initials: "YK", role: "ENGINEER" },
+  { id: "km", name: "Khalid Al Otaibi", initials: "KO", role: "ADMIN" },
 ];
 
 /** Staff member each demo persona acts as. */
@@ -232,7 +286,7 @@ export const personaStaff: Record<Persona, string> = {
 export const roleLabel: Record<Role, string> = {
   ATTENDANT: "Room Attendant",
   SUPERVISOR: "Floor Supervisor",
-  MANAGER: "Housekeeping Manager",
+  MANAGER: "Operations Manager",
   FRONT_DESK: "Front Desk",
   ENGINEER: "Engineer",
   ADMIN: "Admin",
@@ -251,6 +305,7 @@ const item = (id: string, zone: Zone, label: string, labelAr: string, mandatory 
 
 export const seedTemplates: Record<"departure" | "stayover", ChecklistItem[]> = {
   departure: [
+    item("d0", "VENTILATION_WASTE", "Heritage check: look for new cracks, moisture or flaking — report, don't treat", "فحص التراث: ابحث عن شروخ أو رطوبة أو تقشر جديد — أبلغ ولا تعالج"),
     item("d1", "VENTILATION_WASTE", "Open windows / run ventilation", "فتح الشبابيك والتهوية", false),
     item("d2", "VENTILATION_WASTE", "Empty all bins & replace liners", "تفريغ السلال وتغيير الأكياس"),
     item("d3", "VENTILATION_WASTE", "Remove trays to service corridor", "إخراج الصواني لممر الخدمة", false),
@@ -266,15 +321,16 @@ export const seedTemplates: Record<"departure" | "stayover", ChecklistItem[]> = 
     item("d13", "LINEN_RESTOCK", "Make bed to brand standard", "ترتيب السرير حسب المعيار", true, true),
     item("d14", "LINEN_RESTOCK", "Restock toiletries & towels", "استكمال مستلزمات الحمام والفوط"),
     item("d15", "LINEN_RESTOCK", "Restock coffee & water", "استكمال القهوة والمياه", false),
-    item("d16", "FLOOR", "Vacuum carpet wall-to-wall", "كنس السجاد بالمكنسة"),
+    item("d16", "FLOOR", "Vacuum rugs & carpets (not antique textiles)", "كنس السجاد بالمكنسة (عدا المنسوجات الأثرية)"),
     item("d17", "FLOOR", "Mop hard floors", "مسح الأرضيات"),
     item("d18", "FINAL_AUDIT", "Check all light bulbs", "فحص كل اللمبات"),
     item("d19", "FINAL_AUDIT", "Set HVAC to eco mode", "ضبط التكييف على الوضع الاقتصادي", false),
     item("d20", "FINAL_AUDIT", "Align drapes & furniture", "ترتيب الستائر والأثاث", false),
-    item("d21", "FINAL_AUDIT", "Air freshener", "معطر الجو", false),
+    item("d21", "FINAL_AUDIT", "Fragrance only if guest consented — no open flame", "التعطير بموافقة الضيف فقط — بدون لهب مكشوف", false),
     item("d22", "FINAL_AUDIT", "Lock door securely", "قفل الباب بإحكام"),
   ],
   stayover: [
+    item("s0", "VENTILATION_WASTE", "Heritage check: look for new cracks, moisture or flaking — report, don't treat", "فحص التراث: ابحث عن شروخ أو رطوبة أو تقشر جديد — أبلغ ولا تعالج"),
     item("s1", "VENTILATION_WASTE", "Empty bins & replace liners", "تفريغ السلال وتغيير الأكياس"),
     item("s2", "LINEN_STRIP", "Replace used towels", "تغيير الفوط المستعملة"),
     item("s3", "DUSTING", "Wipe surfaces & high-touch points", "مسح الأسطح ونقاط اللمس"),
@@ -323,6 +379,7 @@ export const inspectionPoints: InspectionPoint[] = [
   pt("i18", "Safety & electronics", "AC set & working", 2),
   pt("i19", "Safety & electronics", "Safe open & empty", 3, true),
   pt("i20", "Safety & electronics", "Door lock & chain secure", 3, true),
+  pt("i21", "Heritage", "Heritage elements undisturbed; any new damage reported", 3, true),
 ];
 
 export function scoreInspection(results: Record<string, boolean>) {
@@ -369,17 +426,17 @@ function mulberry32(seed: number) {
 }
 
 const guests = [
-  "Mr. Hassan Othman",
+  "Mr. Abdullah Al Rashid",
   "Ms. Claire Dubois",
   "Mr. Wei Zhang",
-  "Mrs. Aisha Rahman",
+  "Mrs. Maryam Al Mansoori",
   "Mr. Luca Bianchi",
   "Ms. Emma Clark",
-  "Dr. Samir Nassar",
-  "Mrs. Fatima Zahra",
+  "Dr. Hamad Al Thani",
+  "Mrs. Latifa Al Kaabi",
   "Mr. John Carter",
   "Ms. Yuki Tanaka",
-  "Mr. Ali Mansour",
+  "Sheikh Saud Al Sabah",
   "Mrs. Sofia Lopez",
 ];
 
@@ -427,7 +484,14 @@ export function buildSeed(): SeedState {
   const rooms: Room[] = Array.from({ length: 100 }, (_, index) => {
     const floor = Math.floor(index / 20) + 1;
     const position = (index % 20) + 1;
-    const type: RoomType = floor > 1 && position >= 19 ? "Suite" : position % 5 === 0 ? "King" : position % 4 === 0 ? "Twin" : "Standard";
+    const type: RoomType = floor > 1 && position >= 19 ? "Suite" : position % 5 === 0 ? "Courtyard Room" : position % 4 === 0 ? "Twin Room" : "Heritage Room";
+    // Suites and every third room carry one or two heritage elements.
+    const heritage: HeritageAsset[] =
+      type === "Suite" || position % 3 === 0
+        ? [heritageCatalog[(index * 7) % heritageCatalog.length], ...(type === "Suite" ? [heritageCatalog[(index * 7 + 3) % heritageCatalog.length]] : [])]
+            .filter((a): a is Omit<HeritageAsset, "sopStatus"> => Boolean(a))
+            .map((a) => ({ ...a, sopStatus: "AWAITING_SPECIALIST_APPROVAL" as const }))
+        : [];
     return {
       number: `${floor}${String(position).padStart(2, "0")}`,
       floor,
@@ -440,6 +504,7 @@ export function buildSeed(): SeedState {
       pausedMinutes: 0,
       inspections: [],
       anomalies: [],
+      heritage,
     };
   });
 
@@ -576,9 +641,9 @@ export function buildSeed(): SeedState {
     .filter((r) => !r.anomalies.length)
     .sort((a, b) => (b.completedAt ?? 0) - (a.completedAt ?? 0))[0];
   if (queued) {
-    queued.queue = { guest: "Mr. Hassan Othman", at: (queued.completedAt ?? DEMO_START) - 8 };
-    queued.arrival = { guest: "Mr. Hassan Othman", eta: "Waiting in lobby" };
-    log(queued.queue.at, "te", queued.number, "QUEUE_ADDED", "Guest queued · Mr. Hassan Othman waiting");
+    queued.queue = { guest: "Mr. Abdullah Al Rashid", at: (queued.completedAt ?? DEMO_START) - 8 };
+    queued.arrival = { guest: "Mr. Abdullah Al Rashid", eta: "Waiting in lobby" };
+    log(queued.queue.at, "te", queued.number, "QUEUE_ADDED", "Guest queued · Mr. Abdullah Al Rashid waiting");
   }
   const queuedDirty = byPlan("DIRTY")[4];
   if (queuedDirty) {
@@ -588,8 +653,8 @@ export function buildSeed(): SeedState {
   }
   byPlan("DIRTY").slice(6, 8).forEach((room, i) => {
     room.vip = true;
-    room.arrival = { guest: i === 0 ? "Mrs. Aisha Rahman" : "Mr. Luca Bianchi", eta: i === 0 ? "13:00" : "14:30" };
-    room.note = i === 0 ? "VIP · extra feather pillows · anniversary" : "VIP · late check-in, prefers 21°C";
+    room.arrival = { guest: i === 0 ? "Mrs. Maryam Al Mansoori" : "Mr. Luca Bianchi", eta: i === 0 ? "13:00" : "14:30" };
+    room.note = i === 0 ? "VIP · Arabic coffee welcome · anniversary" : "VIP · late check-in, prefers 21°C";
   });
   byPlan("READY").slice(0, 10).forEach((room, i) => {
     room.arrival = { guest: guests[(i + 5) % guests.length] as string, eta: `${13 + (i % 5)}:${i % 2 ? "30" : "00"}` };
@@ -608,7 +673,7 @@ export function buildSeed(): SeedState {
     workOrders.push({ id: "WO-1041", room: ooo1.number, category: "Plumbing", urgency: "P1", state: "ACCEPTED", description: "Bathroom sink leaking under vanity", reportedBy: ooo1.attendant ?? "ak", assignee: "fk", createdAt: 9 * 60 + 5, acceptedAt: 9 * 60 + 12 });
     ooo1.block = { type: "OOO", reason: "P1 Plumbing — sink leak", woId: "WO-1041", since: 9 * 60 + 5 };
     log(9 * 60 + 5, ooo1.attendant, ooo1.number, "WORK_ORDER_CREATED", "P1 Plumbing reported → room Out of Order");
-    log(9 * 60 + 12, "fk", ooo1.number, "WO_ACCEPTED", "Fady Khalil accepted WO-1041");
+    log(9 * 60 + 12, "fk", ooo1.number, "WO_ACCEPTED", "Mansoor Al Balushi accepted WO-1041");
   }
   if (ooo2) {
     workOrders.push({ id: "WO-1042", room: ooo2.number, category: "HVAC", urgency: "P1", state: "OPEN", description: "AC not cooling, error E4 on thermostat", reportedBy: ooo2.attendant ?? "ak", assignee: null, createdAt: 10 * 60 + 20 });
@@ -621,6 +686,25 @@ export function buildSeed(): SeedState {
     log(8 * 60 + 40, oos.attendant, oos.number, "WORK_ORDER_CREATED", "P3 Furniture reported → room Out of Service");
   }
   for (const r of [ooo1, ooo2, oos]) if (r) r.attendant = null;
+
+  // Heritage report: work stopped in the affected area only; no automatic room block (triage decides).
+  const heritageRoom = byPlan("DIRTY").find((r) => r.heritage.length && !r.block && !r.vip && !r.queue);
+  if (heritageRoom) {
+    const asset = heritageRoom.heritage[0] as HeritageAsset;
+    workOrders.push({
+      id: "WO-1044",
+      room: heritageRoom.number,
+      category: "Heritage surface",
+      urgency: "P2",
+      state: "OPEN",
+      description: `${asset.name}: new flaking noticed — work stopped in that area, awaiting heritage specialist review`,
+      reportedBy: heritageRoom.attendant ?? "ak",
+      assignee: null,
+      createdAt: 9 * 60 + 40,
+    });
+    heritageRoom.note = `Heritage report WO-1044 · avoid the ${asset.name.toLowerCase()} until reviewed`;
+    log(9 * 60 + 40, heritageRoom.attendant, heritageRoom.number, "WORK_ORDER_CREATED", `Heritage surface reported · ${asset.name} · awaiting specialist review`);
+  }
 
   // Incidents
   const incidents: Incident[] = [];

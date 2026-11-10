@@ -79,11 +79,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TrianglZ Hotel HMS" },
-      { name: "description", content: "Real-time housekeeping readiness and operations for TrianglZ Hotel." },
-      { name: "author", content: "TrianglZ Hotel" },
-      { property: "og:title", content: "TrianglZ Hotel HMS" },
-      { property: "og:description", content: "Real-time housekeeping readiness and operations for TrianglZ Hotel." },
+      { title: "Riwaq — Heritage Hospitality Operations" },
+      { name: "description", content: "Riwaq (رِواق) — heritage hospitality operations demo for Gulf heritage hotels." },
+      { name: "author", content: "Riwaq" },
+      { property: "og:title", content: "Riwaq — Heritage Hospitality Operations" },
+      { property: "og:description", content: "Riwaq (رِواق) — heritage hospitality operations demo for Gulf heritage hotels." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -92,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
   }),
   shellComponent: RootShell,
@@ -107,7 +107,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Reem+Kufi:wght@500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <HeadContent />
       </head>
       <body>

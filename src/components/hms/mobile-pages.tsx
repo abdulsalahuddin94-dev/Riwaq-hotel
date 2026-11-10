@@ -3,7 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, Bell, ChevronRight, CircleUserRound, Delete, LogOut, RotateCcw, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
+import { wingLabel, fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
 import {
   activeMinutes,
   checklistProgress,
@@ -48,7 +48,7 @@ export function MobileRoomsPage() {
   const pct = mine.length ? Math.round((done.length / mine.length) * 100) : 0;
   return (
     <MobileShell title="My Rooms">
-      <div className="mobile-sync"><Wifi aria-hidden="true" /> Synced <span>{done.length} of {mine.length} complete</span></div>
+      <div className="mobile-sync"><Wifi aria-hidden="true" /> Saved on this device · demo <span>{done.length} of {mine.length} complete</span></div>
       <div className="mobile-progress-summary"><div><span style={{ inlineSize: `${pct}%` }} /></div><b>{pct}%</b></div>
       <div className="m-chips" role="tablist">
         {([["todo", "To do", todo.length], ["done", "Done", done.length], ["issues", "Issues", issues.length]] as const).map(([k, label, n]) => (
@@ -123,7 +123,7 @@ export function MobileMePage() {
         {stats.map(([v, l]) => <article key={l}><strong>{v}</strong><span>{l}</span></article>)}
       </div>
       <div className="mobile-settings-list">
-        <button type="button" onClick={() => toast.success("All changes synced", { duration: 2000 })}><Wifi aria-hidden="true" /> Sync status <span>Synced · {fmtTime(demoNow(s))}</span></button>
+        <button type="button" onClick={() => toast.info("Demo only: changes are saved in this browser. No server or PMS is connected.", { duration: 3500 })}><Wifi aria-hidden="true" /> Sync status <span>Demo · on device · {fmtTime(demoNow(s))}</span></button>
         <button type="button" onClick={() => toast.info("Arabic (RTL) is specified in SPEC_DESIGN_SYSTEM §7 — coming in the next build", { duration: 3500 })}>🌐 Language <span>English</span></button>
         <button type="button" onClick={() => hms.reset()}><RotateCcw aria-hidden="true" /> Reset demo data <ChevronRight aria-hidden="true" /></button>
         <button type="button" onClick={() => { toast.success("Shift ended · see you tomorrow", { duration: 2500 }); void navigate({ to: "/m/login" }); }}><LogOut aria-hidden="true" /> End shift <ChevronRight aria-hidden="true" /></button>
@@ -213,7 +213,7 @@ export function MobileFloorPage() {
       <MobileSheet open={!!room} onClose={() => setOpen(null)} title={room ? `Room ${room.number}` : ""}>
         {room ? (
           <div className="m-sheet-stack">
-            <div className="m-row-between"><span>{room.type} · Floor {room.floor}</span><StatusChip status={displayStatus(room, s.settings)} /></div>
+            <div className="m-row-between"><span>{room.type} · {wingLabel(room.floor)}</span><StatusChip status={displayStatus(room, s.settings)} /></div>
             <dl className="m-facts">
               <div><dt>Attendant</dt><dd>{staffName(s, room.attendant)}</dd></div>
               <div><dt>Checklist</dt><dd>{checklistProgress(s, room).done}/{checklistProgress(s, room).total}</dd></div>
@@ -299,7 +299,7 @@ export function MobileLoginPage() {
     if (next.length === 4 && person) {
       const persona = person.role === "SUPERVISOR" ? "Supervisor" : person.role === "ENGINEER" ? "Engineer" : "Attendant";
       hms.setPersona("mobile", persona);
-      toast.success(`Welcome, ${person.name.split(" ")[0]} · shift started (demo: acting as ${persona === "Attendant" ? "Ahmed" : persona === "Supervisor" ? "Mona" : "Fady"})`, { duration: 3500 });
+      toast.success(`Welcome, ${person.name.split(" ")[0]} · shift started (demo: acting as ${persona === "Attendant" ? "Maria" : persona === "Supervisor" ? "Noura" : "Mansoor"})`, { duration: 3500 });
       void navigate({ to: mobilePersonaHome[persona] });
     }
   };
@@ -352,8 +352,8 @@ export function DesktopLoginPage() {
       >
         <span className="demo-pill">PRODUCTION DESIGN</span>
         <h1>Welcome back</h1>
-        <p>Sign in to TrianglZ Hotel HMS.</p>
-        <label>Email<input type="email" placeholder="name@trianglzhotel.com" defaultValue="rania.fathy@trianglzhotel.com" /></label>
+        <p>Sign in to Riwaq.</p>
+        <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>
         <label>Password<input type="password" placeholder="••••••••" defaultValue="demo1234" /></label>
         <Button type="submit" variant="hmsPrimary" size="hmsLg">Sign in</Button>
         <Link to="/app/board" className="login-skip">Skip — back to demo</Link>

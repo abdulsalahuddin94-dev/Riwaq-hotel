@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { fmtDuration, fmtTime, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
+import { wingLabel, fmtDuration, fmtTime, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
@@ -65,7 +65,7 @@ const DAY = "Wednesday, 23 September";
 
 export function BoardPage() {
   return (
-    <DesktopShell title="Live Board" eyebrow={`Housekeeping · ${DAY}`}>
+    <DesktopShell title="Live Board" eyebrow={`Operations · ${DAY}`}>
       <BoardContent />
     </DesktopShell>
   );
@@ -115,7 +115,7 @@ function BoardContent() {
             onClick={() => {
               const n = hms.autoAssign(actorFor(s, "desktop"));
               if (n) {
-                toast.success(`${n} unassigned rooms auto-assigned by floor & credits`, { duration: 4000, action: { label: "Review", onClick: () => void navigate({ to: "/app/assign" }) } });
+                toast.success(`${n} unassigned rooms auto-assigned by wing & credits`, { duration: 4000, action: { label: "Review", onClick: () => void navigate({ to: "/app/assign" }) } });
               } else toast.info("Every active room already has an attendant", { duration: 3000 });
             }}
           >
@@ -138,7 +138,7 @@ function BoardContent() {
             <span>Floor</span>
             <select value={floor} onChange={(e) => setFloor(e.target.value)}>
               <option value="all">All floors</option>
-              {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>Floor {f}</option>)}
+              {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>{wingLabel(f)}</option>)}
             </select>
             <span>Attendant</span>
             <select value={attendant} onChange={(e) => setAttendant(e.target.value)}>
@@ -178,7 +178,7 @@ function BoardContent() {
       <div className="board-workspace">
         <section className="board-panel board-panel-ops">
           <div className="section-heading">
-            <div><h2>Room status by floor</h2><p>Click any room for who did what, the checklist, and inspection.</p></div>
+            <div><h2>Room status by wing</h2><p>Click any room for who did what, the checklist, and inspection.</p></div>
             <div className="board-legend">
               {(["READY", "AWAITING_INSPECTION", "CLEANING", "DIRTY", "DND", "BLOCKED_OOO"] as RoomStatus[]).map((status) => (
                 <StatusChip key={status} status={status} compact />
@@ -412,7 +412,7 @@ export function ReportsPage() {
 
 export function FrontDeskPage() {
   return (
-    <DesktopShell title="Front Desk Board" eyebrow="Trusted readiness · no manual READY control">
+    <DesktopShell title="Front Desk Board" eyebrow="Internal readiness · PMS not connected (demo)">
       <FrontDeskContent />
     </DesktopShell>
   );
@@ -454,7 +454,7 @@ function FrontDeskContent() {
         {(["ready", "notready", "arrivals", "occupied", "all"] as const).map((k) => (
           <button type="button" key={k} className={cn("fd-counter", `fd-${k}`, filter === k && "fd-counter-on")} onClick={() => setFilter(k)} aria-pressed={filter === k}>
             <strong>{counts[k]}</strong>
-            <span>{{ ready: "Ready now", notready: "Vacant · not ready", arrivals: "Arrivals today", occupied: "Occupied", all: "All rooms" }[k]}</span>
+            <span>{{ ready: "Ready (internal)", notready: "Vacant · not ready", arrivals: "Arrivals today", occupied: "Occupied", all: "All rooms" }[k]}</span>
           </button>
         ))}
       </section>
@@ -649,7 +649,7 @@ function SettingsContent() {
   const s = useHms();
   const [open, setOpen] = useState<SettingsKey | null>(null);
   const cards: { key: SettingsKey; title: string; copy: string; icon: typeof ClipboardList }[] = [
-    { key: "property", title: "Property", copy: `5 floors · ${s.rooms.length} rooms · 4 room types · Africa/Cairo`, icon: CalendarDays },
+    { key: "property", title: "Property", copy: `5 wings · ${s.rooms.length} keys · 4 room types · ${property.location}`, icon: CalendarDays },
     { key: "checklists", title: "Checklists", copy: `Departure ${s.templates.departure.length} items · Stayover ${s.templates.stayover.length} items`, icon: ClipboardList },
     { key: "rules", title: "Inspection & SLA rules", copy: `Pass ${s.settings.passScore}% · ${s.settings.inspectionRequired ? "every room inspected" : "inspection optional"} · queue SLA ${s.settings.queueSlaMin} min`, icon: ShieldCheck },
     { key: "users", title: "Users & roles", copy: `${s.staff.length} active team members across 6 roles`, icon: Users },

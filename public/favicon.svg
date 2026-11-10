@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 56" role="img" aria-label="Riwaq">
+  <!-- Riwaq mark: a shaded arcade arch under a row of Najdi triangular crenellations. -->
+  <g fill="#C9A86A">
+    <path d="M4 10 8 3l4 7Zm10 0 4-7 4 7Zm10 0 4-7 4 7Zm10 0 4-7 4 7Z"/>
+  </g>
+  <path fill="#C9A86A" d="M4 13h40v40H4Z"/>
+  <path fill="#3B2A1E" d="M12 53V31a12 12 0 0 1 24 0v22Z"/>
+  <path fill="#E9DCC3" d="M17 53V32a7 7 0 0 1 14 0v21Z"/>
+  <path fill="#C9A86A" d="M22 53V41a2 2 0 0 1 4 0v12Z"/>
+</svg>

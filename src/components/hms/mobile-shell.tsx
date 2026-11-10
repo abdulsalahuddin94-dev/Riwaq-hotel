@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { BatteryFull, Bell, Briefcase, ChevronLeft, ClipboardCheck, Grid2X2, Home, RotateCcw, Signal, User, Wifi, Wrench, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Persona } from "@/lib/demo-data";
+import { type Persona, property } from "@/lib/demo-data";
 import { hms, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { useMobileAlerts } from "./mobile-alerts";
@@ -121,7 +121,7 @@ export function MobileShell({
                   </Link>
                 ) : null}
                 <div>
-                  <p>{subtitle ?? "TrianglZ Hotel"}</p>
+                  <p>{subtitle ?? property.name}</p>
                   <h1>{title}</h1>
                 </div>
                 {!back ? <span className="mobile-role-pill">{persona === "Attendant" ? "Housekeeper" : persona}</span> : null}
@@ -158,9 +158,9 @@ export function MobileShell({
         <label className="mobile-persona-select">
           <span>Role</span>
           <select value={persona} onChange={(event) => changePersona(event.target.value as Persona)}>
-            <option value="Attendant">Housekeeper · Ahmed</option>
-            <option value="Supervisor">Supervisor · Mona</option>
-            <option value="Engineer">Engineer · Fady</option>
+            <option value="Attendant">Housekeeper · Maria</option>
+            <option value="Supervisor">Supervisor · Noura</option>
+            <option value="Engineer">Engineer · Mansoor</option>
           </select>
         </label>
         <Button className="mobile-persona-reset" variant="hmsSecondary" size="hmsMd" onClick={() => hms.reset()}>

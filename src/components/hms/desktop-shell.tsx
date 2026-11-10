@@ -18,9 +18,9 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
-import logoAsset from "@/assets/trianglz-logo.png.asset.json";
+import riwaqMark from "@/assets/riwaq-mark.svg";
 import { Button } from "@/components/ui/button";
-import { fmtTime, type Persona } from "@/lib/demo-data";
+import { fmtTime, type Persona, property } from "@/lib/demo-data";
 import { demoNow, escalations, hms, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { RoomDrawer } from "./room-drawer";
@@ -93,11 +93,11 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
         {mobileNav ? <button className="sidebar-scrim" type="button" aria-label="Close menu" onClick={() => setMobileNav(false)} /> : null}
         <aside className={cn("desktop-sidebar", collapsed && "desktop-sidebar-collapsed", mobileNav && "desktop-sidebar-open")}>
           <div className="sidebar-brand">
-            <img src={logoAsset.url} alt="TrianglZ Hotel" />
+            <img src={riwaqMark} alt="" />
             {!collapsed ? (
               <div>
-                <strong>TrianglZ HMS</strong>
-                <span>Housekeeping</span>
+                <strong><span lang="ar">رِواق</span> Riwaq</strong>
+                <span>Heritage hospitality ops</span>
               </div>
             ) : null}
             {mobileNav ? (
@@ -134,8 +134,8 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
           {!collapsed ? (
             <div className="sidebar-property">
               <span>Property</span>
-              <strong>TrianglZ Hotel</strong>
-              <small>Cairo · {s.rooms.length} rooms</small>
+              <strong>{property.name}</strong>
+              <small>{property.location} · {s.rooms.length} keys</small>
             </div>
           ) : null}
         </aside>
@@ -162,7 +162,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
                 />
               </form>
               <span className="sync-pill">
-                <span /> Synced · {fmtTime(demoNow(s))} Cairo
+                <span /> Demo data · {fmtTime(demoNow(s))} {property.clock}
               </span>
               <span className="demo-pill">DEMO</span>
               <label className="persona-select">

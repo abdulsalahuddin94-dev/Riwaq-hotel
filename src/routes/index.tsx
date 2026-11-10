@@ -9,10 +9,10 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "TrianglZ Hotel HMS" },
-      { name: "description", content: "TrianglZ Hotel housekeeping operations demo." },
-      { property: "og:title", content: "TrianglZ Hotel HMS" },
-      { property: "og:description", content: "TrianglZ Hotel housekeeping operations demo." },
+      { title: "Riwaq — Heritage Hospitality Operations" },
+      { name: "description", content: "Riwaq heritage hospitality operations demo." },
+      { property: "og:title", content: "Riwaq — Heritage Hospitality Operations" },
+      { property: "og:description", content: "Riwaq heritage hospitality operations demo." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
