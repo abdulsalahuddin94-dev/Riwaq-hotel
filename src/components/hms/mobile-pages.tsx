@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Bell, ChevronRight, CircleUserRound, Delete, LogOut, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
+import { AlertTriangle, Bell, ChevronRight, CircleUserRound, Delete, Languages, LogOut, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { wingLabel, fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
+import { wingLabel, wingShort, fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
 import {
   activeMinutes,
   checklistProgress,
@@ -123,7 +123,7 @@ export function MobileMePage() {
       </div>
       <div className="mobile-settings-list">
         <button type="button" onClick={() => toast.info("All changes are saved on this device.", { duration: 2500 })}><Wifi aria-hidden="true" /> Sync status <span>On device · {fmtTime(demoNow(s))}</span></button>
-        <button type="button" onClick={() => toast.info("Arabic is coming soon", { duration: 2500 })}>🌐 Language <span>English</span></button>
+        <button type="button" onClick={() => toast.info("Arabic is coming soon", { duration: 2500 })}><Languages aria-hidden="true" /> Language <span>English</span></button>
         <button type="button" onClick={() => { toast.success("Shift ended · see you tomorrow", { duration: 2500 }); void navigate({ to: "/m/login" }); }}><LogOut aria-hidden="true" /> End shift <ChevronRight aria-hidden="true" /></button>
       </div>
     </MobileShell>
@@ -145,8 +145,8 @@ export function MobileInspectionsPage() {
     <MobileShell title="Inspection Queue">
       {queued ? <div className="mobile-callout"><Zap aria-hidden="true" /> {queued} queue room{queued > 1 ? "s" : ""} — guest waiting, inspect first.</div> : null}
       <div className="m-chips">
-        <button type="button" className={cn("m-chip", scope === "mine" && "m-chip-on")} onClick={() => setScope("mine")}>My floors ({(me?.floors ?? []).join(", ")})</button>
-        <button type="button" className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>All floors</button>
+        <button type="button" className={cn("m-chip", scope === "mine" && "m-chip-on")} onClick={() => setScope("mine")}>My wings</button>
+        <button type="button" className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>All wings</button>
       </div>
       {list.length === 0 ? (
         <EmptyState title="All caught up 🎉 No rooms waiting" />
@@ -158,7 +158,7 @@ export function MobileInspectionsPage() {
             return (
               <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
                 <div>
-                  <span>Room · {room.type} · F{room.floor}</span>
+                  <span>{room.type} · {wingShort(room.floor)}</span>
                   <h2><bdi>{room.number}</bdi></h2>
                 </div>
                 <StatusChip status={displayStatus(room, s.settings)} />
@@ -190,10 +190,10 @@ export function MobileFloorPage() {
   const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
   const wo = room ? s.workOrders.find((w) => w.room === room.number && w.state !== "VERIFIED") : undefined;
   return (
-    <MobileShell title="Floor Board">
+    <MobileShell title="Wings">
       <div className="m-chips">
         {[1, 2, 3, 4, 5].map((f) => (
-          <button type="button" key={f} className={cn("m-chip", floor === f && "m-chip-on")} onClick={() => setFloor(f)}>F{f}</button>
+          <button type="button" key={f} className={cn("m-chip", floor === f && "m-chip-on")} onClick={() => setFloor(f)}>{wingShort(f)}</button>
         ))}
       </div>
       <div className="mobile-floor-grid">

@@ -217,16 +217,20 @@ export const property = {
 };
 
 /** Floors are presented as wings around the courtyards. */
-export const wings: Record<number, { name: string; nameAr: string }> = {
-  1: { name: "Courtyard Wing", nameAr: "جناح الفناء" },
-  2: { name: "Najdi Wing", nameAr: "الجناح النجدي" },
-  3: { name: "Palm Garden Wing", nameAr: "جناح حديقة النخيل" },
-  4: { name: "Fort Tower", nameAr: "برج الحصن" },
-  5: { name: "Royal Wing", nameAr: "الجناح الملكي" },
+export const wings: Record<number, { name: string; short: string; nameAr: string }> = {
+  1: { name: "Courtyard Wing", short: "Courtyard", nameAr: "جناح الفناء" },
+  2: { name: "Najdi Wing", short: "Najdi", nameAr: "الجناح النجدي" },
+  3: { name: "Palm Garden Wing", short: "Palm Garden", nameAr: "جناح حديقة النخيل" },
+  4: { name: "Fort Tower", short: "Fort Tower", nameAr: "برج الحصن" },
+  5: { name: "Royal Wing", short: "Royal", nameAr: "الجناح الملكي" },
 };
 
 export function wingLabel(floor: number) {
   return wings[floor]?.name ?? `Wing ${floor}`;
+}
+
+export function wingShort(floor: number) {
+  return wings[floor]?.short ?? `Wing ${floor}`;
 }
 
 /** Example heritage elements. Labels only — never cleaning recipes. */

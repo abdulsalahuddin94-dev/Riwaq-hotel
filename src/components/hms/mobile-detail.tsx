@@ -56,15 +56,10 @@ import { StatusChip } from "./status";
 /* ───────────── Shared bits ───────────── */
 
 function ProgressRing({ value, label }: { value: number; label: string }) {
-  const r = 26;
-  const c = 2 * Math.PI * r;
   return (
-    <div className={cn("m-ring", value >= 100 && "m-ring-done")} role="img" aria-label={label}>
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="32" cy="32" r={r} className="m-ring-track" />
-        <circle cx="32" cy="32" r={r} className="m-ring-fill" strokeDasharray={c} strokeDashoffset={c - (c * Math.min(100, value)) / 100} />
-      </svg>
-      <span>{label}</span>
+    <div className={cn("m-meter", value >= 100 && "m-meter-done")} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(value)} aria-label={`Checklist ${label}`}>
+      <strong>{label}</strong>
+      <span className="m-meter-track"><i style={{ width: `${Math.min(100, value)}%` }} /></span>
     </div>
   );
 }
@@ -580,7 +575,7 @@ export function MobileWorkOrderDetailPage({ woId }: { woId: string }) {
         <p>Reported by {staffName(s, wo.reportedBy)} at {fmtTime(wo.createdAt)} · 📷 1 photo</p>
       </div>
       <dl className="m-facts">
-        <div><dt>Room</dt><dd>{wo.room} · {room?.type} · F{room?.floor}</dd></div>
+        <div><dt>Room</dt><dd>{wo.room} · {room?.type} · {room ? wingLabel(room.floor) : ""}</dd></div>
         <div><dt>Occupancy</dt><dd>{room?.occupancy === "OCCUPIED" ? "Occupied — knock first" : "Vacant"}</dd></div>
         <div><dt>Block</dt><dd>{room?.block ? room.block.type : "None"}</dd></div>
         <div><dt>Assigned</dt><dd>{staffName(s, wo.assignee)}</dd></div>

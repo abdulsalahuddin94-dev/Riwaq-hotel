@@ -335,9 +335,9 @@ export function ReportsContent() {
           ))}
         </div>
         <label className="report-select">
-          <span>Floor</span>
+          <span>Wing</span>
           <select value={floor} onChange={(e) => setFloor(e.target.value)}>
-            <option value="all">All floors</option>
+            <option value="all">All wings</option>
             {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>{wingLabel(f)}</option>)}
           </select>
         </label>

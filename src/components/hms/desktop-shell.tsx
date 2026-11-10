@@ -149,6 +149,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
   return (
     <DesktopContext.Provider value={{ openRoom: setOpenRoom }}>
       <div className="desktop-shell" data-platform="desktop" data-theme="light">
+        <a className="skip-link" href="#main-content">Skip to content</a>
         {mobileNav ? <button className="sidebar-scrim" type="button" aria-label="Close menu" onClick={() => setMobileNav(false)} /> : null}
         <aside className={cn("desktop-sidebar", collapsed && "desktop-sidebar-collapsed", mobileNav && "desktop-sidebar-open")}>
           <div className="sidebar-brand">
@@ -192,7 +193,6 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
           </Button>
           {!collapsed ? (
             <div className="sidebar-property">
-              <span>Property</span>
               <strong>{property.name}</strong>
               <small>{property.location} · {s.rooms.length} keys</small>
             </div>
@@ -205,8 +205,8 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
                 <Menu aria-hidden="true" />
               </Button>
               <div className="min-w-0">
-                <p>{eyebrow}</p>
                 <h1>{title}</h1>
+                <p>{eyebrow}</p>
               </div>
             </div>
             <div className="desktop-actions">
@@ -226,7 +226,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
               <UserMenu persona={persona} onSwitch={changePersona} />
             </div>
           </header>
-          <main className="desktop-content">{children}</main>
+          <main className="desktop-content" id="main-content" tabIndex={-1}>{children}</main>
         </div>
         <RoomDrawer number={openRoom} onClose={() => setOpenRoom(null)} />
       </div>
