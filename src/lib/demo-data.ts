@@ -208,12 +208,12 @@ export const roomTypeInfo: Record<RoomType, { credits: number; departure: number
 
 /* ───────────────────────── Property ───────────────────────── */
 
-/** Fictional demo property. Launch country and property are OPEN decisions (see docs/decision-log.md). */
+/** Fictional property used by the prototype. Launch country and property are OPEN decisions (see docs/decision-log.md). */
 export const property = {
-  name: "Demo Heritage Palace",
-  nameAr: "قصر التراث — بيانات تجريبية",
-  location: "Gulf heritage district · demo",
-  clock: "property time",
+  name: "Dar Al Majlis",
+  nameAr: "دار المجلس",
+  location: "Heritage District",
+  clock: "local time",
 };
 
 /** Floors are presented as wings around the courtyards. */

@@ -17,3 +17,8 @@ Launch country and property · PMS provider · inspection and release authority 
 - There is no simulated offline outbox yet. Sync states should follow spec §14 ("Saved locally", "Queued", "Received", and so on).
 - PMS confirmation is shown only as "not connected". A clearly labelled mock PMS acknowledgement could be added.
 - Independent-inspection rule: the demo does not yet block a supervisor from approving their own cleaning.
+
+## 2026-11-10 updates
+- **Arabic typeface: Thmanyah** (owner's choice). Its licence forbids hosting, redistributing or making the font files downloadable, which includes web embedding that lets users extract them. So the repo contains **no font files**: `src/styles.css` references only copies installed on the device via `local()`, and other devices fall back to IBM Plex Sans Arabic. Shipping it on a public site needs an extended licence from thmanyah (ask@thmanyah.com). OPEN.
+- **The UI reads like a real product** (owner's request): no "DEMO" pills or demo wording in the app. Account switching and "Restore sample data" live in the account menu. PMS status still says "not connected", because that is true.
+- Heritage notices are English-only until a language switch exists. Each notice will then show a single language.

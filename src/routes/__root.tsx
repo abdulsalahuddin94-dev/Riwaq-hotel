@@ -80,10 +80,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Riwaq — Heritage Hospitality Operations" },
-      { name: "description", content: "Riwaq (رِواق) — heritage hospitality operations demo for Gulf heritage hotels." },
+      { name: "description", content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels." },
       { name: "author", content: "Riwaq" },
       { property: "og:title", content: "Riwaq — Heritage Hospitality Operations" },
-      { property: "og:description", content: "Riwaq (رِواق) — heritage hospitality operations demo for Gulf heritage hotels." },
+      { property: "og:description", content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -107,7 +107,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Reem+Kufi:wght@500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <HeadContent />
       </head>
       <body>

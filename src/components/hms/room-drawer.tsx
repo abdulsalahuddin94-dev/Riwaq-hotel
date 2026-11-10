@@ -78,7 +78,7 @@ function RoomDrawerBody({ number }: { number: string }) {
         <div>
           <strong>{ready ? "Ready (internal)" : "Not ready for check-in"}</strong>
           <p>{ready ? "Vacant, inspected, and no active blocks." : reasons.join(" · ")}</p>
-          <p className="pms-note">Internal readiness only · PMS confirmation not connected in this demo</p>
+          <p className="pms-note">Internal readiness · PMS sync not connected</p>
         </div>
       </div>
 

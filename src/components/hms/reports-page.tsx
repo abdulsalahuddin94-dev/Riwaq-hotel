@@ -191,7 +191,7 @@ async function downloadPng(card: HTMLElement | null, title: string) {
   ctx.fillText(title, pad, pad + 14);
   ctx.fillStyle = C.muted;
   ctx.font = "12px Inter, -apple-system, Segoe UI, sans-serif";
-  ctx.fillText(`Riwaq · ${property.name} · demo data`, pad, pad + 32);
+  ctx.fillText(`Riwaq · ${property.name}`, pad, pad + 32);
   ctx.drawImage(img, pad, pad + head, width, height);
   canvas.toBlob((blob) => {
     if (!blob) return;
@@ -341,7 +341,7 @@ export function ReportsContent() {
             {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>{wingLabel(f)}</option>)}
           </select>
         </label>
-        <span className="report-note">Today is live · earlier days are demo history at the same time of day ({fmtTime(d.now)})</span>
+        <span className="report-note">Today is live · earlier days compared at the same time of day ({fmtTime(d.now)})</span>
         <Button variant="hmsGhost" size="hmsMd" className="ms-auto" onClick={() => window.print()}>
           <Printer aria-hidden="true" /> Print / PDF
         </Button>

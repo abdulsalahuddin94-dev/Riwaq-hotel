@@ -152,7 +152,6 @@ export function MobileShell({
       </div>
       <div className="mobile-persona-panel">
         <div className="mobile-persona-heading">
-          <span className="demo-pill">DEMO</span>
           <div><strong>Preview a role</strong><small>Switch mobile workspace</small></div>
         </div>
         <label className="mobile-persona-select">
@@ -164,7 +163,7 @@ export function MobileShell({
           </select>
         </label>
         <Button className="mobile-persona-reset" variant="hmsSecondary" size="hmsMd" onClick={() => hms.reset()}>
-          <RotateCcw aria-hidden="true" /> Reset demo data
+          <RotateCcw aria-hidden="true" /> Restore sample data
         </Button>
         <Link to="/m/login" className="mobile-login-link"><Briefcase aria-hidden="true" /> View login screen</Link>
       </div>

@@ -10,9 +10,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Riwaq — Heritage Hospitality Operations" },
-      { name: "description", content: "Riwaq heritage hospitality operations demo." },
+      { name: "description", content: "Riwaq heritage hospitality operations." },
       { property: "og:title", content: "Riwaq — Heritage Hospitality Operations" },
-      { property: "og:description", content: "Riwaq heritage hospitality operations demo." },
+      { property: "og:description", content: "Riwaq heritage hospitality operations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

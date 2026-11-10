@@ -412,7 +412,7 @@ export function ReportsPage() {
 
 export function FrontDeskPage() {
   return (
-    <DesktopShell title="Front Desk Board" eyebrow="Internal readiness · PMS not connected (demo)">
+    <DesktopShell title="Front Desk Board" eyebrow="Internal readiness · PMS sync not connected">
       <FrontDeskContent />
     </DesktopShell>
   );

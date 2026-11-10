@@ -76,7 +76,7 @@ function CameraSheet({ open, onClose, onCapture, title }: { open: boolean; onClo
         <div className="m-viewfinder" aria-hidden="true">
           <span className="vf-corner tl" /><span className="vf-corner tr" /><span className="vf-corner bl" /><span className="vf-corner br" />
           <Camera />
-          <small>Demo camera · photo is simulated</small>
+          <small>Tap to capture</small>
         </div>
         <button type="button" className="m-shutter" aria-label="Take photo" onClick={() => { onCapture(); onClose(); }} />
       </div>
@@ -87,7 +87,7 @@ function CameraSheet({ open, onClose, onCapture, title }: { open: boolean; onClo
 function NotFound({ what, back }: { what: string; back: string }) {
   return (
     <MobileShell title="Not found" back={{ to: back }}>
-      <EmptyState title={`${what} doesn't exist in the demo data`} />
+      <EmptyState title={`${what} was not found`} />
     </MobileShell>
   );
 }

@@ -411,7 +411,7 @@ export function ReportPreviewDialog({ reportKey, onClose }: { reportKey: ReportK
           <>
             <DialogHeader>
               <DialogTitle>{report.title}</DialogTitle>
-              <DialogDescription>{property.name} · demo data · {report.rows.length} rows</DialogDescription>
+              <DialogDescription>{property.name} · {report.rows.length} rows</DialogDescription>
             </DialogHeader>
             <div className="report-table-wrap">
               <table className="report-table">

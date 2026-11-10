@@ -23,7 +23,7 @@ function BadgeIcon({ badge }: { badge: RoomBadge }) {
   return <RotateCcw aria-hidden="true" />;
 }
 
-/** Heritage warning. Text only — the demo never shows a care recipe, because none has been approved. */
+/** Heritage warning. Text only — never a care recipe until a specialist approves one. */
 export function HeritageNotice({ room, compact = false }: { room: Room; compact?: boolean }) {
   if (!room.heritage.length) return null;
   return (
@@ -32,21 +32,16 @@ export function HeritageNotice({ room, compact = false }: { room: Room; compact?
       <div>
         <strong>
           {heritageNotice.title}
-          <span className="heritage-ar" lang="ar" dir="rtl">{heritageNotice.titleAr}</span>
         </strong>
         <ul>
           {room.heritage.map((asset) => (
             <li key={asset.id}>
               {asset.name} <small>({asset.material})</small>
-              <span className="heritage-ar" lang="ar" dir="rtl">{asset.nameAr}</span>
             </li>
           ))}
         </ul>
         {!compact ? (
-          <>
-            <p>{heritageNotice.body}</p>
-            <p lang="ar" dir="rtl">{heritageNotice.bodyAr}</p>
-          </>
+          <p>{heritageNotice.body}</p>
         ) : (
           <p>Care procedure awaiting specialist approval — report, don&apos;t treat.</p>
         )}

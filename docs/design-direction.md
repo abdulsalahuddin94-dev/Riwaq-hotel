@@ -9,7 +9,8 @@ Riwaq should feel like a shaded Gulf courtyard: calm, warm and precise. Usabilit
 
 ## Type
 - The UI uses the system stack / Inter, plus IBM Plex Sans Arabic.
-- The brand wordmark uses Reem Kufi for «رِواق» and Cormorant Garamond for "Riwaq".
+- Arabic uses **Thmanyah**, referenced via `local()` only (see the licence note in `decision-log.md`), with IBM Plex Sans Arabic as fallback.
+- The brand wordmark uses Thmanyah Serif Display for «رِواق» and Cormorant Garamond for "Riwaq".
 
 ## Mark
 `src/assets/riwaq-mark.svg` is an arcade arch under Najdi triangular crenellations (also `public/favicon.svg`).
