@@ -4,10 +4,14 @@
 
 /* Thmanyah — Arabic typeface. Licence forbids hosting/redistributing the font files,
    so we only reference copies installed on the device (local()); others fall back to IBM Plex Sans Arabic. */
-@font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Regular"),local("thmanyahsans-Regular"),local("thmanyah sans");font-weight:400;font-display:swap}
+@font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Light"),local("thmanyahsans-Light");font-weight:300;font-display:swap}
+@font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Regular"),local("thmanyahsans-Regular");font-weight:400;font-display:swap}
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Medium"),local("thmanyahsans-Medium");font-weight:500;font-display:swap}
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Bold"),local("thmanyahsans-Bold");font-weight:600 700;font-display:swap}
-@font-face{font-family:"Riwaq Arabic Display";src:local("thmanyah serif display Bold"),local("thmanyahserifdisplay-Bold");font-weight:400 700;font-display:swap}
+@font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Black"),local("thmanyahsans-Black");font-weight:800 900;font-display:swap}
+@font-face{font-family:"Riwaq Arabic Display";src:local("thmanyah serif display Regular"),local("thmanyahserifdisplay-Regular");font-weight:400;font-display:swap}
+@font-face{font-family:"Riwaq Arabic Display";src:local("thmanyah serif display Medium"),local("thmanyahserifdisplay-Medium");font-weight:500;font-display:swap}
+@font-face{font-family:"Riwaq Arabic Display";src:local("thmanyah serif display Bold"),local("thmanyahserifdisplay-Bold");font-weight:600 900;font-display:swap}
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant mobile (&:where([data-platform="mobile"] *));
@@ -223,7 +227,7 @@ fieldset.segmented{display:flex;flex-wrap:wrap;border:0;padding:0;background:non
 .wo-steps{display:flex;gap:4px}.wo-steps span{flex:1;padding:6px 4px;border-radius:6px;background:var(--neutral-100);color:var(--neutral-500);font-size:11px;font-weight:700;text-align:center}.wo-steps .wo-step-done{background:var(--brass-100);color:var(--brass-800)}
 .mini-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}.mini-kpis>div{display:grid;gap:2px;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card)}.mini-kpis strong{font-size:20px}.mini-kpis span{color:var(--muted-foreground);font-size:11px}
 .dialog-table{display:grid;border:1px solid var(--border);border-radius:8px;overflow:hidden}.dt-row{display:grid;grid-template-columns:1fr 1.1fr 1.2fr .8fr 1fr .8fr;align-items:center;gap:10px;min-height:42px;padding:6px 12px;border:0;border-bottom:1px solid var(--border);background:var(--card);font-size:13px}.dt-row:last-child{border-bottom:0}button.dt-row:hover{background:var(--brass-50)}.dt-head{min-height:34px;background:var(--neutral-100);color:var(--neutral-600);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.dt-4{grid-template-columns:1fr .6fr .6fr 1.2fr}.dt-3{grid-template-columns:1.6fr 1.2fr .8fr}.dt-cl{grid-template-columns:2.4fr 1.2fr .6fr .6fr 40px}.dt-row small.ar{display:block;color:var(--muted-foreground);font-family:"IBM Plex Sans Arabic",sans-serif;font-size:12px}
+.dt-4{grid-template-columns:1fr .6fr .6fr 1.2fr}.dt-3{grid-template-columns:1.6fr 1.2fr .8fr}.dt-cl{grid-template-columns:2.4fr 1.2fr .6fr .6fr 40px}.dt-row small.ar{display:block;color:var(--muted-foreground);font-family:"Riwaq Arabic","IBM Plex Sans Arabic",sans-serif;font-size:12px}
 .inline-warn{display:inline;width:14px;height:14px;color:var(--warning-700);vertical-align:-2px}
 .dialog-search{display:flex;align-items:center;gap:8px;height:38px;padding:0 10px;border:1px solid var(--border);border-radius:8px}.dialog-search svg{width:16px;color:var(--muted-foreground)}.dialog-search input{flex:1;border:0;outline:0;background:transparent}
 .report-table-wrap{max-height:60vh;overflow:auto;border:1px solid var(--border);border-radius:8px}.report-table{width:100%;border-collapse:collapse;font-size:12px}.report-table th{position:sticky;top:0;padding:8px 10px;background:var(--neutral-100);text-align:start;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral-600)}.report-table td{padding:7px 10px;border-top:1px solid var(--neutral-100);white-space:nowrap}
@@ -572,7 +576,7 @@ fieldset.segmented button{border:0;box-shadow:var(--hairline)}
 
 /* ═════════════ Riwaq heritage layer ═════════════ */
 .sidebar-brand strong{display:flex;align-items:baseline;gap:8px;color:var(--neutral-900)}
-.sidebar-brand strong [lang="ar"]{font-family:var(--font-brand-ar);font-size:22px;color:var(--brass-700)}
+.sidebar-brand strong [lang="ar"]{font-family:var(--font-brand-ar);font-weight:700;font-size:22px;color:var(--brass-700)}
 .heritage-notice{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;margin:12px 0;padding:14px 16px;border-radius:12px;background:var(--brass-50);box-shadow:inset 0 0 0 1px var(--brass-300);color:var(--neutral-800)}
 .heritage-notice>svg{width:22px;height:22px;color:var(--brass-700)}
 .heritage-notice strong{display:block;margin-bottom:6px;font-size:var(--fs-label,13px)}
