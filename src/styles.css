@@ -866,3 +866,11 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .m-cat-pic svg{width:26px;height:26px;color:var(--brass-700)}
 .m-pic-btn{justify-content:flex-start!important;gap:12px!important}.m-pic-btn svg{width:22px!important;height:22px!important;color:var(--brass-700)}
 .job-lead{display:grid;justify-items:center;gap:6px}
+
+/* Generated photos (2026-11-11) */
+.room-photo,.login-scene,.m-login-scene,.welcome-scene{display:block;object-fit:cover}
+.login-scene{object-position:center 60%}
+.m-login-scene{object-position:center 35%}
+.welcome-scene{object-position:right center}
+.m-room-banner-art{object-position:center 55%}
+.welcome-hero:before{background:linear-gradient(90deg,oklch(0.14 0.03 60 / .92) 0%,oklch(0.14 0.03 60 / .6) 40%,transparent 70%)!important}

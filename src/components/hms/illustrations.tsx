@@ -46,6 +46,28 @@ import {
 } from "lucide-react";
 import type { ChecklistItem, RoomType, Staff, TaskType, WorkOrder, Zone } from "@/lib/demo-data";
 import { cn } from "@/lib/utils";
+import courtyardDawn from "@/assets/photos/courtyard-dawn.webp";
+import courtyardDusk from "@/assets/photos/courtyard-dusk.webp";
+import majlisNight from "@/assets/photos/majlis-night.webp";
+import roomCourtyard from "@/assets/photos/room-courtyard.webp";
+import roomHeritage from "@/assets/photos/room-heritage.webp";
+import roomSuite from "@/assets/photos/room-suite.webp";
+import roomTwin from "@/assets/photos/room-twin.webp";
+
+/** AI-generated imagery (Lovable image generation, 2026-11-11). Fictional property: no real hotel is shown. */
+export const photos = { courtyardDawn, courtyardDusk, majlisNight };
+
+const roomPhotos: Record<RoomType, string> = {
+  "Heritage Room": roomHeritage,
+  "Courtyard Room": roomCourtyard,
+  "Twin Room": roomTwin,
+  Suite: roomSuite,
+};
+
+/** Photo of the room type. Decorative: the room number and status sit next to it in text. */
+export function RoomPhoto({ type, className }: { type: RoomType; className?: string }) {
+  return <img src={roomPhotos[type]} alt="" className={cn("room-photo", className)} loading="lazy" decoding="async" />;
+}
 
 const C = {
   ink: "#2B1E15",

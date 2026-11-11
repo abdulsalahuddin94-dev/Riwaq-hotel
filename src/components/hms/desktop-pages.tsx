@@ -52,7 +52,7 @@ import { ReportsContent } from "./reports-page";
 import { EscalationAction, NowStrip } from "./now-strip";
 import { ArrivalsTimeline } from "./arrivals-timeline";
 import { StatusChip } from "./status";
-import { CourtyardScene } from "./illustrations";
+import { photos } from "./illustrations";
 
 const KPI_STATUSES: { status: RoomStatus; label: string; helper: (n: number, s: ReturnType<typeof useHms>) => string; group?: RoomStatus[] }[] = [
   { status: "READY", label: "Ready", helper: () => "trusted for check-in" },
@@ -81,7 +81,7 @@ function WelcomeHero() {
   const c = 2 * Math.PI * r;
   return (
     <section className="welcome-hero" aria-label="Today at a glance">
-      <CourtyardScene time="dusk" className="welcome-scene" />
+      <img src={photos.majlisNight} alt="" className="welcome-scene" />
       <div className="welcome-copy">
         <span>{hello},</span>
         <h2>{me?.name ?? "Welcome back"}</h2>

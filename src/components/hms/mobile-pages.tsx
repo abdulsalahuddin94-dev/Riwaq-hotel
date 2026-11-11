@@ -18,7 +18,7 @@ import {
 } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
-import { CourtyardScene, EmptyArt, RoleArt, RoomArt, StaffAvatar, bedStateFor, categoryIcon, Picto } from "./illustrations";
+import { EmptyArt, Picto, RoleArt, RoomArt, RoomPhoto, StaffAvatar, categoryIcon, photos } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
 import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
 import { RoomBadges, RoomCard, statusClass } from "./room-components";
@@ -166,7 +166,7 @@ export function MobileInspectionsPage() {
             return (
               <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
                 <div className="insp-head">
-                  <RoomArt type={room.type} state={bedStateFor(room.hk)} className="room-thumb" />
+                  <RoomPhoto type={room.type} className="room-thumb" />
                   <div>
                     <span>{room.type} · {wingShort(room.floor)}</span>
                     <h2><bdi>{room.number}</bdi></h2>
@@ -334,7 +334,7 @@ export function MobileLoginPage() {
     <MobileShell title="Shift sign-in" bare>
       <div className={cn("m-login", person && "m-login-pin")}>
         <div className="m-login-hero">
-          <CourtyardScene time="dawn" className="m-login-scene" />
+          <img src={photos.courtyardDawn} alt="" className="m-login-scene" />
           <div className="m-login-brand">
             <img src={riwaqMark} alt="" />
             <div><strong lang="ar">{property.nameAr}</strong><span>{property.name}</span></div>
@@ -397,7 +397,7 @@ export function DesktopLoginPage() {
   return (
     <div className="login-screen" data-platform="desktop">
       <section className="login-visual" aria-hidden="true">
-        <CourtyardScene time="dusk" className="login-scene" />
+        <img src={photos.courtyardDusk} alt="" className="login-scene" />
         <div className="login-visual-copy">
           <span>Heritage hospitality operations</span>
           <strong><span lang="ar">رِواق</span> RIWAQ</strong>
