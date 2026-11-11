@@ -17,10 +17,16 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 ---
 
 ## 2026-11-11 · Shared repo context, docs and changelog · @abdulsalahuddin94-dev
-- **What:** Added `CLAUDE.md` (entry point for any Claude session), `CHANGELOG.md`, `docs/README.md` (docs index), `docs/workflow.md` (how two people + Claude work together), `docs/sitemap.md`, `docs/information-architecture.md`, `docs/design-system.md`, `docs/research/` (housekeeping research, v1 user flows and data schema, raw inputs, hotel link directory), and a PR template. Reworked `docs/decision-log.md` with Why/By columns. Updated `AGENTS.md` and `README.md` for the new repo name.
+- **What:** Added `CLAUDE.md` (entry point for any Claude session), `CHANGELOG.md`, `docs/README.md` (docs index), `docs/workflow.md` (how two people + Claude work together), `docs/sitemap.md`, `docs/information-architecture.md`, `docs/design-system.md`, `docs/research/` (housekeeping research, v1 user flows and data schema, raw inputs, hotel link directory), and a PR template. Reworked `docs/decision-log.md` with Why/By columns. Updated `AGENTS.md` and `README.md` to point to all of it.
 - **Why:** EmG38 and Abdul each open the repo in their own Claude; the repo itself must carry the research, IA, sitemap, design system and the history of who decided what.
 - **Decisions:** The repo is the shared brain; every merge updates this changelog; decisions also go in `docs/decision-log.md`.
 - **PR:** #5
+
+## 2026-11-11 · Thmanyah: map all weights in local() · @abdulsalahuddin94-dev
+- **What:** `src/styles.css` maps every Thmanyah weight in `local()` `@font-face` rules; Arabic sub-labels prefer Thmanyah.
+- **Why:** The new Arabic font wasn't showing; only some installed weights were matched.
+- **Decisions:** Still local-only, no font files in the repo (licence).
+- **PR:** #4
 
 ## 2026-11-11 · Dashboard: Needs-you-now, quiet tiles, arrivals timeline · @abdulsalahuddin94-dev
 - **What:** Live Board opens with a Needs-you-now strip; room tiles are quiet, only exceptions get a fill; Front Desk and Reports lose their metric-card rows; Front Desk gets an arrivals timeline with estimated ready times; one primary action per escalation.
