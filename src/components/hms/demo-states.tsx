@@ -11,12 +11,14 @@ export function SkeletonState({ rows = 5 }: { rows?: number }) {
   );
 }
 
-export function EmptyState({ title, action, onAction }: { title: string; action?: string; onAction?: () => void }) {
+export function EmptyState({ title, action, onAction, art }: { title: string; action?: string; onAction?: () => void; art?: React.ReactNode }) {
   return (
-    <div className="empty-state">
-      <div className="empty-illustration" aria-hidden="true">
-        <CheckCircle2 />
-      </div>
+    <div className={art ? "empty-state empty-state-art" : "empty-state"}>
+      {art ?? (
+        <div className="empty-illustration" aria-hidden="true">
+          <CheckCircle2 />
+        </div>
+      )}
       <p>{title}</p>
       {action && onAction ? (
         <Button variant="hmsSecondary" size="hmsSm" onClick={onAction}>

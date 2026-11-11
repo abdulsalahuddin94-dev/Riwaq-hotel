@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from "lucide-react";
-import { wingLabel, fmtDuration, heritageNotice, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
+import { wingLabel, fmtDuration, heritageNotice, type Room, type RoomStatus, statusMeta, taskLabel } from "@/lib/demo-data";
 import { activeMinutes, checklistProgress, displayStatus, type HmsState, staffById, stdMinutes } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
+import { RoomArt, bedStateFor, taskIcon } from "./illustrations";
 import { StatusChip } from "./status";
 
 export type RoomBadge = "Queue" | "VIP" | "Anomaly" | "Re-clean";
@@ -201,6 +202,7 @@ export function FloorBoard({
 
 export function RoomCard({ room, s }: { room: Room; s: HmsState }) {
   const status = displayStatus(room, s.settings);
+  const TaskIcon = taskIcon[room.taskType];
   const progress = checklistProgress(s, room);
   const minutes = activeMinutes(s, room);
   const std = stdMinutes(room);
@@ -216,7 +218,8 @@ export function RoomCard({ room, s }: { room: Room; s: HmsState }) {
             : `~${std} min · ${room.taskType === "STAYOVER" ? "Stayover" : room.taskType === "RECLEAN" ? "Re-clean" : "Departure"}`;
   return (
     <Link to="/m/rooms/$roomId" params={{ roomId: room.number }} className="mobile-room-card">
-      <div className="mobile-room-main">
+      <div className="mobile-room-main mobile-room-main-art">
+        <RoomArt type={room.type} state={bedStateFor(room.hk)} className="room-thumb" />
         <div>
           <p className="mobile-room-meta">
             {room.type} · {wingLabel(room.floor)}
@@ -224,6 +227,7 @@ export function RoomCard({ room, s }: { room: Room; s: HmsState }) {
           <h3>
             <bdi>Room {room.number}</bdi>
           </h3>
+          <span className="task-tag"><TaskIcon aria-hidden="true" /> {taskLabel[room.taskType]}</span>
         </div>
         <StatusChip status={status} />
       </div>

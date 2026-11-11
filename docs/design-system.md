@@ -79,13 +79,23 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 | Dialogs | `desktop-dialogs.tsx` | `.hms-dialog`, `.dialog-*` |
 | Mobile shell, bottom tabs, sheet | `mobile-shell.tsx` | `.mobile-*`, `.m-sheet-*` |
 | Mobile checklist, meter, inspection | `mobile-detail.tsx` | `.m-check*`, `.m-meter*`, `.m-point*` |
-| Empty / skeleton / error states | `demo-states.tsx` | — |
+| Empty / skeleton / error states (optional `art` picture) | `demo-states.tsx` | `.empty-state-art` |
+| Illustration kit: `CourtyardScene`, `RoomArt`, `StaffAvatar`, `RoleArt`, `EmptyArt`, `Picto` + icon maps | `illustrations.tsx` | `.picto`, `.zone-*`, `.cat-*`, `.tone-*` |
+| Welcome hero (Live Board: greeting, courtyard at dusk, readiness gauge) | `desktop-pages.tsx` | `.welcome-*` |
+| Desktop sign-in (split: courtyard scene + night form) | `mobile-pages.tsx` `DesktopLoginPage` | `.login-*` |
+| Mobile sign-in (job picture → face → PIN) | `mobile-pages.tsx` `MobileLoginPage` | `.m-login-*`, `.m-role-card`, `.m-face-grid` |
+
+## 7a. Pictures and illustrations
+All art is original inline SVG in `illustrations.tsx` (no photos, no stock, no real hotel imagery), in the juss/brass/mud palette plus a night palette (`--night-*`) for the login and welcome hero.
+- **Field staff read little:** on mobile, every list row and choice carries a picture: room thumbnails show the room type and the bed state (messy → in progress → made), checklist items get a pictogram tinted by zone, issue categories, pause and skip reasons get icons, staff pick themselves by illustrated face.
+- A picture never replaces words or status: status chips (colour + icon + text) stay next to it.
+- Decorative SVG is `aria-hidden`; the text label beside it is the accessible name.
 
 ## 8. States every screen needs
 Default · loading/skeleton · empty · error with retry · success feedback (toast via sonner).
 
 ## 9. Don'ts
-No eyebrow/kicker labels above headings, no hero metric-card rows, no progress rings, no gradient text, no emoji icons, no real hotel logos or photos, no "Demo" labels, no claim that a PMS or server is connected.
+No eyebrow/kicker labels above headings, no hero metric-card rows, no progress rings except the one readiness gauge in the welcome hero, no gradient text, no emoji icons, no real hotel logos or photos, no "Demo" labels, no claim that a PMS or server is connected.
 
 ## 10. Before merging UI changes
 Run `/impeccable critique` (or `polish`) on the changed screen and an Intent accessibility pass (see `AGENTS.md`). Check desktop at 1440px and mobile at 390px.
