@@ -2,12 +2,25 @@
 
 Riwaq (رِواق) is a heritage hospitality operations platform for Gulf heritage hotels. **This repository is a clickable browser demo/prototype. It has no backend.**
 
+Team: **@abdulsalahuddin94-dev** (owner) and **@EmG38**, each working through their own AI session. The repo is their shared memory.
+
 ## Read first
+- `CHANGELOG.md` (top entries): what the other person changed recently, and why.
+- `docs/README.md`: index of every doc below.
 - `docs/specs/riwaq-product-spec.md`: the primary product spec. It wins over every other document.
 - `docs/specs/hms-supplementary-spec.md`: supplementary only. Treat its hard numbers and material-care steps as proposals.
-- `docs/decision-log.md`: decisions taken and decisions still OPEN.
-- `docs/design-direction.md`: the visual direction and its reference hotels.
-- `PRODUCT.md` and `DESIGN.md`: product context and design tokens in the [impeccable](https://github.com/pbakaus/impeccable) format.
+- `docs/decision-log.md`: decisions taken (with why and by whom) and decisions still OPEN.
+- `docs/research/`: domain research (OPERA, Cloudbeds, competitors, personas) and raw inputs.
+- `docs/information-architecture.md` and `docs/sitemap.md`: structure, status dimensions, every route.
+- `docs/design-system.md`, `DESIGN.md`, `docs/design-direction.md`: tokens, components, mood.
+- `PRODUCT.md`: product context in the [impeccable](https://github.com/pbakaus/impeccable) format.
+- `docs/workflow.md`: how to branch, document, log and merge.
+
+## When you finish a change
+1. Update the docs it touches (sitemap, IA, design system, decision log, research, roadmap).
+2. Add an entry at the top of `CHANGELOG.md`: what, why, decisions, PR, `@login` of who asked.
+3. Pass `npx tsc --noEmit` and `bun run build`.
+4. Open a PR (template in `.github/`) and merge it into `main` with a merge commit.
 
 ## Design tooling
 UI work follows two open design skill sets:
@@ -30,6 +43,7 @@ Each person installs them in Claude Code once (not auto-enabled from this repo):
 - Housekeeping, occupancy, maintenance and availability are separate dimensions.
 - Routing: TanStack Start file routes in `src/routes` (see `src/routes/README.md`).
 - Check with `npx tsc --noEmit` and `bun run build` before pushing.
+- Never commit font files (Thmanyah licence). Bump `VERSION` in `hms-store.ts` when the seed or state shape changes.
 
 <!-- LOVABLE:BEGIN -->
 > [!IMPORTANT]
