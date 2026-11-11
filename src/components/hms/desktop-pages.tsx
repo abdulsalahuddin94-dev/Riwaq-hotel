@@ -49,6 +49,8 @@ import {
 import { DesktopShell, useDesktop } from "./desktop-shell";
 import { FloorBoard, RoomBadges, statusClass } from "./room-components";
 import { ReportsContent } from "./reports-page";
+import { EscalationAction, NowStrip } from "./now-strip";
+import { ArrivalsTimeline } from "./arrivals-timeline";
 import { StatusChip } from "./status";
 
 const KPI_STATUSES: { status: RoomStatus; label: string; helper: (n: number, s: ReturnType<typeof useHms>) => string; group?: RoomStatus[] }[] = [
@@ -98,64 +100,11 @@ function BoardContent() {
     setFlag("none");
   };
   const recent = s.events.slice(-5).reverse();
-  const esc = escalations(s);
   const staff = s.staff.filter((p) => p.role === "ATTENDANT");
 
   return (
     <>
-      <div className="page-actions-row">
-        <div className="live-note"><span /> Live room readiness · {fmtTime(demoNow(s))}</div>
-        <div className="toolbar-actions">
-          <Button variant={showFilters || activeFilters ? "hmsPrimary" : "hmsSecondary"} size="hmsMd" onClick={() => setShowFilters((v) => !v)} aria-expanded={showFilters}>
-            <Filter aria-hidden="true" /> Filters{activeFilters ? ` · ${activeFilters}` : ""}
-          </Button>
-          <Button
-            variant="hmsPrimary"
-            size="hmsLg"
-            onClick={() => {
-              const n = hms.autoAssign(actorFor(s, "desktop"));
-              if (n) {
-                toast.success(`${n} unassigned rooms auto-assigned by wing & credits`, { duration: 4000, action: { label: "Review", onClick: () => void navigate({ to: "/app/assign" }) } });
-              } else toast.info("Every active room already has an attendant", { duration: 3000 });
-            }}
-          >
-            <Sparkles aria-hidden="true" /> Auto-assign
-          </Button>
-        </div>
-      </div>
-
-      {showFilters ? (
-        <section className="filter-panel" aria-label="Board filters">
-          <div className="filter-group">
-            <span>Status</span>
-            {(["READY", "AWAITING_INSPECTION", "CLEANING", "DIRTY", "OCCUPIED", "DND", "BLOCKED_OOO", "BLOCKED_OOS"] as RoomStatus[]).map((st) => (
-              <button type="button" key={st} className={cn("filter-chip", statuses.includes(st) && "filter-chip-on")} onClick={() => toggleStatus([st])}>
-                {statusMeta[st].label}
-              </button>
-            ))}
-          </div>
-          <div className="filter-group">
-            <span>Wing</span>
-            <select value={floor} onChange={(e) => setFloor(e.target.value)}>
-              <option value="all">All wings</option>
-              {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>{wingLabel(f)}</option>)}
-            </select>
-            <span>Attendant</span>
-            <select value={attendant} onChange={(e) => setAttendant(e.target.value)}>
-              <option value="all">Everyone</option>
-              {staff.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
-            <span>Flag</span>
-            <select value={flag} onChange={(e) => setFlag(e.target.value as typeof flag)}>
-              <option value="none">Any</option>
-              <option value="queue">Queue rooms</option>
-              <option value="anomaly">Accountability signals</option>
-              <option value="unassigned">Unassigned</option>
-            </select>
-            {activeFilters ? <Button variant="hmsGhost" size="hmsSm" onClick={clear}><X aria-hidden="true" /> Clear</Button> : null}
-          </div>
-        </section>
-      ) : null}
+      <NowStrip />
 
       <section className="readiness-ribbon" aria-label="Room status summary">
         {(() => {
@@ -194,13 +143,57 @@ function BoardContent() {
       <div className="board-workspace">
         <section className="board-panel board-panel-ops">
           <div className="section-heading">
-            <div><h2>Room status by wing</h2><p>Click any room for who did what, the checklist, and inspection.</p></div>
-            <div className="board-legend">
-              {(["READY", "AWAITING_INSPECTION", "CLEANING", "DIRTY", "DND", "BLOCKED_OOO"] as RoomStatus[]).map((status) => (
-                <StatusChip key={status} status={status} compact />
-              ))}
+            <div><h2>Rooms by wing</h2><p>Open a room for who did what, the checklist and inspection.</p></div>
+            <div className="toolbar-actions">
+              <Button variant={showFilters || activeFilters ? "hmsSecondary" : "hmsGhost"} size="hmsMd" onClick={() => setShowFilters((v) => !v)} aria-expanded={showFilters}>
+                <Filter aria-hidden="true" /> Filters{activeFilters ? ` · ${activeFilters}` : ""}
+              </Button>
+              <Button
+                variant="hmsPrimary"
+                size="hmsMd"
+                onClick={() => {
+                  const n = hms.autoAssign(actorFor(s, "desktop"));
+                  if (n) {
+                    toast.success(`${n} unassigned rooms auto-assigned by wing & credits`, { duration: 4000, action: { label: "Review", onClick: () => void navigate({ to: "/app/assign" }) } });
+                  } else toast.info("Every active room already has an attendant", { duration: 3000 });
+                }}
+              >
+                <Sparkles aria-hidden="true" /> Auto-assign
+              </Button>
             </div>
           </div>
+          {showFilters ? (
+            <section className="filter-panel" aria-label="Board filters">
+              <div className="filter-group">
+                <span>Status</span>
+                {(["READY", "AWAITING_INSPECTION", "CLEANING", "DIRTY", "OCCUPIED", "DND", "BLOCKED_OOO", "BLOCKED_OOS"] as RoomStatus[]).map((st) => (
+                  <button type="button" key={st} className={cn("filter-chip", statuses.includes(st) && "filter-chip-on")} onClick={() => toggleStatus([st])}>
+                    {statusMeta[st].label}
+                  </button>
+                ))}
+              </div>
+              <div className="filter-group">
+                <span>Wing</span>
+                <select value={floor} onChange={(e) => setFloor(e.target.value)}>
+                  <option value="all">All wings</option>
+                  {[1, 2, 3, 4, 5].map((f) => <option key={f} value={f}>{wingLabel(f)}</option>)}
+                </select>
+                <span>Attendant</span>
+                <select value={attendant} onChange={(e) => setAttendant(e.target.value)}>
+                  <option value="all">Everyone</option>
+                  {staff.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+                <span>Flag</span>
+                <select value={flag} onChange={(e) => setFlag(e.target.value as typeof flag)}>
+                  <option value="none">Any</option>
+                  <option value="queue">Queue rooms</option>
+                  <option value="anomaly">Accountability signals</option>
+                  <option value="unassigned">Unassigned</option>
+                </select>
+                {activeFilters ? <Button variant="hmsGhost" size="hmsSm" onClick={clear}><X aria-hidden="true" /> Clear</Button> : null}
+              </div>
+            </section>
+          ) : null}
           {matches === 0 ? <EmptyState title="No rooms match these filters" action="Clear filters" onAction={clear} /> : <FloorBoard s={s} rooms={s.rooms} onOpen={openRoom} isMatch={isMatch} />}
         </section>
         <aside className="timeline-panel" aria-label="Recent housekeeping activity">
@@ -217,12 +210,6 @@ function BoardContent() {
               </button>
             ))}
           </div>
-          {esc.length ? (
-            <Link to="/app/escalations" className="timeline-alert">
-              <AlertTriangle aria-hidden="true" />
-              <div><strong>Attention needed</strong><p>{esc.length} open escalation{esc.length > 1 ? "s" : ""} — {esc[0]?.title}. Open the Escalation Center →</p></div>
-            </Link>
-          ) : null}
         </aside>
       </div>
       <EventLogDialog open={logOpen} onOpenChange={setLogOpen} onOpenRoom={openRoom} />
@@ -466,14 +453,6 @@ function FrontDeskContent() {
   };
   return (
     <>
-      <section className="fd-counters">
-        {(["ready", "notready", "arrivals", "occupied", "all"] as const).map((k) => (
-          <button type="button" key={k} className={cn("fd-counter", `fd-${k}`, filter === k && "fd-counter-on")} onClick={() => setFilter(k)} aria-pressed={filter === k}>
-            <strong>{counts[k]}</strong>
-            <span>{{ ready: "Ready (internal)", notready: "Vacant · not ready", arrivals: "Arrivals today", occupied: "Occupied", all: "All rooms" }[k]}</span>
-          </button>
-        ))}
-      </section>
 
       {queued.length ? (
         <section className="content-panel queue-panel">
@@ -490,13 +469,22 @@ function FrontDeskContent() {
         </section>
       ) : null}
 
+      <ArrivalsTimeline s={s} onOpen={openRoom} />
+
       <section className="content-panel">
         <div className="section-heading">
-          <div><h2>{{ ready: "Ready for check-in", notready: "Vacant but not ready", arrivals: "Arrivals today", occupied: "Occupied rooms", all: "All rooms" }[filter]}</h2><p>Click a room to check in, check out, or see why it isn't ready.</p></div>
+          <div><h2>Rooms</h2><p><strong>{counts.ready}</strong> ready for check-in (internal) · {counts.notready} vacant but not ready · {counts.occupied} occupied. Open a room to check in, check out or see why it isn&apos;t ready.</p></div>
           <div className="toolbar-actions">
             <label className="room-search fd-search"><Search aria-hidden="true" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Room #" inputMode="numeric" /></label>
-            <Button variant="hmsPrimary" size="hmsLg" onClick={() => setQueueOpen(true)}><Plus aria-hidden="true" /> Queue guest</Button>
+            <Button variant="hmsPrimary" size="hmsMd" onClick={() => setQueueOpen(true)}><Plus aria-hidden="true" /> Queue guest</Button>
           </div>
+        </div>
+        <div className="segmented segmented-inline fd-tabs" role="radiogroup" aria-label="Show rooms">
+          {(["ready", "notready", "arrivals", "occupied", "all"] as const).map((k) => (
+            <button type="button" role="radio" aria-checked={filter === k} key={k} className={cn(filter === k && "segmented-on")} onClick={() => setFilter(k)}>
+              {{ ready: "Ready", notready: "Not ready", arrivals: "Arrivals", occupied: "Occupied", all: "All" }[k]} <span className="fd-tab-count">{counts[k]}</span>
+            </button>
+          ))}
         </div>
         {list.length === 0 ? (
           <EmptyState title="No rooms in this view" action="Show all rooms" onAction={() => { setFilter("all"); setQuery(""); }} />
@@ -612,22 +600,10 @@ function EscalationsContent() {
             </div>
             <div className="alert-actions">
               <Button variant="hmsGhost" size="hmsMd" onClick={() => openRoom(alert.room)}>Room {alert.room}</Button>
-              {alert.kind === "QUEUE_SLA" ? (
-                <Button variant="hmsPrimary" size="hmsMd" onClick={() => { hms.remoteApprove(alert.room, actor); hms.resolveEscalation(alert.id, actor, `Queue SLA resolved by remote approval`, alert.room); }}>
-                  <ShieldCheck aria-hidden="true" /> Remote approve
-                </Button>
-              ) : null}
-              {alert.kind === "DND_WELFARE" ? (
-                <Button variant="hmsPrimary" size="hmsMd" onClick={() => { hms.clearDnd(alert.room, actor, "Welfare check completed · guest OK"); hms.resolveEscalation(alert.id, actor, "Welfare check done", alert.room); toast.success("Welfare check logged", { duration: 2500 }); }}>
-                  Welfare check done
-                </Button>
-              ) : null}
-              {alert.kind === "P1_UNACCEPTED" ? (
-                <Button variant="hmsPrimary" size="hmsMd" onClick={() => setWoId(alert.woId ?? null)}>Assign engineer</Button>
-              ) : null}
-              <Button variant="hmsSecondary" size="hmsMd" onClick={() => { hms.resolveEscalation(alert.id, actor, `Escalation acknowledged · ${alert.title}`, alert.room); toast.success("Escalation acknowledged", { duration: 2500 }); }}>
+              <Button variant="hmsGhost" size="hmsMd" onClick={() => { hms.resolveEscalation(alert.id, actor, `Escalation acknowledged · ${alert.title}`, alert.room); toast.success("Escalation acknowledged", { duration: 2500 }); }}>
                 Acknowledge
               </Button>
+              <EscalationAction alert={alert} s={s} onAssign={setWoId} />
             </div>
           </article>
         ))}

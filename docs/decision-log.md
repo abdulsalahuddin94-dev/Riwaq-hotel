@@ -22,3 +22,6 @@ Launch country and property · PMS provider · inspection and release authority 
 - **Arabic typeface: Thmanyah** (owner's choice). Its licence forbids hosting, redistributing or making the font files downloadable, which includes web embedding that lets users extract them. So the repo contains **no font files**: `src/styles.css` references only copies installed on the device via `local()`, and other devices fall back to IBM Plex Sans Arabic. Shipping it on a public site needs an extended licence from thmanyah (ask@thmanyah.com). OPEN.
 - **The UI reads like a real product** (owner's request): no "DEMO" pills or demo wording in the app. Account switching and "Restore sample data" live in the account menu. PMS status still says "not connected", because that is true.
 - Heritage notices are English-only until a language switch exists. Each notice will then show a single language.
+
+## 2026-11-11 updates
+- **Dashboard direction: "calm ledger" plus an arrivals timeline** (owner's pick). The Live Board opens with "Needs you now", room tiles are quiet and only exceptions get a fill, Front Desk and Reports drop their metric-card rows, and Front Desk gets an arrivals timeline with estimated ready times. Each escalation row has one primary action.

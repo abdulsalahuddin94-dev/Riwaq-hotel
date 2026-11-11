@@ -23,7 +23,7 @@ typography:
   caption: 12px
 rounded: { sm: 10px, md: 12px, lg: 16px, xl: 20px, 2xl: 24px }
 spacing: 4px base; panels pad 20–26px; desktop gutter 28px; mobile gutter 16px
-components: [readiness-ribbon, room-tile, status-chip, heritage-notice, m-meter, user-menu, fd-tile]
+components: [now-strip, readiness-ribbon, arrivals-timeline, room-tile, status-chip, heritage-notice, m-meter, user-menu, fd-tile]
 ---
 
 # Riwaq — Design
@@ -47,8 +47,10 @@ Two soft lifts (`--lift-1`, `--lift-2`) plus a 0.5px hairline. No heavy borders,
 Rounded but not bubbly: 10–24px radii by size. Tiles 12px, panels 24px, pills fully round.
 
 ## Components
+- **Needs-you-now strip:** first thing on the Live Board. Up to four items (escalations, guests waiting, arrivals at risk), each with the one action that resolves it. An "All clear" line when empty.
 - **Readiness ribbon:** one proportional bar plus legend buttons that filter the board. Replaces hero-metric cards.
-- **Room tile:** number, status icon, accent rail; hatch/dots for out-of-order/out-of-service.
+- **Room tile:** white, with a status rail and a coloured status icon. A tinted fill is reserved for rooms that need someone (queue guest or accountability signal). Hatch/dots for out-of-order/out-of-service.
+- **Arrivals timeline (Front Desk):** one row per arrival; a bar from now to the estimated ready time and a pin at the arrival time. Risk is written in words (Ready, On track, Tight, At risk). Estimates come from standard clean times and are labelled internal.
 - **Heritage notice:** brass-tinted panel with the arch icon; text only, never a care recipe.
 - **Checklist meter:** count plus a linear bar (no progress rings).
 - **Account menu:** account switch and "Restore sample data" for presenters.

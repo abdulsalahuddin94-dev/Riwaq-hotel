@@ -409,7 +409,7 @@ export function ReportsContent() {
               <YAxis allowDecimals={false} tick={AXIS} axisLine={false} tickLine={false} />
               <Tooltip cursor={{ fill: C.dataSoft }} content={<ChartTip name="Rooms cleaned" />} />
               <Bar isAnimationActive={false} dataKey="count" fill={C.data} radius={[4, 4, 0, 0]} maxBarSize={24}>
-                {d.hourly.map((h) => <Cell key={h.hour} fill={h.hour === peak?.hour ? C.data : "#7fb0ea"} />)}
+                {d.hourly.map((h) => <Cell key={h.hour} fill={h.hour === peak?.hour ? C.data : C.gray} />)}
                 <LabelList dataKey="count" position="top" fill={C.ink} fontSize={11} formatter={(v: number) => (v ? v : "")} />
               </Bar>
             </BarChart>
@@ -431,7 +431,7 @@ export function ReportsContent() {
               <Tooltip cursor={{ fill: C.dataSoft }} content={<ChartTip name="Avg clean time" unit=" min" />} />
               <ReferenceLine x={d.stdAvg} stroke={C.target} strokeWidth={1.5} label={{ value: `Std ${d.stdAvg}m`, position: "top", fill: C.target, fontSize: 11 }} />
               <Bar isAnimationActive={false} dataKey="avg" radius={[0, 4, 4, 0]} maxBarSize={20}>
-                {d.attendants.map((a) => <Cell key={a.name} fill={a.avg < a.std * 0.6 ? "#f08228" : C.data} />)}
+                {d.attendants.map((a) => <Cell key={a.name} fill={a.avg < a.std * 0.6 ? STATUS_HEX["Dirty"] : C.data} />)}
                 <LabelList dataKey="avg" position="right" fill={C.ink} fontSize={11} formatter={(v: number) => `${v}m`} />
               </Bar>
             </BarChart>

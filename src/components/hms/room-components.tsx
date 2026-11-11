@@ -110,7 +110,7 @@ export function RoomTile({
   const summary = [`Room ${room.number}`, meta.label, attendant?.name ?? "Unassigned", ...badges.map((b) => (b === "Anomaly" ? "Accountability alert" : b))].join(" · ");
   return (
     <button
-      className={cn("room-tile", statusClass[status], dimmed && "room-tile-dimmed")}
+      className={cn("room-tile", statusClass[status], (room.queue || (showAnomaly && room.anomalies.length > 0)) && "room-tile-attn", dimmed && "room-tile-dimmed")}
       type="button"
       onClick={() => onOpen(room.number)}
       title={summary}
