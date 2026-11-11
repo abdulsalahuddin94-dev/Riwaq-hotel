@@ -48,7 +48,7 @@ Sidebar order as in `desktop-shell.tsx`. Personas: Manager, Front Desk, Admin (s
 | `/app/work-orders` | Work Orders (`WorkOrdersPage`) | Manager / Engineering | Maintenance list, create and open work orders, OOO/OOS blocks. |
 | `/app/escalations` | Escalations (`EscalationsPage`) | Manager | Anomalies, overdue rooms, heritage reports; one primary action per row. |
 | `/app/settings` | Settings (`SettingsPage`) | Admin | Property rules: inspection required, pass score, queue-guest SLA, P1 accept time, DND welfare hours, attendant credit target. |
-| `/login` | Desktop sign-in (`DesktopLoginPage`) | All | Sign-in screen (no real auth). |
+| `/login` | Desktop sign-in (`DesktopLoginPage`) | All | Split screen: courtyard illustration + night form (no real auth). |
 
 **Overlays on desktop** (not URLs): Room drawer (`room-drawer.tsx`), Queue guest, Work order, New work order, Staff day, Event log, Report preview, Settings dialogs (`desktop-dialogs.tsx`), Account menu (account switch, restore sample data).
 
@@ -57,7 +57,7 @@ Bottom tabs depend on persona (`mobile-shell.tsx`): Attendant = Rooms · Alerts 
 
 | URL | Screen (component) | Persona | What it does |
 |---|---|---|---|
-| `/m/login` | `MobileLoginPage` | All | Sign-in / pick account. |
+| `/m/login` | `MobileLoginPage` | All | Picture-first: pick job → tap your face → PIN. Full-screen (no tabs). |
 | `/m/rooms` | `MobileRoomsPage` | Attendant | My shift: assigned rooms in priority order (queue guests first). |
 | `/m/rooms/:roomId` | `MobileRoomDetailPage` | Attendant | Room info, heritage notices, start / pause / report issue / DND. |
 | `/m/rooms/:roomId/checklist` | `MobileChecklistPage` | Attendant | Zone-by-zone checklist with meter; finish → Awaiting inspection. |

@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-11 · Pictures everywhere: illustrated sign-in, picture-first mobile, board welcome hero · @abdulsalahuddin94-dev
+- **What:** New `src/components/hms/illustrations.tsx` (original SVG: courtyard scene, room interiors per type with bed state, staff portraits, job pictures, empty-state art, tinted pictograms + icon maps). Desktop `/login` is a split screen (courtyard at dusk + night form, remember-me switch, link to the staff app). Mobile `/m/login` is full-screen and picture-first: pick your job → tap your face → PIN. Mobile rooms, room detail (banner), checklist (pictogram per item), issue/pause/skip sheets, jobs, inspections, Me and empty states all carry pictures. Live Board opens with a welcome hero (greeting, dusk courtyard, readiness gauge). `MobileShell` gained a `bare` mode.
+- **Why:** Owner said the app had no visuals and looked boring; field staff are low-literacy users, so pictures must carry meaning. Owner shared Vision UI screenshots as the mood (hero cards, glow, split sign-in).
+- **Decisions:** Original hand-drawn SVG only (no photos, no real hotel imagery); pictures never replace words or status chips; one readiness gauge allowed in the welcome hero. Logged in `docs/decision-log.md`.
+- **PR:** #6
+
 ## 2026-11-11 · Shared repo context, docs and changelog · @abdulsalahuddin94-dev
 - **What:** Added `CLAUDE.md` (entry point for any Claude session), `CHANGELOG.md`, `docs/README.md` (docs index), `docs/workflow.md` (how two people + Claude work together), `docs/sitemap.md`, `docs/information-architecture.md`, `docs/design-system.md`, `docs/research/` (housekeeping research, v1 user flows and data schema, raw inputs, hotel link directory), and a PR template. Reworked `docs/decision-log.md` with Why/By columns. Updated `AGENTS.md` and `README.md` to point to all of it.
 - **Why:** EmG38 and Abdul each open the repo in their own Claude; the repo itself must carry the research, IA, sitemap, design system and the history of who decided what.

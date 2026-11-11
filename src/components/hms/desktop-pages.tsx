@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { wingLabel, wingShort, fmtDuration, fmtTime, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
+import { wingLabel, wingShort, fmtDuration, fmtTime, personaStaff, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
@@ -52,6 +52,7 @@ import { ReportsContent } from "./reports-page";
 import { EscalationAction, NowStrip } from "./now-strip";
 import { ArrivalsTimeline } from "./arrivals-timeline";
 import { StatusChip } from "./status";
+import { CourtyardScene } from "./illustrations";
 
 const KPI_STATUSES: { status: RoomStatus; label: string; helper: (n: number, s: ReturnType<typeof useHms>) => string; group?: RoomStatus[] }[] = [
   { status: "READY", label: "Ready", helper: () => "trusted for check-in" },
@@ -62,6 +63,49 @@ const KPI_STATUSES: { status: RoomStatus; label: string; helper: (n: number, s: 
 ];
 
 const DAY = "Wednesday, 23 September";
+
+/* ───────────────────────── Welcome hero ───────────────────────── */
+
+function WelcomeHero() {
+  const s = useHms();
+  const me = s.staff.find((p) => p.id === personaStaff[s.desktopPersona as keyof typeof personaStaff]) ?? s.staff.find((p) => p.id === personaStaff.Manager);
+  const now = demoNow(s);
+  const sellable = s.rooms.filter((r) => !r.block);
+  const ready = s.rooms.filter((r) => isReady(s, r)).length;
+  const pct = sellable.length ? Math.round((ready / sellable.length) * 100) : 0;
+  const waiting = s.rooms.filter((r) => r.queue).length;
+  const arrivals = s.rooms.filter((r) => r.arrival).length;
+  const hour = Math.floor(now / 60);
+  const hello = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const r = 52;
+  const c = 2 * Math.PI * r;
+  return (
+    <section className="welcome-hero" aria-label="Today at a glance">
+      <CourtyardScene time="dusk" className="welcome-scene" />
+      <div className="welcome-copy">
+        <span>{hello},</span>
+        <h2>{me?.name ?? "Welcome back"}</h2>
+        <p>
+          {waiting ? <><b>{waiting} guest{waiting > 1 ? "s" : ""}</b> waiting in the lobby. </> : null}
+          <b>{arrivals}</b> arrivals still need a room today.
+        </p>
+      </div>
+      <div className="welcome-gauge" role="img" aria-label={`${ready} of ${sellable.length} sellable rooms ready, ${pct}%`}>
+        <svg viewBox="0 0 128 128" aria-hidden="true">
+          <defs>
+            <linearGradient id="gauge-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#F3D9A2" />
+              <stop offset="1" stopColor="#3FA37A" />
+            </linearGradient>
+          </defs>
+          <circle cx="64" cy="64" r={r} fill="none" stroke="rgba(255,255,255,.12)" strokeWidth="10" />
+          <circle cx="64" cy="64" r={r} fill="none" stroke="url(#gauge-grad)" strokeWidth="10" strokeLinecap="round" strokeDasharray={`${(c * pct) / 100} ${c}`} transform="rotate(-90 64 64)" />
+        </svg>
+        <div><CheckCircle2 aria-hidden="true" /><strong>{pct}%</strong><small>{ready} of {sellable.length} rooms ready</small></div>
+      </div>
+    </section>
+  );
+}
 
 /* ───────────────────────── Live Board ───────────────────────── */
 
@@ -104,6 +148,7 @@ function BoardContent() {
 
   return (
     <>
+      <WelcomeHero />
       <NowStrip />
 
       <section className="readiness-ribbon" aria-label="Room status summary">

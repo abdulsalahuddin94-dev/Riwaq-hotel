@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Bell, ChevronRight, CircleUserRound, Delete, Languages, LogOut, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
+import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Delete, Languages, LogOut, ShieldCheck, Smartphone, Wifi, Wrench, Zap } from "lucide-react";
+import riwaqMark from "@/assets/riwaq-mark.svg";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { wingLabel, wingShort, fmtDuration, fmtTime, personaStaff, type Room, roleLabel } from "@/lib/demo-data";
+import { wingLabel, wingShort, fmtDuration, fmtTime, personaStaff, property, type Room, roleLabel } from "@/lib/demo-data";
 import {
   activeMinutes,
   checklistProgress,
@@ -17,6 +18,7 @@ import {
 } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
+import { CourtyardScene, EmptyArt, RoleArt, RoomArt, StaffAvatar, bedStateFor, categoryIcon, Picto } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
 import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
 import { RoomBadges, RoomCard, statusClass } from "./room-components";
@@ -49,7 +51,13 @@ export function MobileRoomsPage() {
   return (
     <MobileShell title="My Rooms">
       <div className="mobile-sync"><Wifi aria-hidden="true" /> Saved on this device <span>{done.length} of {mine.length} complete</span></div>
-      <div className="mobile-progress-summary"><div><span style={{ inlineSize: `${pct}%` }} /></div><b>{pct}%</b></div>
+      <div className="m-day-card">
+        <RoomArt type="Heritage Room" state={pct === 100 ? "made" : "messy"} className="m-day-art" />
+        <div>
+          <strong>{done.length} <small>of {mine.length} rooms done</small></strong>
+          <div className="mobile-progress-summary"><div><span style={{ inlineSize: `${pct}%` }} /></div><b>{pct}%</b></div>
+        </div>
+      </div>
       <div className="m-chips" role="tablist">
         {([["todo", "To do", todo.length], ["done", "Done", done.length], ["issues", "Issues", issues.length]] as const).map(([k, label, n]) => (
           <button type="button" role="tab" aria-selected={filter === k} key={k} className={cn("m-chip", filter === k && "m-chip-on")} onClick={() => setFilter(k)}>
@@ -58,7 +66,7 @@ export function MobileRoomsPage() {
         ))}
       </div>
       {list.length === 0 ? (
-        <EmptyState title={filter === "todo" ? "All your rooms are done 🎉" : filter === "done" ? "Nothing finished yet" : "No issues on your rooms"} />
+        <EmptyState art={<EmptyArt kind={filter === "issues" ? "rest" : filter === "todo" ? "done" : "search"} className="empty-art" />} title={filter === "todo" ? "All your rooms are done" : filter === "done" ? "Nothing finished yet" : "No issues on your rooms"} />
       ) : (
         <div className="mobile-room-list">{list.map((room) => <RoomCard room={room} s={s} key={room.number} />)}</div>
       )}
@@ -73,7 +81,7 @@ export function MobileAlertsPage() {
   return (
     <MobileShell title="Alerts">
       {alerts.length === 0 ? (
-        <EmptyState title="You're all caught up" />
+        <EmptyState art={<EmptyArt kind="rest" className="empty-art" />} title="You're all caught up" />
       ) : (
         <div className="mobile-alert-list">
           {alerts.map((alert) => (
@@ -114,7 +122,7 @@ export function MobileMePage() {
   return (
     <MobileShell title="Me">
       <div className="mobile-profile">
-        <div className="profile-avatar">{person?.initials}</div>
+        {person ? <StaffAvatar staff={person} className="profile-art" /> : null}
         <h2>{person?.name}</h2>
         <p>{person ? roleLabel[person.role] : ""} · Morning shift · started 07:30</p>
       </div>
@@ -149,7 +157,7 @@ export function MobileInspectionsPage() {
         <button type="button" className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>All wings</button>
       </div>
       {list.length === 0 ? (
-        <EmptyState title="All caught up 🎉 No rooms waiting" />
+        <EmptyState art={<EmptyArt kind="done" className="empty-art" />} title="All caught up · no rooms waiting" />
       ) : (
         <div className="mobile-room-list">
           {list.map((room) => {
@@ -157,9 +165,12 @@ export function MobileInspectionsPage() {
             const p = checklistProgress(s, room);
             return (
               <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
-                <div>
-                  <span>{room.type} · {wingShort(room.floor)}</span>
-                  <h2><bdi>{room.number}</bdi></h2>
+                <div className="insp-head">
+                  <RoomArt type={room.type} state={bedStateFor(room.hk)} className="room-thumb" />
+                  <div>
+                    <span>{room.type} · {wingShort(room.floor)}</span>
+                    <h2><bdi>{room.number}</bdi></h2>
+                  </div>
                 </div>
                 <StatusChip status={displayStatus(room, s.settings)} />
                 <p className="insp-meta">
@@ -266,12 +277,15 @@ export function MobileWorkOrdersPage() {
         ))}
       </div>
       {list.length === 0 ? (
-        <EmptyState title={tab === "mine" ? "No jobs assigned to you" : tab === "open" ? "No unassigned jobs" : "Nothing resolved yet"} />
+        <EmptyState art={<EmptyArt kind="tools" className="empty-art" />} title={tab === "mine" ? "No jobs assigned to you" : tab === "open" ? "No unassigned jobs" : "Nothing resolved yet"} />
       ) : (
         <div className="mobile-room-list">
           {list.map((order) => (
             <Link to="/m/work-orders/$woId" params={{ woId: order.id }} className="mobile-job-card" key={order.id}>
-              <span className={cn("priority", order.urgency === "P1" && "priority-critical")}>{order.urgency}</span>
+              <span className="job-lead">
+                <Picto icon={categoryIcon[order.category]} className="picto-lg" tone={`cat-${order.category === "Heritage surface" ? "heritage" : order.category.toLowerCase()}`} />
+                <span className={cn("priority", order.urgency === "P1" && "priority-critical")}>{order.urgency}</span>
+              </span>
               <div><h2>{order.category} · Room <bdi>{order.room}</bdi></h2><p>{order.description}</p><p className="m-muted">{order.id} · {order.state.replace("_", " ").toLowerCase()} · opened {fmtTime(order.createdAt)}</p></div>
               <ChevronRight aria-hidden="true" />
             </Link>
@@ -282,15 +296,29 @@ export function MobileWorkOrdersPage() {
   );
 }
 
-/* ───────────── Login (production design preview) ───────────── */
+/* ───────────── Login ───────────── */
+
+type ShiftRole = "ATTENDANT" | "SUPERVISOR" | "ENGINEER";
+const shiftRoles: { role: ShiftRole; label: string; labelAr: string }[] = [
+  { role: "ATTENDANT", label: "Housekeeping", labelAr: "تنظيف الغرف" },
+  { role: "SUPERVISOR", label: "Supervisor", labelAr: "مشرف" },
+  { role: "ENGINEER", label: "Maintenance", labelAr: "صيانة" },
+];
+
+function greeting(min: number) {
+  const h = Math.floor(min / 60);
+  return h < 12 ? { en: "Good morning", ar: "صباح الخير" } : h < 17 ? { en: "Good afternoon", ar: "مساء الخير" } : { en: "Good evening", ar: "مساء الخير" };
+}
 
 export function MobileLoginPage() {
   const s = useHms();
   const navigate = useNavigate();
+  const [role, setRole] = useState<ShiftRole | null>(null);
   const [who, setWho] = useState<string | null>(null);
   const [pin, setPin] = useState("");
-  const people = s.staff.filter((p) => ["ATTENDANT", "SUPERVISOR", "ENGINEER"].includes(p.role)).slice(0, 12);
-  const person = people.find((p) => p.id === who);
+  const people = s.staff.filter((p) => p.role === role);
+  const person = s.staff.find((p) => p.id === who);
+  const hello = greeting(demoNow(s));
   const press = (d: string) => {
     const next = (pin + d).slice(0, 4);
     setPin(next);
@@ -301,36 +329,63 @@ export function MobileLoginPage() {
       void navigate({ to: mobilePersonaHome[persona] });
     }
   };
+  const back = () => (who ? setWho(null) : setRole(null));
   return (
-    <MobileShell title="Shift sign-in">
-      <div className="mobile-login">
-        {!person ? (
-          <>
-            <p>Tap your photo to start your shift</p>
-            <div className="avatar-grid">
-              {people.map((p) => (
-                <button type="button" key={p.id} onClick={() => { setWho(p.id); setPin(""); }}>
-                  <span>{p.initials}</span>
-                  <b>{p.name.split(" ")[0]}</b>
-                  <small>{roleLabel[p.role].split(" ").slice(-1)[0]}</small>
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="pin-pad">
-            <div className="profile-avatar">{person.initials}</div>
-            <h2>{person.name}</h2>
-            <p>Enter your 4-digit PIN</p>
-            <div className="pin-dots" aria-label={`${pin.length} of 4 digits`}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")} />)}</div>
-            <div className="pin-keys">
-              {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => <button type="button" key={d} onClick={() => press(d)}>{d}</button>)}
-              <button type="button" onClick={() => setWho(null)} aria-label="Back"><CircleUserRound aria-hidden="true" /></button>
-              <button type="button" onClick={() => press("0")}>0</button>
-              <button type="button" onClick={() => setPin((p) => p.slice(0, -1))} aria-label="Delete"><Delete aria-hidden="true" /></button>
-            </div>
+    <MobileShell title="Shift sign-in" bare>
+      <div className={cn("m-login", person && "m-login-pin")}>
+        <div className="m-login-hero">
+          <CourtyardScene time="dawn" className="m-login-scene" />
+          <div className="m-login-brand">
+            <img src={riwaqMark} alt="" />
+            <div><strong lang="ar">{property.nameAr}</strong><span>{property.name}</span></div>
           </div>
-        )}
+          {role ? (
+            <button type="button" className="m-login-back" onClick={back} aria-label="Back"><ChevronLeft aria-hidden="true" /></button>
+          ) : null}
+        </div>
+        <div className="m-login-sheet">
+          {!role ? (
+            <>
+              <p className="m-login-hello"><span lang="ar">{hello.ar}</span> · {hello.en}</p>
+              <h2>What is your job today?</h2>
+              <div className="m-role-cards">
+                {shiftRoles.map((r) => (
+                  <button type="button" key={r.role} className={`m-role-card role-${r.role.toLowerCase()}`} onClick={() => setRole(r.role)}>
+                    <RoleArt role={r.role} />
+                    <span><b>{r.label}</b><small lang="ar">{r.labelAr}</small></span>
+                    <ChevronRight aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : !person ? (
+            <>
+              <p className="m-login-hello"><span lang="ar">{shiftRoles.find((r) => r.role === role)?.labelAr}</span> · {shiftRoles.find((r) => r.role === role)?.label}</p>
+              <h2>Tap your photo</h2>
+              <div className="m-face-grid">
+                {people.map((p) => (
+                  <button type="button" key={p.id} onClick={() => { setWho(p.id); setPin(""); }}>
+                    <StaffAvatar staff={p} />
+                    <b>{p.name.split(" ")[0]}</b>
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="pin-pad">
+              <StaffAvatar staff={person} className="pin-avatar" />
+              <h2>{person.name}</h2>
+              <p>Enter your 4-digit PIN · <span lang="ar">أدخل الرقم السري</span></p>
+              <div className="pin-dots" aria-label={`${pin.length} of 4 digits`}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")} />)}</div>
+              <div className="pin-keys">
+                {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => <button type="button" key={d} onClick={() => press(d)}>{d}</button>)}
+                <button type="button" onClick={() => setWho(null)} aria-label="Back"><CircleUserRound aria-hidden="true" /></button>
+                <button type="button" onClick={() => press("0")}>0</button>
+                <button type="button" onClick={() => setPin((p) => p.slice(0, -1))} aria-label="Delete"><Delete aria-hidden="true" /></button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </MobileShell>
   );
@@ -338,23 +393,40 @@ export function MobileLoginPage() {
 
 export function DesktopLoginPage() {
   const navigate = useNavigate();
+  const [remember, setRemember] = useState(true);
   return (
     <div className="login-screen" data-platform="desktop">
-      <form
-        className="login-panel"
-        onSubmit={(e) => {
-          e.preventDefault();
-          toast.success("Signed in", { duration: 2500 });
-          void navigate({ to: "/app/board" });
-        }}
-      >
-        <h1>Welcome back</h1>
-        <p>Sign in to Riwaq.</p>
-        <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>
-        <label>Password<input type="password" placeholder="••••••••" defaultValue="riwaq1234" /></label>
-        <Button type="submit" variant="hmsPrimary" size="hmsLg">Sign in</Button>
-        <Link to="/app/board" className="login-skip">Back to dashboard</Link>
-      </form>
+      <section className="login-visual" aria-hidden="true">
+        <CourtyardScene time="dusk" className="login-scene" />
+        <div className="login-visual-copy">
+          <span>Heritage hospitality operations</span>
+          <strong><span lang="ar">رِواق</span> RIWAQ</strong>
+          <em lang="ar">{property.nameAr} · {property.name}</em>
+        </div>
+      </section>
+      <section className="login-side">
+        <form
+          className="login-panel"
+          onSubmit={(e) => {
+            e.preventDefault();
+            toast.success("Signed in", { duration: 2500 });
+            void navigate({ to: "/app/board" });
+          }}
+        >
+          <img src={riwaqMark} alt="" className="login-mark" />
+          <h1>Nice to see you</h1>
+          <p>Sign in to run today's house at {property.name}.</p>
+          <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>
+          <label>Password<input type="password" placeholder="••••••••" defaultValue="riwaq1234" /></label>
+          <label className="login-remember">
+            <button type="button" role="switch" aria-checked={remember} className={cn("login-switch", remember && "on")} onClick={() => setRemember((v) => !v)}><i /></button>
+            Remember me on this computer
+          </label>
+          <Button type="submit" variant="hmsPrimary" size="hmsLg" className="login-submit">Sign in</Button>
+          <Link to="/m/login" className="login-alt"><Smartphone aria-hidden="true" /> On shift with a phone? <b>Open the staff app</b></Link>
+        </form>
+        <footer className="login-foot">© 2026 {property.name} · Riwaq</footer>
+      </section>
     </div>
   );
 }

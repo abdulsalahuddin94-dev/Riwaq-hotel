@@ -75,8 +75,10 @@ export function MobileShell({
   back,
   footer,
   subtitle,
+  bare = false,
 }: {
   title: string;
+  bare?: boolean;
   children: React.ReactNode;
   back?: { to: string; params?: Record<string, string>; label?: string };
   footer?: React.ReactNode;
@@ -114,7 +116,8 @@ export function MobileShell({
           </div>
           <div className="mobile-app" ref={setHost}>
             <SheetHostContext.Provider value={host}>
-              <header className={cn("mobile-header", back && "mobile-header-back")}>
+              {bare ? <div className="mobile-bare">{children}</div> : null}
+              {!bare ? <header className={cn("mobile-header", back && "mobile-header-back")}>
                 {back ? (
                   <Link to={back.to as never} params={back.params as never} className="m-back" aria-label={back.label ?? "Back"}>
                     <ChevronLeft aria-hidden="true" /> {back.label ?? "Back"}
@@ -125,10 +128,10 @@ export function MobileShell({
                   <p>{subtitle ?? property.name}</p>
                 </div>
                 {!back ? <span className="mobile-role-pill">{persona === "Attendant" ? "Housekeeper" : persona}</span> : null}
-              </header>
-              <div className="mobile-scroll-area">{children}</div>
-              {footer ? <div className="m-footer">{footer}</div> : null}
-              {!footer ? (
+              </header> : null}
+              {!bare ? <div className="mobile-scroll-area">{children}</div> : null}
+              {footer && !bare ? <div className="m-footer">{footer}</div> : null}
+              {!footer && !bare ? (
                 <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;

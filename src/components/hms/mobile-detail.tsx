@@ -51,6 +51,7 @@ import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
 import { MobileSheet, MobileShell, useMobilePersona } from "./mobile-shell";
 import { HeritageNotice, RoomBadges } from "./room-components";
+import { Picto, RoomArt, bedStateFor, categoryIcon, pauseIcon, pictoFor, skipIcon, zoneTone } from "./illustrations";
 import { StatusChip } from "./status";
 
 /* ───────────── Shared bits ───────────── */
@@ -153,9 +154,12 @@ export function MobileRoomDetailPage({ roomId }: { roomId: string }) {
 
   return (
     <MobileShell title={`Room ${room.number}`} subtitle={`${room.type} · ${wingLabel(room.floor)} · ${taskLabel[room.taskType]}`} back={{ to: persona === "Supervisor" ? "/m/floor" : "/m/rooms", label: persona === "Supervisor" ? "Floor" : "My Rooms" }} footer={footer}>
-      <div className="m-hero">
-        <StatusChip status={status} />
-        <RoomBadges room={room} showAnomaly={false} />
+      <div className="m-room-banner">
+        <RoomArt type={room.type} state={bedStateFor(room.hk)} className="m-room-banner-art" anchor="xMidYMax" />
+        <div className="m-hero">
+          <StatusChip status={status} />
+          <RoomBadges room={room} showAnomaly={false} />
+        </div>
       </div>
       <HeritageNotice room={room} />
 
@@ -183,12 +187,12 @@ export function MobileRoomDetailPage({ roomId }: { roomId: string }) {
       </Link>
 
       <div className="m-action-grid">
-        {inProgress ? <button type="button" onClick={() => setSheet("pause")}><Pause aria-hidden="true" /> Pause</button> : null}
-        {room.hk === "DIRTY" && !room.dnd ? <button type="button" onClick={() => { hms.flagDnd(room.number, actor); toast.success("DND logged — reminder in 2 hours", { duration: 2500 }); }}><Moon aria-hidden="true" /> Flag DND</button> : null}
-        <button type="button" onClick={() => { setIssue({ category: "Plumbing", urgency: "P2", note: "", photo: false }); setSheet("issue"); }}><Wrench aria-hidden="true" /> Report issue</button>
-        <button type="button" onClick={() => { setText(""); setPhoto(false); setSheet("damage"); }}><ShieldAlert aria-hidden="true" /> Damage</button>
-        <button type="button" onClick={() => { setText(""); setPhoto(false); setSheet("found"); }}><Package aria-hidden="true" /> Found item</button>
-        {room.occupancy === "OCCUPIED" && room.hk === "DIRTY" && !room.refused ? <button type="button" onClick={() => { hms.guestRefused(room.number, actor); toast.success("Logged: guest refused service", { duration: 2500 }); }}><Hand aria-hidden="true" /> Guest refused</button> : null}
+        {inProgress ? <button type="button" onClick={() => setSheet("pause")}><Picto icon={Pause} tone="tone-warn" /> Pause</button> : null}
+        {room.hk === "DIRTY" && !room.dnd ? <button type="button" onClick={() => { hms.flagDnd(room.number, actor); toast.success("DND logged — reminder in 2 hours", { duration: 2500 }); }}><Picto icon={Moon} tone="tone-dnd" /> Flag DND</button> : null}
+        <button type="button" onClick={() => { setIssue({ category: "Plumbing", urgency: "P2", note: "", photo: false }); setSheet("issue"); }}><Picto icon={Wrench} tone="tone-info" /> Report issue</button>
+        <button type="button" onClick={() => { setText(""); setPhoto(false); setSheet("damage"); }}><Picto icon={ShieldAlert} tone="tone-error" /> Damage</button>
+        <button type="button" onClick={() => { setText(""); setPhoto(false); setSheet("found"); }}><Picto icon={Package} tone="tone-brass" /> Found item</button>
+        {room.occupancy === "OCCUPIED" && room.hk === "DIRTY" && !room.refused ? <button type="button" onClick={() => { hms.guestRefused(room.number, actor); toast.success("Logged: guest refused service", { duration: 2500 }); }}><Picto icon={Hand} tone="tone-neutral" /> Guest refused</button> : null}
       </div>
 
       <section className="m-history">
@@ -211,7 +215,7 @@ export function MobileRoomDetailPage({ roomId }: { roomId: string }) {
       <MobileSheet open={sheet === "pause"} onClose={() => setSheet(null)} title="Why are you pausing?">
         <div className="m-sheet-stack">
           {pauseReasons.map((r) => (
-            <Button key={r} variant="hmsSecondary" size="hmsLg" onClick={() => { hms.pauseCleaning(room.number, actor, r); setSheet(null); toast.success(`Paused · ${r} — timer stopped`, { duration: 2500 }); }}>{r}</Button>
+            <Button key={r} variant="hmsSecondary" size="hmsLg" className="m-pic-btn" onClick={() => { hms.pauseCleaning(room.number, actor, r); setSheet(null); toast.success(`Paused · ${r} — timer stopped`, { duration: 2500 }); }}>{(() => { const I = pauseIcon[r] ?? Pause; return <I aria-hidden="true" />; })()} {r}</Button>
           ))}
         </div>
       </MobileSheet>
@@ -220,7 +224,7 @@ export function MobileRoomDetailPage({ roomId }: { roomId: string }) {
         <div className="m-sheet-stack">
           <div className="m-cat-grid">
             {issueCategories.map((c) => (
-              <button type="button" key={c} className={cn(issue.category === c && "on")} onClick={() => setIssue({ ...issue, category: c, urgency: c === "Pest" ? "P1" : issue.urgency })}>{c}</button>
+              <button type="button" key={c} className={cn("m-cat-pic", issue.category === c && "on")} onClick={() => setIssue({ ...issue, category: c, urgency: c === "Pest" ? "P1" : issue.urgency })}>{(() => { const I = categoryIcon[c]; return <I aria-hidden="true" />; })()}<span>{c}</span></button>
             ))}
           </div>
           <div className="m-segmented">
@@ -348,7 +352,7 @@ export function MobileChecklistPage({ roomId }: { roomId: string }) {
               return (
                 <div className={cn("m-check", res?.status === "DONE" && "m-check-done", res?.status === "SKIPPED" && "m-check-skipped")} key={it.id}>
                   <button type="button" className="m-check-main" onClick={() => tap(it.id, it.photo)} aria-pressed={res?.status === "DONE"}>
-                    {res?.status === "DONE" ? <CheckCircle2 className="m-check-icon" aria-hidden="true" /> : res?.status === "SKIPPED" ? <CircleSlash className="m-check-icon" aria-hidden="true" /> : <Circle className="m-check-icon" aria-hidden="true" />}
+                    <Picto icon={pictoFor(it)} tone={zoneTone[it.zone]} className="m-check-picto" />
                     <span className="m-check-text">
                       {it.label}
                       <small>
@@ -358,6 +362,7 @@ export function MobileChecklistPage({ roomId }: { roomId: string }) {
                       </small>
                     </span>
                     {res?.photo ? <span className="m-thumb" aria-label="Photo attached"><Camera aria-hidden="true" /></span> : null}
+                    {res?.status === "DONE" ? <CheckCircle2 className="m-check-icon" aria-hidden="true" /> : res?.status === "SKIPPED" ? <CircleSlash className="m-check-icon" aria-hidden="true" /> : <Circle className="m-check-icon" aria-hidden="true" />}
                   </button>
                   {editable && !it.mandatory && !res ? (
                     <button type="button" className="m-skip" onClick={() => setSkipItem(it.id)}>Skip</button>
@@ -380,7 +385,7 @@ export function MobileChecklistPage({ roomId }: { roomId: string }) {
       <MobileSheet open={!!skipItem} onClose={() => setSkipItem(null)} title="Why skip this item?">
         <div className="m-sheet-stack">
           {skipReasons.map((r) => (
-            <Button key={r} variant="hmsSecondary" size="hmsLg" onClick={() => { if (skipItem) hms.skipItem(room.number, skipItem, actor, r); setSkipItem(null); }}>{r}</Button>
+            <Button key={r} variant="hmsSecondary" size="hmsLg" className="m-pic-btn" onClick={() => { if (skipItem) hms.skipItem(room.number, skipItem, actor, r); setSkipItem(null); }}>{(() => { const I = skipIcon[r] ?? CircleSlash; return <I aria-hidden="true" />; })()} {r}</Button>
           ))}
         </div>
       </MobileSheet>

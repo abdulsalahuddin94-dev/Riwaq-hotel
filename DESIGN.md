@@ -52,7 +52,10 @@ Rounded but not bubbly: 10–24px radii by size. Tiles 12px, panels 24px, pills 
 - **Room tile:** white, with a status rail and a coloured status icon. A tinted fill is reserved for rooms that need someone (queue guest or accountability signal). Hatch/dots for out-of-order/out-of-service.
 - **Arrivals timeline (Front Desk):** one row per arrival; a bar from now to the estimated ready time and a pin at the arrival time. Risk is written in words (Ready, On track, Tight, At risk). Estimates come from standard clean times and are labelled internal.
 - **Heritage notice:** brass-tinted panel with the arch icon; text only, never a care recipe.
-- **Checklist meter:** count plus a linear bar (no progress rings).
+- **Checklist meter:** count plus a linear bar.
+- **Illustrations (`illustrations.tsx`):** hand-drawn SVG courtyard scene (dawn/dusk), room interiors per room type with bed state, illustrated staff portraits, job pictures for sign-in, empty-state art and tinted pictograms. Always next to words.
+- **Welcome hero (Live Board):** night card with the courtyard at dusk, greeting by name and one readiness gauge (rooms ready of sellable). The only ring in the product.
+- **Sign-in:** desktop is a split screen (scene left, night form right); mobile is picture-first: pick your job, tap your face, enter PIN.
 - **Account menu:** account switch and "Restore sample data" for presenters.
 
 ## Do's and Don'ts
