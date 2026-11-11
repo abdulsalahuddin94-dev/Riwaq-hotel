@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-11 · Generated photos for sign-in, board hero and rooms · @abdulsalahuddin94-dev
+- **What:** Seven AI-generated photos in `src/assets/photos/` (WebP, 42–139 KB): courtyard at dusk (desktop `/login`), courtyard at dawn (mobile `/m/login`), majlis at night (Live Board welcome hero) and one photo per room type (Heritage, Courtyard, Twin, Suite) used on mobile room cards, inspection cards and the room-detail banner. New `RoomPhoto` component and `photos` map in `illustrations.tsx`. SVG pictograms, avatars and job pictures stay.
+- **Why:** Owner asked for more creative generated imagery that expresses the project instead of drawn scenes.
+- **Decisions:** Images were generated with Lovable's image generation (owner's pick; Figma was view-only and Gemini MCP lives only on the owner's PC) in a separate scratch Lovable project. Prompts forbid people, text, logos and any real hotel. Logged in `docs/decision-log.md`.
+- **PR:** #7
+
 ## 2026-11-11 · Pictures everywhere: illustrated sign-in, picture-first mobile, board welcome hero · @abdulsalahuddin94-dev
 - **What:** New `src/components/hms/illustrations.tsx` (original SVG: courtyard scene, room interiors per type with bed state, staff portraits, job pictures, empty-state art, tinted pictograms + icon maps). Desktop `/login` is a split screen (courtyard at dusk + night form, remember-me switch, link to the staff app). Mobile `/m/login` is full-screen and picture-first: pick your job → tap your face → PIN. Mobile rooms, room detail (banner), checklist (pictogram per item), issue/pause/skip sheets, jobs, inspections, Me and empty states all carry pictures. Live Board opens with a welcome hero (greeting, dusk courtyard, readiness gauge). `MobileShell` gained a `bare` mode.
 - **Why:** Owner said the app had no visuals and looked boring; field staff are low-literacy users, so pictures must carry meaning. Owner shared Vision UI screenshots as the mood (hero cards, glow, split sign-in).

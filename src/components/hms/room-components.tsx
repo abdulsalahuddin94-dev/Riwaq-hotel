@@ -3,7 +3,7 @@ import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from 
 import { wingLabel, fmtDuration, heritageNotice, type Room, type RoomStatus, statusMeta, taskLabel } from "@/lib/demo-data";
 import { activeMinutes, checklistProgress, displayStatus, type HmsState, staffById, stdMinutes } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
-import { RoomArt, bedStateFor, taskIcon } from "./illustrations";
+import { RoomPhoto, taskIcon } from "./illustrations";
 import { StatusChip } from "./status";
 
 export type RoomBadge = "Queue" | "VIP" | "Anomaly" | "Re-clean";
@@ -219,7 +219,7 @@ export function RoomCard({ room, s }: { room: Room; s: HmsState }) {
   return (
     <Link to="/m/rooms/$roomId" params={{ roomId: room.number }} className="mobile-room-card">
       <div className="mobile-room-main mobile-room-main-art">
-        <RoomArt type={room.type} state={bedStateFor(room.hk)} className="room-thumb" />
+        <RoomPhoto type={room.type} className="room-thumb" />
         <div>
           <p className="mobile-room-meta">
             {room.type} · {wingLabel(room.floor)}

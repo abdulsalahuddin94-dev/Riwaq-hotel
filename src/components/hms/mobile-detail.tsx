@@ -51,7 +51,7 @@ import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
 import { MobileSheet, MobileShell, useMobilePersona } from "./mobile-shell";
 import { HeritageNotice, RoomBadges } from "./room-components";
-import { Picto, RoomArt, bedStateFor, categoryIcon, pauseIcon, pictoFor, skipIcon, zoneTone } from "./illustrations";
+import { Picto, RoomPhoto, categoryIcon, pauseIcon, pictoFor, skipIcon, zoneTone } from "./illustrations";
 import { StatusChip } from "./status";
 
 /* ───────────── Shared bits ───────────── */
@@ -155,7 +155,7 @@ export function MobileRoomDetailPage({ roomId }: { roomId: string }) {
   return (
     <MobileShell title={`Room ${room.number}`} subtitle={`${room.type} · ${wingLabel(room.floor)} · ${taskLabel[room.taskType]}`} back={{ to: persona === "Supervisor" ? "/m/floor" : "/m/rooms", label: persona === "Supervisor" ? "Floor" : "My Rooms" }} footer={footer}>
       <div className="m-room-banner">
-        <RoomArt type={room.type} state={bedStateFor(room.hk)} className="m-room-banner-art" anchor="xMidYMax" />
+        <RoomPhoto type={room.type} className="m-room-banner-art" />
         <div className="m-hero">
           <StatusChip status={status} />
           <RoomBadges room={room} showAnomaly={false} />
