@@ -93,6 +93,8 @@ Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP fi
 - The Live Board welcome image is `majlis-luxury.jpg`: a generated daylight lounge with refined arcades, tailored sofas and polished finishes. It replaces the rustic night majlis on this screen only; the existing overlay keeps the greeting legible.
 
 ## 8. States every screen needs
+Room drawers use `RoomDrawerHeader` with photographs resolved by the existing floor-to-wing assignment in `wing-photos.ts`. Najdi, Palm Garden, Fort Tower and Royal have distinct generated photographs; Courtyard Wing retains its existing courtyard image. The image fades into the semantic background, with compact room-type/task tags and conditional existing badges. No changes to room assignments or operational state.
+
 Default · loading/skeleton · empty · error with retry · success feedback (toast via sonner).
 
 ## 9. Don'ts

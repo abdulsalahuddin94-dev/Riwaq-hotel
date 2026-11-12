@@ -29,6 +29,8 @@ Format: newest at the bottom of each table. `By` is the GitHub login of the pers
 | 2026-11-12 | Root and desktop/phone switching start at the respective sign-in screen. Workspace deep links remain available. | Owner wants the complete sign-in-first demo flow without adding real authentication. | Lovable for abdulsalahuddin94-dev | Decided |
 
 ## Still OPEN (spec §25)
+Room drawer photography (2026-11-12, Lovable for @abdulsalahuddin94-dev): distinct refined imagery for each requested wing, faded into the header. Preserve the existing fifth Courtyard Wing and all room-type assignments. Icons supplement short labels; VIP and other flags appear only when present in room data.
+
 Launch country and property · PMS provider · inspection and release authority · heritage SOP owner · BYOD policy · data retention and residency · SLA configuration · brand clearance for "Riwaq" · multi-property rollout · audio strategy · accessibility target.
 
 ## Known gaps in the demo (to do next)

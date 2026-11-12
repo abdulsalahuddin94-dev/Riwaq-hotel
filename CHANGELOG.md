@@ -17,6 +17,13 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 ---
 
 ## 2026-11-12 · Sign-in-first preview flows · @abdulsalahuddin94-dev
+## 2026-11-12 · Wing-specific room drawer photography · @abdulsalahuddin94-dev
+- **What:** Added four distinct generated wing photographs and a faded drawer header with wing identity, room type/task icons and existing VIP/Queue/Alert/Re-clean tags. Existing Courtyard Wing keeps its courtyard photo.
+- **Why:** Owner requested a visual wing-level header instead of a long descriptive line.
+- **Decisions:** Preserve all wing and room-type assignments; tags reflect existing data only. No operational changes.
+- **PR:** Not created; direct Lovable edit.
+
+## 2026-11-12 · Sign-in-first preview flows · @abdulsalahuddin94-dev
 - **What:** Home opens desktop sign-in, or mobile shift sign-in on phones. Switching experiences also opens sign-in. Verified desktop submission and all three mobile job → person → PIN flows; two entry-routing tests pass.
 - **Why:** Owner asked both dashboard and mobile flows to start at the login screen.
 - **Decisions:** Presentation routing only; no real authentication or access protection added. Deep links stay accessible.
