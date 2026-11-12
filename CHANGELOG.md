@@ -16,7 +16,6 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
-## 2026-11-12 · Sign-in-first preview flows · @abdulsalahuddin94-dev
 ## 2026-11-12 · Wing-specific room drawer photography · @abdulsalahuddin94-dev
 - **What:** Added four distinct generated wing photographs and a faded drawer header with wing identity, room type/task icons and existing VIP/Queue/Alert/Re-clean tags. Existing Courtyard Wing keeps its courtyard photo.
 - **Why:** Owner requested a visual wing-level header instead of a long descriptive line.
