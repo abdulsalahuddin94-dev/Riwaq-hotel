@@ -34,6 +34,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **Decisions:** Change the referenced welcome photograph only; fictional property, no real hotel, people, text or logos. Existing images remain available. Logged in `docs/decision-log.md`.
 - **PR:** Not created; direct Lovable edit.
 
+## 2026-11-12 · Thmanyah from a local, git-ignored folder · @abdulsalahuddin94-dev
+- **What:** New `public/fonts/thmanyah/` (git-ignored except its README) and `src/lib/local-fonts.ts`: on a local dev server the app loads Thmanyah `.woff2` files from that folder, so nobody has to install the font in their OS. Setup steps in the folder README, the main README and `CLAUDE.md` (Claude reminds a new teammate on first run). Font stacks in `src/styles.css` gained "Riwaq Arabic Files" / "Riwaq Arabic Display Files".
+- **Why:** Owner wants @EmG38 to work with the same font as soon as she clones the repo. The licence forbids putting the files in the repo, so each person downloads them once from font.thmanyah.com.
+- **Decisions:** Files never committed; the shared Lovable preview never requests them. Logged in `docs/decision-log.md`.
+- **PR:** #PRNUM
+
 ## 2026-11-12 · Closer Arabic web fallback for Thmanyah · @abdulsalahuddin94-dev
 - **What:** Arabic text now falls back to **Almarai** (UI) and **Markazi Text** (brand «رِواق», display) from Google Fonts instead of IBM Plex Sans Arabic. Thmanyah still comes first via `local()` where installed. Files: `src/styles.css`, `src/routes/__root.tsx`, design docs.
 - **Why:** Owner asked why the chosen Arabic font doesn't show on Lovable. Thmanyah's licence keeps its files off the web, so anyone without it installed saw Plex; this makes them see something close.

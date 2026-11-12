@@ -30,3 +30,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Thmanyah font files: licence forbids sharing them. See public/fonts/thmanyah/README.md
+public/fonts/thmanyah/*
+!public/fonts/thmanyah/README.md

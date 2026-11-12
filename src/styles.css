@@ -3,7 +3,8 @@
 @import "tw-animate-css";
 
 /* Thmanyah — Arabic typeface. Licence forbids hosting/redistributing the font files,
-   so we only reference copies installed on the device (local()); everyone else gets the closest free web fonts: Almarai (UI) and Markazi Text (display). */
+   so we only reference copies installed on the device (local()); a teammate may also drop the files in the git-ignored public/fonts/thmanyah/ (src/lib/local-fonts.ts);
+   everyone else gets the closest free web fonts: Almarai (UI) and Markazi Text (display). */
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Light"),local("thmanyahsans-Light");font-weight:300;font-display:swap}
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Regular"),local("thmanyahsans-Regular");font-weight:400;font-display:swap}
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Medium"),local("thmanyahsans-Medium");font-weight:500;font-display:swap}
@@ -17,9 +18,9 @@
 @custom-variant mobile (&:where([data-platform="mobile"] *));
 
 @theme inline {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Riwaq Arabic", "Almarai", system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Riwaq Arabic", "Riwaq Arabic Files", "Almarai", system-ui, sans-serif;
   --font-brand: "Cormorant Garamond", Georgia, serif;
-  --font-brand-ar: "Riwaq Arabic Display", "Markazi Text", "Riwaq Arabic", "Almarai", serif;
+  --font-brand-ar: "Riwaq Arabic Display", "Riwaq Arabic Display Files", "Markazi Text", "Riwaq Arabic", "Almarai", serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -79,7 +80,7 @@ body { overflow-x: hidden; }
 button, input, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
-:lang(ar) { font-family: "Riwaq Arabic", "Almarai", "Inter", Tahoma, sans-serif; }
+:lang(ar) { font-family: "Riwaq Arabic", "Riwaq Arabic Files", "Almarai", "Inter", Tahoma, sans-serif; }
 bdi, time, .tabular { font-variant-numeric: tabular-nums; }
 
 .desktop-shell { display: grid; min-height: 100vh; grid-template-columns: auto minmax(0,1fr); background: var(--background); font-size: var(--fs-body); }
@@ -227,7 +228,7 @@ fieldset.segmented{display:flex;flex-wrap:wrap;border:0;padding:0;background:non
 .wo-steps{display:flex;gap:4px}.wo-steps span{flex:1;padding:6px 4px;border-radius:6px;background:var(--neutral-100);color:var(--neutral-500);font-size:11px;font-weight:700;text-align:center}.wo-steps .wo-step-done{background:var(--brass-100);color:var(--brass-800)}
 .mini-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}.mini-kpis>div{display:grid;gap:2px;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card)}.mini-kpis strong{font-size:20px}.mini-kpis span{color:var(--muted-foreground);font-size:11px}
 .dialog-table{display:grid;border:1px solid var(--border);border-radius:8px;overflow:hidden}.dt-row{display:grid;grid-template-columns:1fr 1.1fr 1.2fr .8fr 1fr .8fr;align-items:center;gap:10px;min-height:42px;padding:6px 12px;border:0;border-bottom:1px solid var(--border);background:var(--card);font-size:13px}.dt-row:last-child{border-bottom:0}button.dt-row:hover{background:var(--brass-50)}.dt-head{min-height:34px;background:var(--neutral-100);color:var(--neutral-600);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.dt-4{grid-template-columns:1fr .6fr .6fr 1.2fr}.dt-3{grid-template-columns:1.6fr 1.2fr .8fr}.dt-cl{grid-template-columns:2.4fr 1.2fr .6fr .6fr 40px}.dt-row small.ar{display:block;color:var(--muted-foreground);font-family:"Riwaq Arabic","Almarai",sans-serif;font-size:12px}
+.dt-4{grid-template-columns:1fr .6fr .6fr 1.2fr}.dt-3{grid-template-columns:1.6fr 1.2fr .8fr}.dt-cl{grid-template-columns:2.4fr 1.2fr .6fr .6fr 40px}.dt-row small.ar{display:block;color:var(--muted-foreground);font-family:"Riwaq Arabic","Riwaq Arabic Files","Almarai",sans-serif;font-size:12px}
 .inline-warn{display:inline;width:14px;height:14px;color:var(--warning-700);vertical-align:-2px}
 .dialog-search{display:flex;align-items:center;gap:8px;height:38px;padding:0 10px;border:1px solid var(--border);border-radius:8px}.dialog-search svg{width:16px;color:var(--muted-foreground)}.dialog-search input{flex:1;border:0;outline:0;background:transparent}
 .report-table-wrap{max-height:60vh;overflow:auto;border:1px solid var(--border);border-radius:8px}.report-table{width:100%;border-collapse:collapse;font-size:12px}.report-table th{position:sticky;top:0;padding:8px 10px;background:var(--neutral-100);text-align:start;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral-600)}.report-table td{padding:7px 10px;border-top:1px solid var(--neutral-100);white-space:nowrap}

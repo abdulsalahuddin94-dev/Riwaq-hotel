@@ -14,6 +14,7 @@ import { DemoChrome } from "@/components/hms/demo-chrome";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { loadLocalThmanyah } from "../lib/local-fonts";
 
 function NotFoundComponent() {
   return (
@@ -81,10 +82,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Riwaq — Heritage Hospitality Operations" },
-      { name: "description", content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels." },
+      {
+        name: "description",
+        content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels.",
+      },
       { name: "author", content: "Riwaq" },
       { property: "og:title", content: "Riwaq — Heritage Hospitality Operations" },
-      { property: "og:description", content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels." },
+      {
+        property: "og:description",
+        content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -108,7 +115,10 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Almarai:wght@300;400;700;800&family=Markazi+Text:wght@400..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Almarai:wght@300;400;700;800&family=Markazi+Text:wght@400..700&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
         <HeadContent />
       </head>
       <body>
@@ -121,6 +131,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    loadLocalThmanyah();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

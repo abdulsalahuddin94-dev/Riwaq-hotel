@@ -44,7 +44,7 @@ Each person installs them in Claude Code once (not auto-enabled from this repo):
 - Housekeeping, occupancy, maintenance and availability are separate dimensions.
 - Routing: TanStack Start file routes in `src/routes` (see `src/routes/README.md`).
 - Check with `npx tsc --noEmit` and `bun run build` before pushing.
-- Never commit font files (Thmanyah licence). Bump `VERSION` in `hms-store.ts` when the seed or state shape changes.
+- Never commit font files (Thmanyah licence). Each person keeps their own copy in the git-ignored `public/fonts/thmanyah/` (see its README). Bump `VERSION` in `hms-store.ts` when the seed or state shape changes.
 
 <!-- LOVABLE:BEGIN -->
 > [!IMPORTANT]
