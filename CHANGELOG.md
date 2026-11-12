@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Dar Al Majlis is the front brand (desktop) · @abdulsalahuddin94-dev
+- **What:** Desktop `/login` left side now shows the hotel lockup (Arabic «دار المجلس» over "DAR AL MAJLIS", tight and start-aligned, "Heritage Hotel · فندق تراثي"); footer reads "© 2026 Dar Al Majlis Hotel · Powered by RIWAQ Systems". Sidebar brand and the sign-in form use the shared Dar Al Majlis seal (`HotelMark` from `hotel-mark.tsx`, same as mobile) with the hotel name and "Powered by RIWAQ Systems"; the footer uses `PoweredByRiwaq`. Desktop tab titles end with "· Dar Al Majlis"; chart exports credit the hotel. Files: `mobile-pages.tsx` (DesktopLoginPage only), `desktop-shell.tsx`, `reports-page.tsx`, `src/routes/app/*`, `login.tsx`, `index.tsx`, `__root.tsx`, `styles.css`.
+- **Why:** Owner: the Arabic and English sat far apart, and hotel staff shouldn't see RIWAQ more than their own hotel. A Dar Al Majlis website is planned.
+- **Decisions:** Riwaq = vendor credit only. Mobile screens are left to the mobile redesign work to avoid conflicts. Logged in `docs/decision-log.md`.
+- **PR:** #11
+
 ## 2026-11-12 · Premium staff app: one language, hotel mark, tab dock, immersive room, Android frame · @abdulsalahuddin94-dev
 - **What:** Staff app (`/m/*`) shows one language at a time: English by default, full Arabic RTL behind an EN / ع switch (sign-in hero, Me → Language, presenter panel). New `src/lib/mobile-i18n.ts` holds the strings and Arabic mappings for seeded data; shared chips, badges, heritage notice and room cards follow the staff-app language while desktop stays English. The hotel brand leads: new Dar Al Majlis logo (`hotel-mark.tsx`, mark + «دار المجلس» / DAR AL MAJLIS lockup) replaces the Riwaq icon on the mobile sign-in, with a small "Powered by RIWAQ SYSTEMS" credit on sign-in and Me. The plain tab bar is now a floating espresso dock with a gliding brass arch under the active tab. Room detail opens with a full-bleed photo from the top edge, room name and data on it; on scroll the photo drifts and fades and the title shrinks into a compact top bar (`room-hero.tsx`). The iPhone mockup is now a generic Android phone (`.device-*` classes, renamed from `.iphone-*`). Sign-in flow unchanged, restyled.
 - **Why:** Owner feedback: mixed Arabic/English text, hotel badge reused the product icon, boring tab bar, dull room header; asked for premium work. Owner chose to keep the PIN sign-in after the reasoning (shared devices, fast handover, low-literacy staff) and asked for an Android-style device since hotels hand out phones.
@@ -39,12 +45,6 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **Why:** Owner said the pictured interior felt primitive rather than hotel-like.
 - **Decisions:** Change the referenced welcome photograph only; fictional property, no real hotel, people, text or logos. Existing images remain available. Logged in `docs/decision-log.md`.
 - **PR:** Not created; direct Lovable edit.
-
-## 2026-11-12 · Dar Al Majlis is the front brand (desktop) · @abdulsalahuddin94-dev
-- **What:** Desktop `/login` left side now shows the hotel lockup (Arabic «دار المجلس» over "DAR AL MAJLIS", tight and start-aligned, "Heritage Hotel · فندق تراثي"); footer reads "© 2026 Dar Al Majlis Hotel · Powered by RIWAQ Systems". Sidebar brand and the sign-in form use the shared Dar Al Majlis seal (`HotelMark` from `hotel-mark.tsx`, same as mobile) with the hotel name and "Powered by RIWAQ Systems"; the footer uses `PoweredByRiwaq`. Desktop tab titles end with "· Dar Al Majlis"; chart exports credit the hotel. Files: `mobile-pages.tsx` (DesktopLoginPage only), `desktop-shell.tsx`, `reports-page.tsx`, `src/routes/app/*`, `login.tsx`, `index.tsx`, `__root.tsx`, `styles.css`.
-- **Why:** Owner: the Arabic and English sat far apart, and hotel staff shouldn't see RIWAQ more than their own hotel. A Dar Al Majlis website is planned.
-- **Decisions:** Riwaq = vendor credit only. Mobile screens are left to the mobile redesign work to avoid conflicts. Logged in `docs/decision-log.md`.
-- **PR:** #11
 
 ## 2026-11-12 · Thmanyah from a local, git-ignored folder · @abdulsalahuddin94-dev
 - **What:** New `public/fonts/thmanyah/` (git-ignored except its README) and `src/lib/local-fonts.ts`: on a local dev server the app loads Thmanyah `.woff2` files from that folder, so nobody has to install the font in their OS. Setup steps in the folder README, the main README and `CLAUDE.md` (Claude reminds a new teammate on first run). Font stacks in `src/styles.css` gained "Riwaq Arabic Files" / "Riwaq Arabic Display Files".
