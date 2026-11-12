@@ -28,17 +28,25 @@ export function HotelMark({ className }: { className?: string }) {
   );
 }
 
-/** Hotel badge: mark + wordmark in the current staff-app language only. */
+/** Hotel logo lockup: mark + «دار المجلس» over DAR AL MAJLIS. A logo, not a label, so both names always show together. */
 export function HotelBadge({ className, tone = "light" }: { className?: string; tone?: "light" | "dark" }) {
-  const { ar } = useSharedT();
   return (
     <div className={cn("hotel-badge", `hotel-badge-${tone}`, className)}>
       <HotelMark className="hotel-badge-mark" />
-      {ar ? (
-        <div className="hotel-badge-word" lang="ar"><strong>دار المجلس</strong><span>فندق تراثي</span></div>
-      ) : (
-        <div className="hotel-badge-word"><strong className="hotel-word-en">Dar Al Majlis</strong><span>Heritage Hotel</span></div>
-      )}
+      <div className="hotel-badge-word">
+        <strong lang="ar">دار المجلس</strong>
+        <span>Dar Al Majlis</span>
+      </div>
     </div>
+  );
+}
+
+/** Small product credit: the hotel brand leads, Riwaq stays in the background. */
+export function PoweredByRiwaq({ className }: { className?: string }) {
+  const { t } = useSharedT();
+  return (
+    <p className={cn("powered-by", className)}>
+      <span>{t("Powered by", "مدعوم من")}</span> <b>RIWAQ SYSTEMS</b>
+    </p>
   );
 }

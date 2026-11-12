@@ -19,7 +19,7 @@ import {
 import { setLang, useMobileT } from "@/lib/mobile-i18n";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
-import { HotelBadge } from "./hotel-mark";
+import { HotelBadge, PoweredByRiwaq } from "./hotel-mark";
 import { EmptyArt, Picto, RoleArt, RoomArt, RoomPhoto, StaffAvatar, categoryIcon, photos } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
 import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
@@ -151,6 +151,7 @@ export function MobileMePage() {
         <div className="mobile-settings-row"><Languages aria-hidden="true" /> {t("Language", "اللغة")} <LangSwitch /></div>
         <button type="button" onClick={() => { toast.success(t("Shift ended · see you tomorrow", "انتهت الوردية · نراك غدًا"), { duration: 2500 }); void navigate({ to: "/m/login" }); }}><LogOut aria-hidden="true" /> {t("End shift", "إنهاء الوردية")} <ChevronRight aria-hidden="true" /></button>
       </div>
+      <PoweredByRiwaq />
     </MobileShell>
   );
 }
@@ -384,6 +385,7 @@ export function MobileLoginPage() {
                   </button>
                 ))}
               </div>
+              <PoweredByRiwaq />
             </>
           ) : !person ? (
             <>

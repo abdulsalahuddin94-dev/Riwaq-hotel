@@ -928,11 +928,12 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 /* Hotel mark: Dar Al Majlis, distinct from the Riwaq product mark */
 .hotel-badge{display:inline-flex;align-items:center;gap:10px}
 .hotel-badge-mark{flex:none;width:36px;height:36px;filter:drop-shadow(0 2px 5px oklch(0.15 0.02 46 / .35))}
-.hotel-badge-word{display:grid;gap:1px;line-height:1.05}
-.hotel-word-en{font-family:var(--font-brand);font-size:20px;font-weight:600;letter-spacing:.03em}
-.hotel-badge-word[lang="ar"] strong{font-family:var(--font-brand-ar);font-size:21px;font-weight:700}
-.hotel-badge-word span{font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;opacity:.78}
-.hotel-badge-word[lang="ar"] span{font-size:12px;letter-spacing:0}
+.hotel-badge-word{display:grid;justify-items:start;gap:2px;line-height:1}
+.hotel-badge-word strong{font-family:var(--font-brand-ar);font-size:20px;font-weight:700;line-height:1.05}
+.hotel-badge-word span{font-family:var(--font-brand);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;opacity:.85}
+.powered-by{display:flex;justify-content:center;gap:5px;margin:22px 0 0;color:var(--neutral-500);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.powered-by b{color:var(--brass-700);font-weight:700;letter-spacing:.16em}
+.mobile-app[lang="ar"] .powered-by span{text-transform:none;letter-spacing:0;font-size:12px}
 
 /* Login (kept: job → photo → PIN), dressed up */
 .m-login-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,oklch(0.15 0.02 46 / .5),transparent 32%,transparent 62%,oklch(0.15 0.02 46 / .35));pointer-events:none}
@@ -941,7 +942,8 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .m-login-back{z-index:3;left:auto!important;right:16px!important;border:1px solid oklch(1 0 0 / .22)!important;background:oklch(0.17 0.02 46 / .42)!important;color:#fff;backdrop-filter:blur(14px)}
 .mobile-app[dir="rtl"] .m-login-brand{left:auto!important;right:16px!important}.mobile-app[dir="rtl"] .m-login-back{left:16px!important;right:auto!important}
 .device-screen:has(.m-login) .device-status{color:#fff}
-.m-login-lang{position:absolute;z-index:3;top:calc(var(--safe-top) + 16px);inset-inline-end:16px;border:1px solid oklch(1 0 0 / .2);background:oklch(0.17 0.02 46 / .42);backdrop-filter:blur(14px)}
+.mobile-app[dir="rtl"] .m-login-lang{right:auto;left:16px}
+.m-login-lang{position:absolute;z-index:3;top:calc(var(--safe-top) + 16px);right:16px;border:1px solid oklch(1 0 0 / .2);background:oklch(0.17 0.02 46 / .42);backdrop-filter:blur(14px)}
 .m-login-lang button{color:oklch(1 0 0 / .82)}.m-login-lang button.on{background:#fff;color:#1d1510}
 .m-login-hello{letter-spacing:.02em}
 .m-login-sheet h2{font-family:var(--font-brand);font-size:34px;font-weight:600;letter-spacing:-.005em}
