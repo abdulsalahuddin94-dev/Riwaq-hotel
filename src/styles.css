@@ -594,8 +594,10 @@ fieldset.segmented button{border:0;box-shadow:var(--hairline)}
 
 
 /* ═════════════ Riwaq heritage layer ═════════════ */
-.sidebar-brand strong{display:flex;align-items:baseline;gap:8px;color:var(--neutral-900)}
-.sidebar-brand strong [lang="ar"]{font-family:var(--font-brand-ar);font-weight:700;font-size:22px;color:var(--brass-700)}
+.sidebar-brand strong{display:grid;gap:0;line-height:1.1;font-size:17px;letter-spacing:.04em;color:var(--neutral-900)}
+.sidebar-brand strong [lang="ar"]{font-family:var(--font-brand-ar);font-weight:700;font-size:22px;letter-spacing:0;text-transform:none;color:var(--brass-700)}
+.sidebar-brand>div>span{margin-top:4px;font-size:10px;letter-spacing:.05em;white-space:nowrap}
+.desktop-shell .sidebar-brand strong [lang="ar"]{color:var(--brass-300)}
 .heritage-notice{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;margin:12px 0;padding:14px 16px;border-radius:12px;background:var(--brass-50);box-shadow:inset 0 0 0 1px var(--brass-300);color:var(--neutral-800)}
 .heritage-notice>svg{width:22px;height:22px;color:var(--brass-700)}
 .heritage-notice strong{display:block;margin-bottom:6px;font-size:var(--fs-label,13px)}
@@ -789,9 +791,10 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .login-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,var(--night-950)),linear-gradient(0deg,oklch(0.12 0.03 290 / .55),transparent 45%)}
 .login-visual-copy{position:absolute;z-index:2;left:56px;right:56px;top:18%;display:grid;gap:10px;color:#fff;text-shadow:0 2px 24px oklch(0.1 0.04 290 / .6)}
 .login-visual-copy>span{font-size:13px;font-weight:600;letter-spacing:.42em;text-transform:uppercase;opacity:.85}
-.login-visual-copy strong{margin-bottom:8px;font-family:var(--font-brand);font-size:clamp(44px,5.4vw,76px);font-weight:600;letter-spacing:.14em;line-height:1}
-.login-visual-copy strong span{font-family:var(--font-brand-ar);font-weight:700;letter-spacing:0;margin-inline-end:.3em;color:var(--brass-300,#E2C891)}
-.login-visual-copy em{font-style:normal;font-size:18px;opacity:.9}
+.hotel-lockup{display:grid;justify-items:start;gap:10px;margin-bottom:8px;line-height:1}
+.hotel-lockup [lang="ar"]{font-family:var(--font-brand-ar);font-size:clamp(52px,6vw,84px);font-weight:700;line-height:1.35;color:var(--brass-300,#E2C891)}
+.hotel-lockup span:not([lang]){font-family:var(--font-brand);font-size:clamp(26px,2.8vw,40px);font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.login-visual-copy em{font-style:normal;font-size:15px;letter-spacing:.06em;opacity:.88}
 .login-side{position:relative;display:grid;align-content:center;justify-items:center;padding:48px 32px;background:radial-gradient(120% 70% at 100% 0%,var(--night-700),transparent 60%),radial-gradient(90% 60% at 0% 100%,oklch(0.42 0.09 70 / .35),transparent 60%),var(--night-950)}
 .login-screen .login-panel{width:min(400px,100%);gap:16px;padding:0;border-radius:0!important;background:transparent;box-shadow:none;color:#fff}
 .login-mark{width:44px;height:52px;filter:drop-shadow(0 0 18px oklch(0.8 0.11 80 / .55))}
@@ -806,7 +809,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .login-switch.on{background:var(--brass-500)}.login-switch.on i{transform:translateX(18px)}
 .login-submit{height:50px!important;border-radius:14px!important;background:linear-gradient(135deg,#E2C47F,#B88A3E)!important;color:var(--neutral-950)!important;font-weight:700;box-shadow:0 10px 30px oklch(0.75 0.12 75 / .35)}
 .login-alt{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;color:oklch(0.82 0.02 290);font-size:13px;text-decoration:none}.login-alt b{color:#fff}.login-alt svg{width:16px}
-.login-foot{position:absolute;bottom:24px;color:oklch(0.65 0.02 290);font-size:12px}
+.login-foot{position:absolute;bottom:24px;left:32px;right:32px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;color:oklch(0.65 0.02 290);font-size:12px}
 @media (max-width:900px){.login-screen{grid-template-columns:1fr}.login-visual{min-height:300px}.login-visual:after{background:linear-gradient(180deg,transparent 50%,var(--night-950))}.login-visual-copy{top:auto;bottom:40px;left:24px;right:24px}.login-visual-copy strong{font-size:40px}.login-side{padding:24px 16px 72px}}
 
 /* Board welcome hero */
@@ -1001,3 +1004,9 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .room-topbar-chip{justify-self:end;opacity:clamp(0,calc((var(--hero-p,0) - .82) * 6),1)}
 .room-topbar-chip .status-chip{background:#fff}
 @media (prefers-reduced-motion:reduce){.room-hero-media,.room-hero-copy{transform:none!important}.room-hero-photo,.room-hero-copy{animation:none}.tab-dock-arch,.tab-dock-icon,.tab-dock-label{transition:none}}
+
+/* Desktop: hotel mark in sidebar + sign-in, Riwaq credit on dark footer */
+.sidebar-brand .sidebar-mark{width:44px;height:44px;flex:0 0 auto;filter:drop-shadow(0 2px 6px oklch(0.1 0.02 46 / .4))}
+.desktop-sidebar-collapsed .sidebar-brand .sidebar-mark{width:40px;height:40px}
+.login-screen .login-mark{width:56px;height:56px}
+.login-foot .powered-by{margin:0;color:inherit;font-size:11px}.login-foot .powered-by b{color:var(--brass-300,#E2C891)}

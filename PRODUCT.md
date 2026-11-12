@@ -28,6 +28,8 @@ Busy shift work. Managers on a large screen at a desk; housekeepers on phones in
 ## Brand Commitments
 Quiet, warm, crafted. Juss plaster, brass, palm green, terracotta, basalt. The arcade arch (riwaq) is the only ornament.
 
+**Who is on screen:** staff see their hotel first. The front brand is the property, «دار المجلس · Dar Al Majlis»; Riwaq appears only as a quiet "Powered by Riwaq Systems" credit (sidebar, sign-in footer, exports, tab titles end with the hotel name). Riwaq is the vendor; the hotel is the host.
+
 ## Evidence on Hand
 docs/specs/riwaq-product-spec.md (primary), docs/specs/hms-supplementary-spec.md, docs/specs/hotel-reference-links.md, docs/decision-log.md.
 

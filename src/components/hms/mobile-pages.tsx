@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Delete, Languages, LogOut, ShieldCheck, Smartphone, Wifi, Wrench, Zap } from "lucide-react";
-import riwaqMark from "@/assets/riwaq-mark.svg";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { personaStaff, property, type Room } from "@/lib/demo-data";
@@ -19,7 +18,7 @@ import {
 import { setLang, useMobileT } from "@/lib/mobile-i18n";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
-import { HotelBadge, PoweredByRiwaq } from "./hotel-mark";
+import { HotelBadge, HotelMark, PoweredByRiwaq } from "./hotel-mark";
 import { EmptyArt, Picto, RoleArt, RoomArt, RoomPhoto, StaffAvatar, categoryIcon, photos } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
 import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
@@ -428,9 +427,11 @@ export function DesktopLoginPage() {
       <section className="login-visual" aria-hidden="true">
         <img src={photos.courtyardDusk} alt="" className="login-scene" />
         <div className="login-visual-copy">
-          <span>Heritage hospitality operations</span>
-          <strong><span lang="ar">رِواق</span> RIWAQ</strong>
-          <em lang="ar">{property.nameAr} · {property.name}</em>
+          <strong className="hotel-lockup">
+            <span lang="ar">{property.nameAr}</span>
+            <span>{property.name}</span>
+          </strong>
+          <em>Heritage Hotel · <span lang="ar">فندق تراثي</span></em>
         </div>
       </section>
       <section className="login-side">
@@ -442,7 +443,7 @@ export function DesktopLoginPage() {
             void navigate({ to: "/app/board" });
           }}
         >
-          <img src={riwaqMark} alt="" className="login-mark" />
+          <HotelMark className="login-mark" />
           <h1>Nice to see you</h1>
           <p>Sign in to run today's house at {property.name}.</p>
           <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>
@@ -454,7 +455,10 @@ export function DesktopLoginPage() {
           <Button type="submit" variant="hmsPrimary" size="hmsLg" className="login-submit">Sign in</Button>
           <Link to="/m/login" className="login-alt"><Smartphone aria-hidden="true" /> On shift with a phone? <b>Open the staff app</b></Link>
         </form>
-        <footer className="login-foot">© 2026 {property.name} · Riwaq</footer>
+        <footer className="login-foot">
+          <span>© 2026 {property.name} Hotel</span>
+          <PoweredByRiwaq />
+        </footer>
       </section>
     </div>
   );

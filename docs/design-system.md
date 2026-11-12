@@ -51,7 +51,7 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 
 ## 4. Typography
 - UI: `--font-sans` = system / SF Pro / Inter, then **"Riwaq Arabic"** (Thmanyah via `local()`), then **Almarai** (Google Fonts, closest free match).
-- Brand: `--font-brand` Cormorant Garamond ("Riwaq"); `--font-brand-ar` Thmanyah Serif Display («رِواق»), then **Markazi Text** (Google Fonts, closest free match).
+- Brand: the **hotel** leads (`.hotel-lockup`: Arabic name above the uppercase English name, same start edge); Riwaq is only "Powered by Riwaq Systems". `--font-brand` Cormorant Garamond (English hotel name, RIWAQ in the credit); `--font-brand-ar` Thmanyah Serif Display («رِواق»), then **Markazi Text** (Google Fonts, closest free match).
 - Scale: h1 26px/1.25 · body 15px · label 13px · caption 12px. Tabular numbers for counts and times.
 - **Thmanyah only renders on machines that have it**: installed in the OS, or as `.woff2` files in the git-ignored `public/fonts/thmanyah/` (loaded on a local dev server only by `src/lib/local-fonts.ts`); everyone else (e.g. the Lovable link) sees Almarai / Markazi Text. Never commit font files (licence). See `decision-log.md`.
 
