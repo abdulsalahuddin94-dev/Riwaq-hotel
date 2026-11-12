@@ -97,8 +97,29 @@ export function MobileShell({
   const alerts = useMobileAlerts();
   const [host, setHost] = useState<HTMLElement | null>(null);
   const [scroller, setScroller] = useState<HTMLElement | null>(null);
+  const [headerCompact, setHeaderCompact] = useState(false);
+  const [scrolling, setScrolling] = useState(false);
   const tr = useMobileT();
   const routePersona = personaForRoute(pathname);
+
+  useEffect(() => {
+    setHeaderCompact(false);
+    setScrolling(false);
+    if (!scroller || bare) return;
+    let idleTimer: ReturnType<typeof setTimeout> | undefined;
+    const onScroll = () => {
+      const offset = scroller.scrollTop;
+      setHeaderCompact((compact) => offset > 40 ? true : offset < 8 ? false : compact);
+      setScrolling(true);
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => setScrolling(false), 240);
+    };
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      clearTimeout(idleTimer);
+    };
+  }, [scroller, bare, pathname]);
 
   // Opening a role-specific page directly (deep link, FAB, bookmark) switches the demo role to match.
   useEffect(() => {
@@ -128,7 +149,7 @@ export function MobileShell({
             <SheetHostContext.Provider value={host}>
             <AppHostContext.Provider value={{ app: host, scroller }}>
               {bare ? <div className="mobile-bare">{children}</div> : null}
-              {!bare && !immersive ? <header className={cn("mobile-header", back && "mobile-header-back")}>
+              {!bare && !immersive ? <header className={cn("mobile-header", back && "mobile-header-back", headerCompact && "mobile-header-compact")}>
                 {back ? (
                   <Link to={back.to as never} params={back.params as never} className="m-back" aria-label={back.label ?? tr.t("Back", "رجوع")}>
                     <ChevronLeft aria-hidden="true" /> {back.label ?? tr.t("Back", "رجوع")}
@@ -142,7 +163,7 @@ export function MobileShell({
               </header> : null}
               {!bare ? <div className={cn("mobile-scroll-area", !footer && "mobile-scroll-dock")} ref={setScroller}>{children}</div> : null}
               {footer && !bare ? <div className="m-footer">{footer}</div> : null}
-              {!footer && !bare ? <TabDock tabs={tabs} pathname={pathname} alerts={alerts.length} /> : null}
+              {!footer && !bare ? <TabDock tabs={tabs} pathname={pathname} alerts={alerts.length} hidden={scrolling} /> : null}
               <div className="mobile-home-indicator" aria-hidden="true" />
             </AppHostContext.Provider>
             </SheetHostContext.Provider>
@@ -185,11 +206,11 @@ type Tab = { to: string; label: string; labelAr: string; icon: React.ComponentTy
 /**
  * Light floating navigation with persistent labels and a sliding active indicator.
  */
-function TabDock({ tabs, pathname, alerts }: { tabs: readonly Tab[]; pathname: string; alerts: number }) {
+function TabDock({ tabs, pathname, alerts, hidden }: { tabs: readonly Tab[]; pathname: string; alerts: number; hidden: boolean }) {
   const { t } = useMobileT();
   const activeIndex = Math.max(0, tabs.findIndex((tab) => pathname === tab.to || (tab.to !== "/m/me" && pathname.startsWith(`${tab.to}/`))));
   return (
-    <nav className="tab-dock" aria-label={t("Main navigation", "التنقل الرئيسي")} style={{ "--n": tabs.length, "--i": activeIndex } as React.CSSProperties}>
+    <nav className={cn("tab-dock", hidden && "tab-dock-hidden")} inert={hidden} aria-hidden={hidden || undefined} aria-label={t("Main navigation", "التنقل الرئيسي")} style={{ "--n": tabs.length, "--i": activeIndex } as React.CSSProperties}>
       <span className="tab-dock-arch" aria-hidden="true" />
       {tabs.map((tab, i) => {
         const Icon = tab.icon;

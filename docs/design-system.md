@@ -98,6 +98,7 @@ Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP fi
 
 ## 7b. Staff app language
 Mobile visual refresh: room cards use full-card photography with a semantic contrast overlay, short room/task labels, existing status badges and checklist progress. The shift summary uses `mobile-shift-suite.jpg`, a generated refined daylight suite, also available to mobile Heritage Room photos only. PIN keeps job → face → four digits, with a compact identity row, four masked slots and a 64px keypad. No operational rules changed.
+Mobile scroll behavior: standard headers compact from 88px to 56px after scrolling, keeping the title and role visible. The floating dock slides below the screen while scrolling and returns after 240ms idle; hidden navigation is inert. Room cards use a 224px minimum height with unchanged photo overlays and room data. Existing reduced-motion rules suppress these transitions.
 
 - **One language per screen.** English is the default (Gulf housekeeping teams are multinational); Arabic switches the whole staff app to RTL. Never show English and Arabic labels side by side.
 - Strings live in `src/lib/mobile-i18n.ts`: `useMobileT()` in pages, `useSharedT()` in shared components (desktop has no provider, so it stays English). Seeded data (room types, wings, checklist items, staff and guest names, notes, event history) has Arabic mappings; text typed by staff stays as typed.

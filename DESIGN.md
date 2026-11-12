@@ -63,6 +63,7 @@ Rounded but not bubbly: 10–24px radii by size. Tiles 12px, panels 24px, pills 
 - **Mobile detail:** fixed phone-local photograph behind scrolling content; always-visible 48px back control; room title remains start-aligned in the collapsed top bar.
 - **Mobile navigation and PIN:** light floating dock with all tab labels visible; four masked PIN slots and 64px keys, preserving job → photo → PIN sign-in.
 - **Language selection:** equal 44px targets, centered labels and a raised selected segment; fixed geometry in English and Arabic, without inheriting settings-row button heights.
+- **Mobile scrolling:** compact title header after scrolling; navigation slides out during movement and returns on idle. Room cards retain full-image presentation at a reduced 224px minimum height.
 
 ## Do's and Don'ts
 - Do pair every status colour with an icon and words.
