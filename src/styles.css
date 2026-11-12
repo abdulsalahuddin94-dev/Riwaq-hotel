@@ -810,7 +810,6 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .login-submit{height:50px!important;border-radius:14px!important;background:linear-gradient(135deg,#E2C47F,#B88A3E)!important;color:var(--neutral-950)!important;font-weight:700;box-shadow:0 10px 30px oklch(0.75 0.12 75 / .35)}
 .login-alt{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;color:oklch(0.82 0.02 290);font-size:13px;text-decoration:none}.login-alt b{color:#fff}.login-alt svg{width:16px}
 .login-foot{position:absolute;bottom:24px;left:32px;right:32px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;color:oklch(0.65 0.02 290);font-size:12px}
-.powered-by{letter-spacing:.06em}.powered-by b{font-family:var(--font-brand);font-size:13px;font-weight:600;letter-spacing:.2em;color:var(--brass-300,#E2C891)}
 @media (max-width:900px){.login-screen{grid-template-columns:1fr}.login-visual{min-height:300px}.login-visual:after{background:linear-gradient(180deg,transparent 50%,var(--night-950))}.login-visual-copy{top:auto;bottom:40px;left:24px;right:24px}.login-visual-copy strong{font-size:40px}.login-side{padding:24px 16px 72px}}
 
 /* Board welcome hero */
@@ -1005,3 +1004,9 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .room-topbar-chip{justify-self:end;opacity:clamp(0,calc((var(--hero-p,0) - .82) * 6),1)}
 .room-topbar-chip .status-chip{background:#fff}
 @media (prefers-reduced-motion:reduce){.room-hero-media,.room-hero-copy{transform:none!important}.room-hero-photo,.room-hero-copy{animation:none}.tab-dock-arch,.tab-dock-icon,.tab-dock-label{transition:none}}
+
+/* Desktop: hotel mark in sidebar + sign-in, Riwaq credit on dark footer */
+.sidebar-brand .sidebar-mark{width:44px;height:44px;flex:0 0 auto;filter:drop-shadow(0 2px 6px oklch(0.1 0.02 46 / .4))}
+.desktop-sidebar-collapsed .sidebar-brand .sidebar-mark{width:40px;height:40px}
+.login-screen .login-mark{width:56px;height:56px}
+.login-foot .powered-by{margin:0;color:inherit;font-size:11px}.login-foot .powered-by b{color:var(--brass-300,#E2C891)}

@@ -20,7 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
-import riwaqMark from "@/assets/riwaq-mark.svg";
+import { HotelMark } from "./hotel-mark";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -153,11 +153,11 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
         {mobileNav ? <button className="sidebar-scrim" type="button" aria-label="Close menu" onClick={() => setMobileNav(false)} /> : null}
         <aside className={cn("desktop-sidebar", collapsed && "desktop-sidebar-collapsed", mobileNav && "desktop-sidebar-open")}>
           <div className="sidebar-brand">
-            <img src={riwaqMark} alt="" />
+            <HotelMark className="sidebar-mark" />
             {!collapsed ? (
               <div>
                 <strong><span lang="ar">{property.nameAr}</span> {property.name}</strong>
-                <span>Powered by Riwaq Systems</span>
+                <span>Powered by RIWAQ Systems</span>
               </div>
             ) : null}
             {mobileNav ? (

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Delete, Languages, LogOut, ShieldCheck, Smartphone, Wifi, Wrench, Zap } from "lucide-react";
-import riwaqMark from "@/assets/riwaq-mark.svg";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { personaStaff, property, type Room } from "@/lib/demo-data";
@@ -19,7 +18,7 @@ import {
 import { setLang, useMobileT } from "@/lib/mobile-i18n";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
-import { HotelBadge, PoweredByRiwaq } from "./hotel-mark";
+import { HotelBadge, HotelMark, PoweredByRiwaq } from "./hotel-mark";
 import { EmptyArt, Picto, RoleArt, RoomArt, RoomPhoto, StaffAvatar, categoryIcon, photos } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
 import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
@@ -444,7 +443,7 @@ export function DesktopLoginPage() {
             void navigate({ to: "/app/board" });
           }}
         >
-          <img src={riwaqMark} alt="" className="login-mark" />
+          <HotelMark className="login-mark" />
           <h1>Nice to see you</h1>
           <p>Sign in to run today's house at {property.name}.</p>
           <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>
@@ -458,7 +457,7 @@ export function DesktopLoginPage() {
         </form>
         <footer className="login-foot">
           <span>© 2026 {property.name} Hotel</span>
-          <span className="powered-by">Powered by <b>RIWAQ</b> Systems</span>
+          <PoweredByRiwaq />
         </footer>
       </section>
     </div>

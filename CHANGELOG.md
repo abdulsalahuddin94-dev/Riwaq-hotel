@@ -41,7 +41,7 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **PR:** Not created; direct Lovable edit.
 
 ## 2026-11-12 · Dar Al Majlis is the front brand (desktop) · @abdulsalahuddin94-dev
-- **What:** Desktop `/login` left side now shows the hotel lockup (Arabic «دار المجلس» over "DAR AL MAJLIS", tight and start-aligned, "Heritage Hotel · فندق تراثي"); footer reads "© 2026 Dar Al Majlis Hotel · Powered by RIWAQ Systems". Sidebar brand shows the hotel name with "Powered by Riwaq Systems". Desktop tab titles end with "· Dar Al Majlis"; chart exports credit the hotel. Files: `mobile-pages.tsx` (DesktopLoginPage only), `desktop-shell.tsx`, `reports-page.tsx`, `src/routes/app/*`, `login.tsx`, `index.tsx`, `__root.tsx`, `styles.css`.
+- **What:** Desktop `/login` left side now shows the hotel lockup (Arabic «دار المجلس» over "DAR AL MAJLIS", tight and start-aligned, "Heritage Hotel · فندق تراثي"); footer reads "© 2026 Dar Al Majlis Hotel · Powered by RIWAQ Systems". Sidebar brand and the sign-in form use the shared Dar Al Majlis seal (`HotelMark` from `hotel-mark.tsx`, same as mobile) with the hotel name and "Powered by RIWAQ Systems"; the footer uses `PoweredByRiwaq`. Desktop tab titles end with "· Dar Al Majlis"; chart exports credit the hotel. Files: `mobile-pages.tsx` (DesktopLoginPage only), `desktop-shell.tsx`, `reports-page.tsx`, `src/routes/app/*`, `login.tsx`, `index.tsx`, `__root.tsx`, `styles.css`.
 - **Why:** Owner: the Arabic and English sat far apart, and hotel staff shouldn't see RIWAQ more than their own hotel. A Dar Al Majlis website is planned.
 - **Decisions:** Riwaq = vendor credit only. Mobile screens are left to the mobile redesign work to avoid conflicts. Logged in `docs/decision-log.md`.
 - **PR:** #11
