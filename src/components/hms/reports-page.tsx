@@ -191,7 +191,7 @@ async function downloadPng(card: HTMLElement | null, title: string) {
   ctx.fillText(title, pad, pad + 14);
   ctx.fillStyle = C.muted;
   ctx.font = "12px Inter, -apple-system, Segoe UI, sans-serif";
-  ctx.fillText(`Riwaq · ${property.name}`, pad, pad + 32);
+  ctx.fillText(`${property.name} Hotel · Powered by Riwaq Systems`, pad, pad + 32);
   ctx.drawImage(img, pad, pad + head, width, height);
   canvas.toBlob((blob) => {
     if (!blob) return;

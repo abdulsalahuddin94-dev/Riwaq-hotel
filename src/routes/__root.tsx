@@ -81,16 +81,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Riwaq — Heritage Hospitality Operations" },
+      { title: "Dar Al Majlis — Hotel Operations" },
       {
         name: "description",
-        content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels.",
+        content: "Dar Al Majlis hotel operations, powered by Riwaq Systems (رِواق).",
       },
-      { name: "author", content: "Riwaq" },
-      { property: "og:title", content: "Riwaq — Heritage Hospitality Operations" },
+      { name: "author", content: "Riwaq Systems" },
+      { property: "og:title", content: "Dar Al Majlis — Hotel Operations" },
       {
         property: "og:description",
-        content: "Riwaq (رِواق) — heritage hospitality operations for Gulf heritage hotels.",
+        content: "Dar Al Majlis hotel operations, powered by Riwaq Systems (رِواق).",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
