@@ -50,6 +50,7 @@ Rounded but not bubbly: 10–24px radii by size. Tiles 12px, panels 24px, pills 
 - **Needs-you-now strip:** first thing on the Live Board. Up to four items (escalations, guests waiting, arrivals at risk), each with the one action that resolves it. An "All clear" line when empty.
 - **Readiness ribbon:** one proportional bar plus legend buttons that filter the board. Replaces hero-metric cards.
 - **Room tile:** white, with a status rail and a coloured status icon. A tinted fill is reserved for rooms that need someone (queue guest or accountability signal). Hatch/dots for out-of-order/out-of-service.
+- **Room drawer header:** wing-specific photography fades into the page background. Wing name, room number and status stay readable; room type, task and existing VIP/Queue/Alert/Re-clean flags use compact icon-and-text tags. Images identify wings, not room types.
 - **Arrivals timeline (Front Desk):** one row per arrival; a bar from now to the estimated ready time and a pin at the arrival time. Risk is written in words (Ready, On track, Tight, At risk). Estimates come from standard clean times and are labelled internal.
 - **Heritage notice:** brass-tinted panel with the arch icon; text only, never a care recipe.
 - **Checklist meter:** count plus a linear bar.

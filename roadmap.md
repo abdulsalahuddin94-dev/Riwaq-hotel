@@ -6,6 +6,7 @@
 - [x] Honest labels: demo data, PMS not connected, internal readiness
 - [x] Replace Live Board welcome photography with a refined daylight hotel lounge
 - [x] Start desktop and mobile flows at their sign-in screens
+- [x] Distinct wing photography with faded room-drawer headers and compact room tags
 - [ ] Full Arabic RTL with a language switch
 - [ ] Simulated offline outbox with spec §14 sync states
 - [ ] Clearly labelled mock PMS acknowledgement

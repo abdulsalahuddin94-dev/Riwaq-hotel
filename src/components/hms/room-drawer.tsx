@@ -2,9 +2,9 @@ import { useState } from "react";
 import { AlertTriangle, Camera, CheckCircle2, Circle, CircleSlash, ClipboardCheck, LogIn, LogOut, RotateCcw, ShieldCheck, UserRoundCog, Wrench, XCircle, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { wingLabel, fmtDuration, fmtTime, hkLabel, inspectionPoints, taskLabel, zoneLabel, type Zone } from "@/lib/demo-data";
+import { fmtDuration, fmtTime, hkLabel, inspectionPoints, zoneLabel, type Zone } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
@@ -23,8 +23,8 @@ import {
 } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { QueueGuestDialog, WorkOrderDialog } from "./desktop-dialogs";
-import { HeritageNotice, RoomBadges } from "./room-components";
-import { StatusChip } from "./status";
+import { HeritageNotice } from "./room-components";
+import { RoomDrawerHeader } from "./room-drawer-header";
 
 export function RoomDrawer({ number, onClose }: { number: string | null; onClose: () => void }) {
   return (
@@ -60,18 +60,7 @@ function RoomDrawerBody({ number }: { number: string }) {
 
   return (
     <div className="drawer-body">
-      <SheetHeader className="drawer-header">
-        <div className="drawer-title-row">
-          <SheetTitle className="drawer-title">
-            Room <bdi>{room.number}</bdi>
-          </SheetTitle>
-          <StatusChip status={status} />
-        </div>
-        <SheetDescription>
-          {room.type} · {wingLabel(room.floor)} · {taskLabel[room.taskType]}
-        </SheetDescription>
-        <RoomBadges room={room} />
-      </SheetHeader>
+      <RoomDrawerHeader room={room} status={status} />
 
       <div className={cn("readiness-box", ready ? "readiness-yes" : "readiness-no")}>
         {ready ? <CheckCircle2 aria-hidden="true" /> : <XCircle aria-hidden="true" />}

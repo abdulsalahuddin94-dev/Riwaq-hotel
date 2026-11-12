@@ -36,6 +36,7 @@ Each person installs them in Claude Code once (not auto-enabled from this repo):
 ```
 
 ## Rules
+- Resolve room-drawer photographs through the wing-photo map using existing room floor assignments, independently of room-type icons, so visual changes cannot alter operational grouping.
 - Keep everything client-side (`src/lib/hms-store.ts` uses localStorage). Don't add a server, database, auth provider or real PMS without the owner's approval.
 - Label every simulated thing as simulated: sync, server receipt, PMS confirmation. Never show demo data as confirmed by an external system.
 - Never invent heritage conservation instructions. Heritage assets show "awaiting specialist approval" and tell staff to report, not treat.
