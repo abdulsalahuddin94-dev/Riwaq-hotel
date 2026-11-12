@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Delete, Languages, LogOut, ShieldCheck, Smartphone, Wifi, Wrench, Zap } from "lucide-react";
+import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Clock3, Delete, Languages, LogOut, ShieldCheck, Smartphone, Wifi, Wrench, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { personaStaff, property, type Room } from "@/lib/demo-data";
@@ -24,6 +24,7 @@ import { useMobileAlerts } from "./mobile-alerts";
 import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
 import { RoomBadges, RoomCard, statusClass } from "./room-components";
 import { StatusChip } from "./status";
+import { MobileTaskContent, MobileTaskPhoto } from "./mobile-task-card";
 
 /** Priority order for an attendant's list: queue → re-clean → VIP → in progress → to do → waiting → done. */
 function priority(r: Room) {
@@ -170,10 +171,14 @@ export function MobileInspectionsPage() {
   const queued = list.filter((r) => r.queue).length;
   return (
     <MobileShell title={t("Inspection Queue", "قائمة الفحص")}>
+      <div className="m-day-card">
+        <img src={photos.shiftSuite} alt="" className="m-day-art" />
+        <div><strong>{list.length} <small>{t("rooms awaiting inspection", "غرف بانتظار الفحص")}</small></strong><p className="mobile-summary-meta"><ShieldCheck aria-hidden="true" /> {t("Inspection Queue", "قائمة الفحص")} · {queued} {t("guest waiting", "ضيف ينتظر")}</p></div>
+      </div>
       {queued ? <div className="mobile-callout"><Zap aria-hidden="true" /> {t(`${queued} queue room${queued > 1 ? "s" : ""} — guest waiting, inspect first.`, `${queued} غرفة عليها ضيف ينتظر — افحصها أولًا.`)}</div> : null}
       <div className="m-chips">
-        <button type="button" className={cn("m-chip", scope === "mine" && "m-chip-on")} onClick={() => setScope("mine")}>{t("My wings", "أجنحتي")}</button>
-        <button type="button" className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>{t("All wings", "كل الأجنحة")}</button>
+        <Button variant="hmsGhost" type="button" aria-pressed={scope === "mine"} className={cn("m-chip", scope === "mine" && "m-chip-on")} onClick={() => setScope("mine")}>{t("My wings", "أجنحتي")}</Button>
+        <Button variant="hmsGhost" type="button" aria-pressed={scope === "all"} className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>{t("All wings", "كل الأجنحة")}</Button>
       </div>
       {list.length === 0 ? (
         <EmptyState art={<EmptyArt kind="done" className="empty-art" />} title={t("All caught up · no rooms waiting", "لا غرف بانتظار الفحص")} />
@@ -184,21 +189,17 @@ export function MobileInspectionsPage() {
             const p = checklistProgress(s, room);
             const guest = tr.guest(room.queue?.guest);
             return (
-              <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
-                <div className="insp-head">
-                  <RoomPhoto type={room.type} className="room-thumb" refined />
-                  <div>
-                    <span>{tr.roomType(room.type)} · {tr.wingShort(room.floor)}</span>
-                    <h2><bdi>{room.number}</bdi></h2>
-                  </div>
-                </div>
+              <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card mobile-task-card" key={room.number}>
+                <MobileTaskPhoto type={room.type} />
                 <StatusChip status={displayStatus(room, s.settings)} />
+                <RoomBadges room={room} />
+                <MobileTaskContent eyebrow={<>{tr.roomType(room.type)} · {tr.wingShort(room.floor)}</>} title={<>{t("Room", "غرفة")} <bdi>{room.number}</bdi></>}>
                 <p className="insp-meta">
                   {tr.person(staffById(s, room.attendant)?.name)} · {tr.duration(activeMinutes(s, room))} · {p.done}/{p.total} {t("items", "بند")}{p.skipped ? t(` (${p.skipped} skipped)`, ` (${p.skipped} متخطى)`) : ""}
                 </p>
-                <RoomBadges room={room} />
-                {room.queue ? <p className={cn("sla-line", left <= 0 && "sla-breached")}>⏱ {left > 0 ? t(`${left} min left for ${guest}`, `باقي ${left} د على ${guest}`) : t(`SLA breached ${-left} min ago`, `تجاوز المهلة منذ ${-left} د`)}</p> : null}
+                {room.queue ? <p className={cn("sla-line", left <= 0 && "sla-breached")}><Clock3 aria-hidden="true" /> {left > 0 ? t(`${left} min left for ${guest}`, `باقي ${left} د على ${guest}`) : t(`SLA breached ${-left} min ago`, `تجاوز المهلة منذ ${-left} د`)}</p> : null}
                 <span className="m-card-cta">{t("Inspect", "افحص")} <ChevronRight aria-hidden="true" /></span>
+                </MobileTaskContent>
               </Link>
             );
           })}
@@ -227,18 +228,19 @@ export function MobileFloorPage() {
     <MobileShell title={t("Wings", "الأجنحة")}>
       <div className="m-chips">
         {[1, 2, 3, 4, 5].map((f) => (
-          <button type="button" key={f} className={cn("m-chip", floor === f && "m-chip-on")} onClick={() => setFloor(f)}>{tr.wingShort(f)}</button>
+          <Button variant="hmsGhost" type="button" key={f} aria-pressed={floor === f} className={cn("m-chip", floor === f && "m-chip-on")} onClick={() => setFloor(f)}>{tr.wingShort(f)}</Button>
         ))}
       </div>
       <div className="mobile-floor-grid">
         {rooms.map((r) => {
           const st = displayStatus(r, s.settings);
           return (
-            <button type="button" className={cn("m-floor-tile", statusClass[st])} key={r.number} onClick={() => setOpen(r.number)}>
+            <Button variant="hmsGhost" type="button" className={cn("m-floor-tile mobile-wing-room", statusClass[st])} key={r.number} onClick={() => setOpen(r.number)}>
+              <MobileTaskPhoto type={r.type} />
               <strong><bdi>{r.number}</bdi></strong>
               <StatusChip status={st} compact />
               <span>{r.attendant ? tr.first(staffById(s, r.attendant)?.name) : "—"}{r.queue ? " · ⚡" : ""}{r.anomalies.length ? " · ⚠" : ""}</span>
-            </button>
+            </Button>
           );
         })}
       </div>
@@ -296,9 +298,13 @@ export function MobileWorkOrdersPage() {
   );
   return (
     <MobileShell title={t("My Jobs", "مهامي")}>
+      <div className="m-day-card">
+        <img src={photos.shiftSuite} alt="" className="m-day-art" />
+        <div><strong>{list.length} <small>{tab === "done" ? t("Resolved", "تم حلها") : t("open work orders", "طلبات صيانة مفتوحة")}</small></strong><p className="mobile-summary-meta"><Wrench aria-hidden="true" /> {t("My Jobs", "مهامي")} · {list.filter((w) => w.urgency === "P1").length} {t("Urgent jobs", "مهام عاجلة")}</p></div>
+      </div>
       <div className="m-chips">
         {([["mine", t("Assigned to me", "مُسندة لي")], ["open", t("Unassigned", "غير مُسندة")], ["done", t("Resolved", "تم حلها")]] as const).map(([k, l]) => (
-          <button type="button" key={k} className={cn("m-chip", tab === k && "m-chip-on")} onClick={() => setTab(k)}>{l}</button>
+          <Button variant="hmsGhost" type="button" key={k} aria-pressed={tab === k} className={cn("m-chip", tab === k && "m-chip-on")} onClick={() => setTab(k)}>{l}</Button>
         ))}
       </div>
       {list.length === 0 ? (
@@ -306,13 +312,13 @@ export function MobileWorkOrdersPage() {
       ) : (
         <div className="mobile-room-list">
           {list.map((order) => (
-            <Link to="/m/work-orders/$woId" params={{ woId: order.id }} className="mobile-job-card" key={order.id}>
-              <span className="job-lead">
-                <Picto icon={categoryIcon[order.category]} className="picto-lg" tone={`cat-${order.category === "Heritage surface" ? "heritage" : order.category.toLowerCase()}`} />
-                <span className={cn("priority", order.urgency === "P1" && "priority-critical")}>{tr.ar ? tr.urgency(order.urgency) : order.urgency}</span>
-              </span>
-              <div><h2>{tr.category(order.category)} · {t("Room", "غرفة")} <bdi>{order.room}</bdi></h2><p>{tr.phrase(order.description)}</p><p className="m-muted"><bdi>{order.id}</bdi> · {tr.woState(order.state).toLowerCase()} · {t("opened", "فُتح")} {tr.time(order.createdAt)}</p></div>
-              <ChevronRight aria-hidden="true" />
+            <Link to="/m/work-orders/$woId" params={{ woId: order.id }} className="mobile-job-card mobile-task-card" key={order.id}>
+              <MobileTaskPhoto type={s.rooms.find((r) => r.number === order.room)?.type} />
+              <span className={cn("mobile-task-priority", order.urgency === "P1" && "priority-critical")}><AlertTriangle aria-hidden="true" /> {tr.urgency(order.urgency)}</span>
+              <MobileTaskContent eyebrow={<>{tr.category(order.category)} · <bdi>{order.id}</bdi></>} title={<>{t("Room", "غرفة")} <bdi>{order.room}</bdi></>}>
+                <p className="mobile-task-description">{tr.phrase(order.description)}</p>
+                <span className="m-card-cta"><Wrench aria-hidden="true" /> {tr.woState(order.state)} <ChevronRight aria-hidden="true" /></span>
+              </MobileTaskContent>
             </Link>
           ))}
         </div>

@@ -50,6 +50,7 @@ import { HeritageNotice, RoomBadges } from "./room-components";
 import { RoomHero } from "./room-hero";
 import { Picto, categoryIcon, pauseIcon, pictoFor, skipIcon, zoneTone } from "./illustrations";
 import { StatusChip } from "./status";
+import { MobileDetailPhoto } from "./mobile-task-card";
 
 /* ───────────── Shared bits ───────────── */
 
@@ -481,6 +482,7 @@ export function MobileInspectionFormPage({ roomId }: { roomId: string }) {
 
   return (
     <MobileShell title={t(`Inspect ${room.number}`, `فحص ${room.number}`)} subtitle={`${tr.roomType(room.type)} · ${tr.wing(room.floor)}`} back={{ to: "/m/inspections", label: t("Queue", "القائمة") }} footer={footer}>
+      <MobileDetailPhoto type={room.type} title={<>{t("Room", "غرفة")} <bdi>{room.number}</bdi></>} subtitle={`${tr.roomType(room.type)} · ${tr.wing(room.floor)}`} />
       <HeritageNotice room={room} compact />
       <button type="button" className="m-attendant-card" onClick={() => setAttendantOpen(true)}>
         <div>
@@ -588,6 +590,7 @@ export function MobileWorkOrderDetailPage({ woId }: { woId: string }) {
 
   return (
     <MobileShell title={wo.id} subtitle={`${tr.category(wo.category)} · ${tr.urgency(wo.urgency)} · ${t("Room", "غرفة")} ${wo.room}`} back={{ to: "/m/work-orders", label: t("Jobs", "المهام") }} footer={footer}>
+      {room ? <MobileDetailPhoto type={room.type} title={<>{t("Room", "غرفة")} <bdi>{room.number}</bdi></>} subtitle={`${tr.category(wo.category)} · ${tr.wing(room.floor)}`} /> : null}
       <div className="m-stepper">
         {steps.map((st, i) => <span key={st} className={cn(i <= at && "on")}>{tr.woState(st)}</span>)}
       </div>

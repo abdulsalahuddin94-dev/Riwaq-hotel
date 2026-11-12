@@ -37,6 +37,7 @@ Each person installs them in Claude Code once (not auto-enabled from this repo):
 ```
 
 ## Rules
+- Reuse mobile-task-card photo/content primitives for inspection and maintenance, keeping presentation shared without coupling operational state.
 - Handle mobile scroll chrome in MobileShell with passive listeners and cleaned-up idle timers so all staff roles share compact headers and idle-restored navigation.
 - Keep immersive mobile room photography in the app-host layer and scrolling content above it, so back navigation and the collapsed title remain reachable independently of scroll position.
 - Opt mobile screens into refined room photography explicitly; do not change desktop wing-photo mapping when refreshing mobile visuals.
