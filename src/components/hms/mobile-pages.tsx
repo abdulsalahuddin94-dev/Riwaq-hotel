@@ -42,8 +42,8 @@ export function LangSwitch({ className }: { className?: string }) {
   const { lang } = useMobileT();
   return (
     <div className={cn("lang-switch", className)} dir="ltr" role="group" aria-label="Language / اللغة">
-      <button type="button" aria-pressed={lang === "en"} className={cn(lang === "en" && "on")} onClick={() => setLang("en")}>EN</button>
-      <button type="button" aria-pressed={lang === "ar"} className={cn(lang === "ar" && "on")} onClick={() => setLang("ar")} lang="ar">ع</button>
+      <Button variant="hmsGhost" type="button" aria-label="English" aria-pressed={lang === "en"} className={cn("lang-option", lang === "en" && "on")} onClick={() => setLang("en")}>EN</Button>
+      <Button variant="hmsGhost" type="button" aria-label="العربية" aria-pressed={lang === "ar"} className={cn("lang-option", lang === "ar" && "on")} onClick={() => setLang("ar")} lang="ar">ع</Button>
     </div>
   );
 }

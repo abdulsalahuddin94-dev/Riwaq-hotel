@@ -921,12 +921,12 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .mobile-app[lang="ar"]{font-family:"Riwaq Arabic","Riwaq Arabic Files","Almarai",Tahoma,sans-serif}
 .mobile-app[dir="rtl"] .lucide-chevron-right,.mobile-app[dir="rtl"] .lucide-chevron-left{transform:scaleX(-1)}
 .mobile-app .mobile-settings-list button{text-align:start}
-.lang-switch{display:inline-flex;gap:2px;padding:3px;border-radius:99px;background:oklch(0.47 0.012 50 / .12)}
-.lang-switch button{min-width:40px;height:32px;padding:0 10px;border:0;border-radius:99px;background:transparent;color:var(--neutral-600);font-size:13px;font-weight:700;line-height:1;transition:background .2s,color .2s}
-.lang-switch button[lang="ar"]{font-family:var(--font-brand-ar);font-size:18px}
-.lang-switch button.on{background:#fff;color:var(--neutral-900);box-shadow:0 1px 3px oklch(0.2 0.02 46 / .16)}
-.mobile-settings-row{display:flex;min-height:58px;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--border);background:var(--card)}
-.mobile-settings-row .lang-switch{margin-inline-start:auto}
+.lang-switch{display:inline-grid;grid-template-columns:repeat(2,44px);flex:none;gap:2px;padding:3px;border-radius:99px;background:var(--muted)}
+.lang-switch .lang-option{display:flex;align-items:center;justify-content:center;width:44px;min-width:44px;height:44px;min-height:44px;margin:0;padding:0;border:0;border-radius:99px;background:transparent;color:var(--muted-foreground);font-size:13px;font-weight:700;line-height:1;transition:background .2s,color .2s,box-shadow .2s}
+.lang-switch .lang-option[lang="ar"]{font-family:var(--font-brand-ar);font-size:18px}
+.lang-switch .lang-option:hover{color:var(--foreground)}
+.lang-switch .lang-option.on{background:var(--card);color:var(--card-foreground);box-shadow:var(--shadow-sm)}
+.mobile-settings-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;min-height:66px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--card)}
 
 /* Hotel mark: Dar Al Majlis, distinct from the Riwaq product mark */
 .hotel-badge{display:inline-flex;align-items:center;gap:10px}

@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Repair staff language switch geometry · @abdulsalahuddin94-dev
+- **What:** Fixed the stretched EN / ع selection in Me; both options use shared buttons with equal 44px targets and centered labels, with a direction-aware settings row.
+- **Why:** Settings-list button rules were overriding the switch height and borders.
+- **Decisions:** Presentation-only fix; preserve PD-02 and existing language preference behavior.
+- **PR:** Not created; direct Lovable edit. No Git merge performed.
+
 ## 2026-11-12 · Photo-led mobile refresh and visible room back navigation · @abdulsalahuddin94-dev
 - **What:** Refined generated suite photograph replaces illustrated shift-progress artwork; mobile room cards use full-card photos and compact overlay details. PIN has masked slots, a compact identity row and 64px keys. Navigation is a light floating dock with persistent labels. Room imagery stays fixed behind scrolling content; a visible back button and start-aligned collapsed title remain at the top.
 - **Why:** Requested a more polished mobile experience, larger room imagery, clearer back navigation and improved PIN entry.

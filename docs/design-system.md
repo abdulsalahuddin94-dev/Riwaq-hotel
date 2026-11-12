@@ -102,6 +102,7 @@ Mobile visual refresh: room cards use full-card photography with a semantic cont
 - **One language per screen.** English is the default (Gulf housekeeping teams are multinational); Arabic switches the whole staff app to RTL. Never show English and Arabic labels side by side.
 - Strings live in `src/lib/mobile-i18n.ts`: `useMobileT()` in pages, `useSharedT()` in shared components (desktop has no provider, so it stays English). Seeded data (room types, wings, checklist items, staff and guest names, notes, event history) has Arabic mappings; text typed by staff stays as typed.
 - The choice is a per-device preference (`localStorage["riwaq-mobile-lang"]`), set on the sign-in hero, in Me → Language, or in the presenter panel.
+- EN / ع uses two fixed 44px targets in a segmented track. Component-scoped sizing prevents settings-row button rules from stretching the selection; the settings row uses a direction-aware grid.
 
 ## 8. States every screen needs
 Room drawers use `RoomDrawerHeader` with photographs resolved by the existing floor-to-wing assignment in `wing-photos.ts`. Najdi, Palm Garden, Fort Tower and Royal have distinct generated photographs; Courtyard Wing retains its existing courtyard image. The image fades into the semantic background, with compact room-type/task tags and conditional existing badges. No changes to room assignments or operational state.
