@@ -399,9 +399,11 @@ export function DesktopLoginPage() {
       <section className="login-visual" aria-hidden="true">
         <img src={photos.courtyardDusk} alt="" className="login-scene" />
         <div className="login-visual-copy">
-          <span>Heritage hospitality operations</span>
-          <strong><span lang="ar">رِواق</span> RIWAQ</strong>
-          <em lang="ar">{property.nameAr} · {property.name}</em>
+          <strong className="hotel-lockup">
+            <span lang="ar">{property.nameAr}</span>
+            <span>{property.name}</span>
+          </strong>
+          <em>Heritage Hotel · <span lang="ar">فندق تراثي</span></em>
         </div>
       </section>
       <section className="login-side">
@@ -425,7 +427,10 @@ export function DesktopLoginPage() {
           <Button type="submit" variant="hmsPrimary" size="hmsLg" className="login-submit">Sign in</Button>
           <Link to="/m/login" className="login-alt"><Smartphone aria-hidden="true" /> On shift with a phone? <b>Open the staff app</b></Link>
         </form>
-        <footer className="login-foot">© 2026 {property.name} · Riwaq</footer>
+        <footer className="login-foot">
+          <span>© 2026 {property.name} Hotel</span>
+          <span className="powered-by">Powered by <b>RIWAQ</b> Systems</span>
+        </footer>
       </section>
     </div>
   );

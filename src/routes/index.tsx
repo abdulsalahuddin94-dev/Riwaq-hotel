@@ -7,10 +7,10 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "Riwaq — Heritage Hospitality Operations" },
-      { name: "description", content: "Riwaq heritage hospitality operations." },
-      { property: "og:title", content: "Riwaq — Heritage Hospitality Operations" },
-      { property: "og:description", content: "Riwaq heritage hospitality operations." },
+      { title: "Dar Al Majlis — Hotel Operations" },
+      { name: "description", content: "Dar Al Majlis hotel operations, powered by Riwaq Systems." },
+      { property: "og:title", content: "Dar Al Majlis — Hotel Operations" },
+      { property: "og:description", content: "Dar Al Majlis hotel operations, powered by Riwaq Systems." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -34,6 +34,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **Decisions:** Change the referenced welcome photograph only; fictional property, no real hotel, people, text or logos. Existing images remain available. Logged in `docs/decision-log.md`.
 - **PR:** Not created; direct Lovable edit.
 
+## 2026-11-12 · Dar Al Majlis is the front brand (desktop) · @abdulsalahuddin94-dev
+- **What:** Desktop `/login` left side now shows the hotel lockup (Arabic «دار المجلس» over "DAR AL MAJLIS", tight and start-aligned, "Heritage Hotel · فندق تراثي"); footer reads "© 2026 Dar Al Majlis Hotel · Powered by RIWAQ Systems". Sidebar brand shows the hotel name with "Powered by Riwaq Systems". Desktop tab titles end with "· Dar Al Majlis"; chart exports credit the hotel. Files: `mobile-pages.tsx` (DesktopLoginPage only), `desktop-shell.tsx`, `reports-page.tsx`, `src/routes/app/*`, `login.tsx`, `index.tsx`, `__root.tsx`, `styles.css`.
+- **Why:** Owner: the Arabic and English sat far apart, and hotel staff shouldn't see RIWAQ more than their own hotel. A Dar Al Majlis website is planned.
+- **Decisions:** Riwaq = vendor credit only. Mobile screens are left to the mobile redesign work to avoid conflicts. Logged in `docs/decision-log.md`.
+- **PR:** #PRNUM
+
 ## 2026-11-12 · Thmanyah from a local, git-ignored folder · @abdulsalahuddin94-dev
 - **What:** New `public/fonts/thmanyah/` (git-ignored except its README) and `src/lib/local-fonts.ts`: on a local dev server the app loads Thmanyah `.woff2` files from that folder, so nobody has to install the font in their OS. Setup steps in the folder README, the main README and `CLAUDE.md` (Claude reminds a new teammate on first run). Font stacks in `src/styles.css` gained "Riwaq Arabic Files" / "Riwaq Arabic Display Files".
 - **Why:** Owner wants @EmG38 to work with the same font as soon as she clones the repo. The licence forbids putting the files in the repo, so each person downloads them once from font.thmanyah.com.

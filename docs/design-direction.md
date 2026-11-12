@@ -10,7 +10,7 @@ Riwaq should feel like a shaded Gulf courtyard: calm, warm and precise. Usabilit
 ## Type
 - The UI uses the system stack / Inter for Latin.
 - Arabic uses **Thmanyah**, referenced via `local()` only (see the licence note in `decision-log.md`). Viewers without it installed get the closest free web fonts: **Almarai** (UI) and **Markazi Text** (display).
-- The brand wordmark uses Thmanyah Serif Display (web fallback Markazi Text) for «رِواق» and Cormorant Garamond for "Riwaq".
+- The front brand is the hotel: «دار المجلس» in Thmanyah Serif Display (web fallback Markazi Text) stacked over "DAR AL MAJLIS" in Cormorant Garamond. Riwaq shows only as "Powered by Riwaq Systems".
 
 ## Mark
 `src/assets/riwaq-mark.svg` is an arcade arch under Najdi triangular crenellations (also `public/favicon.svg`).
