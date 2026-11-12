@@ -81,7 +81,7 @@ function WelcomeHero() {
   const c = 2 * Math.PI * r;
   return (
     <section className="welcome-hero" aria-label="Today at a glance">
-      <img src={photos.majlisNight} alt="" className="welcome-scene" />
+      <img src={photos.majlisLuxury} alt="" className="welcome-scene" width={1920} height={768} />
       <div className="welcome-copy">
         <span>{hello},</span>
         <h2>{me?.name ?? "Welcome back"}</h2>

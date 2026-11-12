@@ -90,6 +90,7 @@ Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP fi
 - **Field staff read little:** on mobile, every list row and choice carries a picture: room thumbnails show the room type and the bed state (messy → in progress → made), checklist items get a pictogram tinted by zone, issue categories, pause and skip reasons get icons, staff pick themselves by illustrated face.
 - A picture never replaces words or status: status chips (colour + icon + text) stay next to it.
 - Decorative SVG is `aria-hidden`; the text label beside it is the accessible name.
+- The Live Board welcome image is `majlis-luxury.jpg`: a generated daylight lounge with refined arcades, tailored sofas and polished finishes. It replaces the rustic night majlis on this screen only; the existing overlay keeps the greeting legible.
 
 ## 8. States every screen needs
 Default · loading/skeleton · empty · error with retry · success feedback (toast via sonner).

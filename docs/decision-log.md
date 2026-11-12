@@ -24,6 +24,8 @@ Format: newest at the bottom of each table. `By` is the GitHub login of the pers
 | 2026-11-11 | **Generated photos** (Lovable image generation) for sign-in backgrounds, the board welcome hero and room-type photos; SVG stays for pictograms, avatars and job pictures. Prompts: fictional Gulf heritage hotel, no people, text, logos or real hotels. | Owner wanted more creative imagery than drawn scenes. | abdulsalahuddin94-dev | Decided |
 | 2026-11-11 | Repo is the shared brain: `CLAUDE.md`/`AGENTS.md` entry, `docs/` for research, IA, sitemap, design system, and a `CHANGELOG.md` every contributor (and their Claude) updates. | Two people (abdulsalahuddin94-dev, EmG38) each work through their own Claude sessions. | abdulsalahuddin94-dev | Decided |
 
+| 2026-11-12 | Replace the Live Board night majlis with a generated luxury heritage lounge in daylight; leave other photos unchanged. | Owner found the pictured scene primitive rather than hotel-like; retain Gulf heritage architecture with polished hospitality finishes. | Lovable for abdulsalahuddin94-dev | Decided |
+
 ## Still OPEN (spec §25)
 Launch country and property · PMS provider · inspection and release authority · heritage SOP owner · BYOD policy · data retention and residency · SLA configuration · brand clearance for "Riwaq" · multi-property rollout · audio strategy · accessibility target.
 

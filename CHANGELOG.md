@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Refined hotel welcome photography · @abdulsalahuddin94-dev
+- **What:** Replaced the Live Board welcome image with a generated daylight luxury heritage lounge; retained greeting, readiness gauge and all workflows. Completed social metadata on existing detail pages.
+- **Why:** Owner said the pictured interior felt primitive rather than hotel-like.
+- **Decisions:** Change the referenced welcome photograph only; fictional property, no real hotel, people, text or logos. Existing images remain available. Logged in `docs/decision-log.md`.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-12 · Closer Arabic web fallback for Thmanyah · @abdulsalahuddin94-dev
 - **What:** Arabic text now falls back to **Almarai** (UI) and **Markazi Text** (brand «رِواق», display) from Google Fonts instead of IBM Plex Sans Arabic. Thmanyah still comes first via `local()` where installed. Files: `src/styles.css`, `src/routes/__root.tsx`, design docs.
 - **Why:** Owner asked why the chosen Arabic font doesn't show on Lovable. Thmanyah's licence keeps its files off the web, so anyone without it installed saw Plex; this makes them see something close.
