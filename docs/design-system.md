@@ -83,6 +83,7 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 | Illustration kit: `CourtyardScene`, `RoomArt`, `StaffAvatar`, `RoleArt`, `EmptyArt`, `Picto` + icon maps | `illustrations.tsx` | `.picto`, `.zone-*`, `.cat-*`, `.tone-*` |
 | Welcome hero (Live Board: greeting, courtyard at dusk, readiness gauge) | `desktop-pages.tsx` | `.welcome-*` |
 | Desktop sign-in (split: courtyard scene + night form) | `mobile-pages.tsx` `DesktopLoginPage` | `.login-*` |
+| Hotel lockup (Arabic name over tracked English name) + vendor credit | DesktopLoginPage, MobileLoginPage, sidebar brand | .hotel-lockup, .powered-by, .login-powered, .m-powered |
 | Mobile sign-in (job picture → face → PIN) | `mobile-pages.tsx` `MobileLoginPage` | `.m-login-*`, `.m-role-card`, `.m-face-grid` |
 
 ## 7a. Pictures and illustrations

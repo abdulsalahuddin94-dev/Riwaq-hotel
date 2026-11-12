@@ -28,6 +28,7 @@ Format: newest at the bottom of each table. `By` is the GitHub login of the pers
 | 2026-11-12 | Replace the Live Board night majlis with a generated luxury heritage lounge in daylight; leave other photos unchanged. | Owner found the pictured scene primitive rather than hotel-like; retain Gulf heritage architecture with polished hospitality finishes. | Lovable for abdulsalahuddin94-dev | Decided |
 
 | 2026-11-12 | Root and desktop/phone switching start at the respective sign-in screen. Workspace deep links remain available. | Owner wants the complete sign-in-first demo flow without adding real authentication. | Lovable for abdulsalahuddin94-dev | Decided |
+| 2026-11-12 | Hotel-first branding: the hotel lockup «دار المجلس» / Dar Al Majlis is the primary brand on desktop sign-in, sidebar and mobile sign-in; Riwaq appears only as a small "Powered by Riwaq Systems" credit. Page titles still say Riwaq. | Hotel staff should see their hotel's name, not the vendor's; Dar Al Majlis will also get its own website. | abdulsalahuddin94-dev | Decided |
 
 Room drawer photography (2026-11-12, Lovable for @abdulsalahuddin94-dev): distinct refined imagery for each requested wing, faded into the header. Preserve the existing fifth Courtyard Wing and all room-type assignments. Icons supplement short labels; VIP and other flags appear only when present in room data.
 

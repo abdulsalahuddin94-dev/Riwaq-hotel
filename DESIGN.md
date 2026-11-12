@@ -35,7 +35,7 @@ Operate mode. A calm, warm console that lets the work lead. One signature move: 
 Committed shell: deep basalt-brown sidebar (`shell`) with sand type and a brass active marker; content sits on warm plaster with white surfaces. Brass is the single accent (primary buttons, focus, selection). Status colours are functional only and always paired with an icon and a label.
 
 ## Typography
-System sans for UI, tabular numbers wherever a count or time appears. Cormorant Garamond only for the wordmark. Thmanyah for Arabic, loaded from the user's machine via `local()`.
+System sans for UI, tabular numbers wherever a count or time appears. Cormorant Garamond only for the wordmark. The primary wordmark is the hotel («دار المجلس» / Dar Al Majlis); Riwaq is a small "Powered by Riwaq Systems" credit. Thmanyah for Arabic, loaded from the user's machine via `local()`.
 
 ## Layout
 Desktop: sidebar, sticky top bar (title first, date beneath), content. The board opens with the readiness ribbon, then rooms grouped by wing. Mobile: header, scroll area, bottom nav or a 64px footer action.

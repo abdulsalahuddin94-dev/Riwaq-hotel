@@ -789,9 +789,17 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .login-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,var(--night-950)),linear-gradient(0deg,oklch(0.12 0.03 290 / .55),transparent 45%)}
 .login-visual-copy{position:absolute;z-index:2;left:56px;right:56px;top:18%;display:grid;gap:10px;color:#fff;text-shadow:0 2px 24px oklch(0.1 0.04 290 / .6)}
 .login-visual-copy>span{font-size:13px;font-weight:600;letter-spacing:.42em;text-transform:uppercase;opacity:.85}
-.login-visual-copy strong{margin-bottom:8px;font-family:var(--font-brand);font-size:clamp(44px,5.4vw,76px);font-weight:600;letter-spacing:.14em;line-height:1}
-.login-visual-copy strong span{font-family:var(--font-brand-ar);font-weight:700;letter-spacing:0;margin-inline-end:.3em;color:var(--brass-300,#E2C891)}
-.login-visual-copy em{font-style:normal;font-size:18px;opacity:.9}
+/* Hotel lockup: Arabic name over English name, one tight unit (hotel brand first; Riwaq is the vendor credit) */
+.hotel-lockup{display:grid;justify-items:start;gap:18px;margin-top:6px}
+.sidebar-brand strong:has([lang="ar"]){display:grid!important;gap:2px;line-height:1.05;white-space:nowrap;font-size:15px!important;letter-spacing:.06em}
+.sidebar-brand div>span{white-space:nowrap;font-size:10px!important;letter-spacing:.03em!important}
+.hotel-lockup [lang="ar"]{font-family:var(--font-brand-ar);font-size:clamp(52px,6vw,84px);font-weight:700;line-height:1.05;color:var(--brass-300,#E2C891)}
+.hotel-lockup i{display:block;width:56px;height:1px;margin-top:10px;background:oklch(0.85 0.08 80 / .7)}
+.hotel-lockup span:last-child{font-family:var(--font-brand);font-size:clamp(22px,2.4vw,32px);font-weight:600;letter-spacing:.22em;text-transform:uppercase;line-height:1}
+.powered-by{margin:0;font-size:12px;letter-spacing:.04em}.powered-by b{font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.login-powered{position:absolute;z-index:2;left:56px;bottom:32px;display:flex;align-items:center;gap:8px;color:oklch(0.92 0.02 80 / .8)}
+.login-powered img{width:16px;height:19px;opacity:.85}
+.m-powered{margin-top:28px;text-align:center;color:var(--neutral-500)}
 .login-side{position:relative;display:grid;align-content:center;justify-items:center;padding:48px 32px;background:radial-gradient(120% 70% at 100% 0%,var(--night-700),transparent 60%),radial-gradient(90% 60% at 0% 100%,oklch(0.42 0.09 70 / .35),transparent 60%),var(--night-950)}
 .login-screen .login-panel{width:min(400px,100%);gap:16px;padding:0;border-radius:0!important;background:transparent;box-shadow:none;color:#fff}
 .login-mark{width:44px;height:52px;filter:drop-shadow(0 0 18px oklch(0.8 0.11 80 / .55))}
@@ -807,7 +815,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .login-submit{height:50px!important;border-radius:14px!important;background:linear-gradient(135deg,#E2C47F,#B88A3E)!important;color:var(--neutral-950)!important;font-weight:700;box-shadow:0 10px 30px oklch(0.75 0.12 75 / .35)}
 .login-alt{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;color:oklch(0.82 0.02 290);font-size:13px;text-decoration:none}.login-alt b{color:#fff}.login-alt svg{width:16px}
 .login-foot{position:absolute;bottom:24px;color:oklch(0.65 0.02 290);font-size:12px}
-@media (max-width:900px){.login-screen{grid-template-columns:1fr}.login-visual{min-height:300px}.login-visual:after{background:linear-gradient(180deg,transparent 50%,var(--night-950))}.login-visual-copy{top:auto;bottom:40px;left:24px;right:24px}.login-visual-copy strong{font-size:40px}.login-side{padding:24px 16px 72px}}
+@media (max-width:900px){.login-screen{grid-template-columns:1fr}.login-visual{min-height:300px}.login-visual:after{background:linear-gradient(180deg,transparent 50%,var(--night-950))}.login-visual-copy{top:auto;bottom:56px;left:24px;right:24px}.hotel-lockup [lang="ar"]{font-size:44px}.hotel-lockup span:last-child{font-size:20px}.login-powered{left:24px;bottom:18px}.login-side{padding:24px 16px 72px}}
 
 /* Board welcome hero */
 .welcome-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;min-height:210px;margin-bottom:18px;padding:28px 32px;border-radius:var(--r-2xl,24px);overflow:hidden;color:#fff;background:var(--night-900);box-shadow:0 20px 50px oklch(0.2 0.05 290 / .22)}

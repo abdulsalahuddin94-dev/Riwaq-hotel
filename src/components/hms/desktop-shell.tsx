@@ -156,8 +156,8 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
             <img src={riwaqMark} alt="" />
             {!collapsed ? (
               <div>
-                <strong><span lang="ar">رِواق</span> Riwaq</strong>
-                <span>Heritage hospitality ops</span>
+                <strong><span lang="ar">{property.nameAr}</span> {property.name}</strong>
+                <span>Powered by Riwaq Systems</span>
               </div>
             ) : null}
             {mobileNav ? (

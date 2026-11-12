@@ -385,6 +385,7 @@ export function MobileLoginPage() {
               </div>
             </div>
           )}
+          <p className="powered-by m-powered">Powered by <b>Riwaq Systems</b></p>
         </div>
       </div>
     </MobileShell>
@@ -399,10 +400,14 @@ export function DesktopLoginPage() {
       <section className="login-visual" aria-hidden="true">
         <img src={photos.courtyardDusk} alt="" className="login-scene" />
         <div className="login-visual-copy">
-          <span>Heritage hospitality operations</span>
-          <strong><span lang="ar">رِواق</span> RIWAQ</strong>
-          <em lang="ar">{property.nameAr} · {property.name}</em>
+          <span>Heritage hotel</span>
+          <strong className="hotel-lockup">
+            <span lang="ar">{property.nameAr}</span>
+            <i aria-hidden="true" />
+            <span>{property.name}</span>
+          </strong>
         </div>
+        <p className="powered-by login-powered"><img src={riwaqMark} alt="" />Powered by <b>Riwaq Systems</b></p>
       </section>
       <section className="login-side">
         <form
@@ -425,7 +430,7 @@ export function DesktopLoginPage() {
           <Button type="submit" variant="hmsPrimary" size="hmsLg" className="login-submit">Sign in</Button>
           <Link to="/m/login" className="login-alt"><Smartphone aria-hidden="true" /> On shift with a phone? <b>Open the staff app</b></Link>
         </form>
-        <footer className="login-foot">© 2026 {property.name} · Riwaq</footer>
+        <footer className="login-foot">© 2026 {property.name}</footer>
       </section>
     </div>
   );

@@ -16,6 +16,11 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Hotel-first branding · @abdulsalahuddin94-dev
+- **What:** Desktop sign-in now leads with a tight hotel lockup («دار المجلس» over DAR AL MAJLIS) instead of «رِواق» RIWAQ, with "Powered by Riwaq Systems" at the bottom of the photo. Sidebar brand shows the hotel name with the same credit. Mobile shift sign-in gets the credit under the sheet. Login footer is now just © 2026 Dar Al Majlis.
+- **Why:** Owner found the old login lockup scattered (Arabic far from English) and said hotel staff should see Dar Al Majlis, not Riwaq. The hotel will also get its own website.
+- **Decisions:** Hotel is the primary brand in the staff product; Riwaq is the vendor credit only. Browser tab titles unchanged for now. See docs/decision-log.md.
+- **PR:** see the PR for branch claude/hotel-first-branding
 ## 2026-11-12 · Wing-specific room drawer photography · @abdulsalahuddin94-dev
 - **What:** Added four distinct generated wing photographs and a faded drawer header with wing identity, room type/task icons and existing VIP/Queue/Alert/Re-clean tags. Existing Courtyard Wing keeps its courtyard photo.
 - **Why:** Owner requested a visual wing-level header instead of a long descriptive line.
