@@ -51,12 +51,12 @@ import courtyardDusk from "@/assets/photos/courtyard-dusk.webp";
 import majlisNight from "@/assets/photos/majlis-night.webp";
 import majlisLuxury from "@/assets/photos/majlis-luxury.jpg";
 import roomCourtyard from "@/assets/photos/room-courtyard.webp";
-import roomHeritage from "@/assets/photos/room-heritage.webp";
+import roomHeritage from "@/assets/photos/mobile-shift-suite.jpg";
 import roomSuite from "@/assets/photos/room-suite.webp";
 import roomTwin from "@/assets/photos/room-twin.webp";
 
 /** AI-generated imagery (Lovable image generation, 2026-11-11). Fictional property: no real hotel is shown. */
-export const photos = { courtyardDawn, courtyardDusk, majlisNight, majlisLuxury };
+export const photos = { courtyardDawn, courtyardDusk, majlisNight, majlisLuxury, shiftSuite: roomHeritage };
 
 const roomPhotos: Record<RoomType, string> = {
   "Heritage Room": roomHeritage,
