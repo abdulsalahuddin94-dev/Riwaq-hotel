@@ -3,7 +3,7 @@
 @import "tw-animate-css";
 
 /* Thmanyah — Arabic typeface. Licence forbids hosting/redistributing the font files,
-   so we only reference copies installed on the device (local()); others fall back to IBM Plex Sans Arabic. */
+   so we only reference copies installed on the device (local()); everyone else gets the closest free web fonts: Almarai (UI) and Markazi Text (display). */
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Light"),local("thmanyahsans-Light");font-weight:300;font-display:swap}
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Regular"),local("thmanyahsans-Regular");font-weight:400;font-display:swap}
 @font-face{font-family:"Riwaq Arabic";src:local("thmanyah sans Medium"),local("thmanyahsans-Medium");font-weight:500;font-display:swap}
@@ -17,9 +17,9 @@
 @custom-variant mobile (&:where([data-platform="mobile"] *));
 
 @theme inline {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Riwaq Arabic", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Riwaq Arabic", "Almarai", system-ui, sans-serif;
   --font-brand: "Cormorant Garamond", Georgia, serif;
-  --font-brand-ar: "Riwaq Arabic Display", "Riwaq Arabic", "IBM Plex Sans Arabic", serif;
+  --font-brand-ar: "Riwaq Arabic Display", "Markazi Text", "Riwaq Arabic", "Almarai", serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -79,7 +79,7 @@ body { overflow-x: hidden; }
 button, input, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
-:lang(ar) { font-family: "Riwaq Arabic", "IBM Plex Sans Arabic", "Inter", Tahoma, sans-serif; }
+:lang(ar) { font-family: "Riwaq Arabic", "Almarai", "Inter", Tahoma, sans-serif; }
 bdi, time, .tabular { font-variant-numeric: tabular-nums; }
 
 .desktop-shell { display: grid; min-height: 100vh; grid-template-columns: auto minmax(0,1fr); background: var(--background); font-size: var(--fs-body); }
@@ -227,7 +227,7 @@ fieldset.segmented{display:flex;flex-wrap:wrap;border:0;padding:0;background:non
 .wo-steps{display:flex;gap:4px}.wo-steps span{flex:1;padding:6px 4px;border-radius:6px;background:var(--neutral-100);color:var(--neutral-500);font-size:11px;font-weight:700;text-align:center}.wo-steps .wo-step-done{background:var(--brass-100);color:var(--brass-800)}
 .mini-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}.mini-kpis>div{display:grid;gap:2px;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card)}.mini-kpis strong{font-size:20px}.mini-kpis span{color:var(--muted-foreground);font-size:11px}
 .dialog-table{display:grid;border:1px solid var(--border);border-radius:8px;overflow:hidden}.dt-row{display:grid;grid-template-columns:1fr 1.1fr 1.2fr .8fr 1fr .8fr;align-items:center;gap:10px;min-height:42px;padding:6px 12px;border:0;border-bottom:1px solid var(--border);background:var(--card);font-size:13px}.dt-row:last-child{border-bottom:0}button.dt-row:hover{background:var(--brass-50)}.dt-head{min-height:34px;background:var(--neutral-100);color:var(--neutral-600);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.dt-4{grid-template-columns:1fr .6fr .6fr 1.2fr}.dt-3{grid-template-columns:1.6fr 1.2fr .8fr}.dt-cl{grid-template-columns:2.4fr 1.2fr .6fr .6fr 40px}.dt-row small.ar{display:block;color:var(--muted-foreground);font-family:"Riwaq Arabic","IBM Plex Sans Arabic",sans-serif;font-size:12px}
+.dt-4{grid-template-columns:1fr .6fr .6fr 1.2fr}.dt-3{grid-template-columns:1.6fr 1.2fr .8fr}.dt-cl{grid-template-columns:2.4fr 1.2fr .6fr .6fr 40px}.dt-row small.ar{display:block;color:var(--muted-foreground);font-family:"Riwaq Arabic","Almarai",sans-serif;font-size:12px}
 .inline-warn{display:inline;width:14px;height:14px;color:var(--warning-700);vertical-align:-2px}
 .dialog-search{display:flex;align-items:center;gap:8px;height:38px;padding:0 10px;border:1px solid var(--border);border-radius:8px}.dialog-search svg{width:16px;color:var(--muted-foreground)}.dialog-search input{flex:1;border:0;outline:0;background:transparent}
 .report-table-wrap{max-height:60vh;overflow:auto;border:1px solid var(--border);border-radius:8px}.report-table{width:100%;border-collapse:collapse;font-size:12px}.report-table th{position:sticky;top:0;padding:8px 10px;background:var(--neutral-100);text-align:start;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral-600)}.report-table td{padding:7px 10px;border-top:1px solid var(--neutral-100);white-space:nowrap}
@@ -771,7 +771,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .login-visual-copy{position:absolute;z-index:2;left:56px;right:56px;top:18%;display:grid;gap:10px;color:#fff;text-shadow:0 2px 24px oklch(0.1 0.04 290 / .6)}
 .login-visual-copy>span{font-size:13px;font-weight:600;letter-spacing:.42em;text-transform:uppercase;opacity:.85}
 .login-visual-copy strong{margin-bottom:8px;font-family:var(--font-brand);font-size:clamp(44px,5.4vw,76px);font-weight:600;letter-spacing:.14em;line-height:1}
-.login-visual-copy strong span{font-family:var(--font-brand-ar);letter-spacing:0;margin-inline-end:.3em;color:var(--brass-300,#E2C891)}
+.login-visual-copy strong span{font-family:var(--font-brand-ar);font-weight:700;letter-spacing:0;margin-inline-end:.3em;color:var(--brass-300,#E2C891)}
 .login-visual-copy em{font-style:normal;font-size:18px;opacity:.9}
 .login-side{position:relative;display:grid;align-content:center;justify-items:center;padding:48px 32px;background:radial-gradient(120% 70% at 100% 0%,var(--night-700),transparent 60%),radial-gradient(90% 60% at 0% 100%,oklch(0.42 0.09 70 / .35),transparent 60%),var(--night-950)}
 .login-screen .login-panel{width:min(400px,100%);gap:16px;padding:0;border-radius:0!important;background:transparent;box-shadow:none;color:#fff}

@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Closer Arabic web fallback for Thmanyah · @abdulsalahuddin94-dev
+- **What:** Arabic text now falls back to **Almarai** (UI) and **Markazi Text** (brand «رِواق», display) from Google Fonts instead of IBM Plex Sans Arabic. Thmanyah still comes first via `local()` where installed. Files: `src/styles.css`, `src/routes/__root.tsx`, design docs.
+- **Why:** Owner asked why the chosen Arabic font doesn't show on Lovable. Thmanyah's licence keeps its files off the web, so anyone without it installed saw Plex; this makes them see something close.
+- **Decisions:** Fallback picked by rendering ten free sans and nine free display fonts next to the real Thmanyah files. Font files still not committed. Logged in `docs/decision-log.md`.
+- **PR:** #8
+
 ## 2026-11-11 · Generated photos for sign-in, board hero and rooms · @abdulsalahuddin94-dev
 - **What:** Seven AI-generated photos in `src/assets/photos/` (WebP, 42–139 KB): courtyard at dusk (desktop `/login`), courtyard at dawn (mobile `/m/login`), majlis at night (Live Board welcome hero) and one photo per room type (Heritage, Courtyard, Twin, Suite) used on mobile room cards, inspection cards and the room-detail banner. New `RoomPhoto` component and `photos` map in `illustrations.tsx`. SVG pictograms, avatars and job pictures stay.
 - **Why:** Owner asked for more creative generated imagery that expresses the project instead of drawn scenes.

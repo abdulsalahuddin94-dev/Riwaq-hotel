@@ -50,10 +50,10 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 | OCCUPIED | Occupied / مشغولة | User | `status-occupied` |
 
 ## 4. Typography
-- UI: `--font-sans` = system / SF Pro / Inter, then **"Riwaq Arabic"** (Thmanyah via `local()`), then IBM Plex Sans Arabic.
-- Brand: `--font-brand` Cormorant Garamond ("Riwaq"); `--font-brand-ar` Thmanyah Serif Display («رِواق»).
+- UI: `--font-sans` = system / SF Pro / Inter, then **"Riwaq Arabic"** (Thmanyah via `local()`), then **Almarai** (Google Fonts, closest free match).
+- Brand: `--font-brand` Cormorant Garamond ("Riwaq"); `--font-brand-ar` Thmanyah Serif Display («رِواق»), then **Markazi Text** (Google Fonts, closest free match).
 - Scale: h1 26px/1.25 · body 15px · label 13px · caption 12px. Tabular numbers for counts and times.
-- **Thmanyah only renders on machines where it is installed.** Never commit font files (licence). See `decision-log.md`.
+- **Thmanyah only renders on machines where it is installed**; everyone else (e.g. the Lovable link) sees Almarai / Markazi Text. Never commit font files (licence). See `decision-log.md`.
 
 ## 5. Shape, depth, spacing
 - Radii: `--r-sm` 10 · `--r-md` 12 (tiles) · `--r-lg` 16 · `--r-xl` 20 · `--r-2xl` 24 (panels) · pills fully round.
