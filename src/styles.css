@@ -874,3 +874,6 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .welcome-scene{object-position:right center}
 .m-room-banner-art{object-position:center 55%}
 .welcome-hero:before{background:linear-gradient(90deg,oklch(0.14 0.03 60 / .92) 0%,oklch(0.14 0.03 60 / .6) 40%,transparent 70%)!important}
+
+:root{--welcome-mobile-overlay:linear-gradient(180deg,oklch(0.14 0.03 60 / .88) 0%,oklch(0.14 0.03 60 / .72) 42%,transparent 78%)}
+@media(max-width:767px){.welcome-hero:before{background:var(--welcome-mobile-overlay)!important}}

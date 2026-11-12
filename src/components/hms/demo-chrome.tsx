@@ -2,10 +2,7 @@ import { useCallback, useEffect } from "react";
 import { Monitor, Smartphone } from "lucide-react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { getHms } from "@/lib/hms-store";
-
-const desktopHome = { Manager: "/app/board", "Front Desk": "/app/front-desk", Admin: "/app/settings" } as const;
-const mobileHome = { Attendant: "/m/rooms", Supervisor: "/m/inspections", Engineer: "/m/work-orders" } as const;
+import { initialSignInPath, signInPath } from "@/lib/entry-flow";
 
 export function DemoChrome({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -13,13 +10,14 @@ export function DemoChrome({ children }: { children: React.ReactNode }) {
   const isMobileView = pathname.startsWith("/m");
 
   const toggle = useCallback(() => {
-    const s = getHms();
-    if (isMobileView) {
-      void navigate({ to: desktopHome[s.desktopPersona as keyof typeof desktopHome] ?? "/app/board" });
-    } else {
-      void navigate({ to: mobileHome[s.mobilePersona as keyof typeof mobileHome] ?? "/m/rooms" });
-    }
+    void navigate({ to: signInPath(!isMobileView) });
   }, [isMobileView, navigate]);
+
+  useEffect(() => {
+    if (pathname === "/login" && initialSignInPath(window.innerWidth) === "/m/login") {
+      void navigate({ to: "/m/login", replace: true });
+    }
+  }, [pathname, navigate]);
 
   useEffect(() => {
     try {

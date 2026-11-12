@@ -4,8 +4,9 @@ Every URL in the app, who it is for, and what lives on it. Routes are TanStack S
 
 ```mermaid
 flowchart TD
-  root["/ → redirects to /app/board"]
-  root --> app
+  root["/ → /login (desktop) or /m/login (phone)"]
+  root --> login
+  root --> mlogin
   subgraph app["Desktop console /app/* (DesktopShell)"]
     board["/app/board · Live Board"]
     team["/app/team · Team Progress"]
@@ -34,6 +35,8 @@ flowchart TD
   insp --> inspf
   mwo --> mwod
 ```
+
+Entry starts at sign-in. Switching desktop/phone also opens the destination sign-in screen. These are simulated client-side preview flows, not real authentication; existing workspace links remain directly accessible.
 
 ## Desktop console (`/app/*`)
 Sidebar order as in `desktop-shell.tsx`. Personas: Manager, Front Desk, Admin (switch in the account menu).
