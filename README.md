@@ -17,6 +17,8 @@
 | Decisions | [`docs/decision-log.md`](docs/decision-log.md) |
 | Changelog (who did what, why) | [`CHANGELOG.md`](CHANGELOG.md) |
 
+**Arabic font (Thmanyah), one-time setup:** download it yourself from https://font.thmanyah.com and copy the `.woff2` files into [`public/fonts/thmanyah/`](public/fonts/thmanyah/README.md). The folder is git-ignored because the licence forbids sharing the files. Without them, the app shows the free fallbacks (Almarai, Markazi Text).
+
 Team: [@abdulsalahuddin94-dev](https://github.com/abdulsalahuddin94-dev), [@EmG38](https://github.com/EmG38).
 
 This project was built with [Lovable](https://lovable.dev).
