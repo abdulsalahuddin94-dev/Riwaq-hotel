@@ -508,7 +508,7 @@ fieldset.segmented button{border:0;box-shadow:var(--hairline)}
 .drawer-photo-tags .badge-vip{background:var(--accent);color:var(--accent-foreground)}
 .drawer-photo-tags .badge-queue,.drawer-photo-tags .badge-reclean{background:var(--warning-100);color:var(--warning-800)}
 .drawer-photo-tags .badge-anomaly{background:var(--error-100);color:var(--error-800)}
-.room-drawer>button:last-child{background:var(--card);color:var(--foreground);border-radius:50%;opacity:1}
+.room-drawer>button{z-index:5;background:var(--card);color:var(--foreground);border-radius:50%;opacity:1}
 @media(max-width:767px){.drawer-body{padding:20px;--drawer-gutter:20px}.drawer-photo-header{padding-top:176px;min-height:300px}.drawer-photo-header .drawer-title{font-size:24px}}
 .readiness-box{border:0;border-radius:var(--r-lg)}
 .fact-grid{border:0;border-radius:var(--r-lg);background:oklch(0.26 0.025 46 / .06);box-shadow:var(--hairline)}
