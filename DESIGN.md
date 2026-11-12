@@ -55,7 +55,7 @@ Rounded but not bubbly: 10–24px radii by size. Tiles 12px, panels 24px, pills 
 - **Checklist meter:** count plus a linear bar.
 - **Photos (`src/assets/photos/`):** generated courtyard (dawn/dusk), majlis at night and one photo per room type, via `photos` and `RoomPhoto`.
 - **Illustrations (`illustrations.tsx`):** hand-drawn SVG courtyard scene (fallback), room interiors with bed state (progress card), illustrated staff portraits, job pictures for sign-in, empty-state art and tinted pictograms. Always next to words.
-- **Welcome hero (Live Board):** night card with the courtyard at dusk, greeting by name and one readiness gauge (rooms ready of sellable). The only ring in the product.
+- **Welcome hero (Live Board):** daylight luxury heritage lounge photograph, greeting by name and one readiness gauge (rooms ready of sellable). The only ring in the product. Dark left-side overlay preserves text contrast.
 - **Sign-in:** desktop is a split screen (scene left, night form right); mobile is picture-first: pick your job, tap your face, enter PIN.
 - **Account menu:** account switch and "Restore sample data" for presenters.
 
