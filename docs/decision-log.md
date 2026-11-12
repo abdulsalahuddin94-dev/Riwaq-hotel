@@ -26,6 +26,8 @@ Format: newest at the bottom of each table. `By` is the GitHub login of the pers
 
 | 2026-11-12 | Replace the Live Board night majlis with a generated luxury heritage lounge in daylight; leave other photos unchanged. | Owner found the pictured scene primitive rather than hotel-like; retain Gulf heritage architecture with polished hospitality finishes. | Lovable for abdulsalahuddin94-dev | Decided |
 
+| 2026-11-12 | Root and desktop/phone switching start at the respective sign-in screen. Workspace deep links remain available. | Owner wants the complete sign-in-first demo flow without adding real authentication. | Lovable for abdulsalahuddin94-dev | Decided |
+
 ## Still OPEN (spec §25)
 Launch country and property · PMS provider · inspection and release authority · heritage SOP owner · BYOD policy · data retention and residency · SLA configuration · brand clearance for "Riwaq" · multi-property rollout · audio strategy · accessibility target.
 
