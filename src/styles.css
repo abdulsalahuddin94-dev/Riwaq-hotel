@@ -1117,7 +1117,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 [data-platform="mobile"]{--mobile-card-radius:16px;--mobile-control-radius:10px}
 .mobile-app .mobile-task-card{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;min-height:224px;padding:16px;gap:8px;background:var(--secondary);color:var(--photo-ink);border-radius:var(--mobile-card-radius)!important;box-shadow:var(--mobile-lift);text-decoration:none}
 .mobile-app .mobile-task-card:before,.mobile-app .mobile-wing-room:before,.mobile-app .mobile-detail-photo:before{content:"";position:absolute;z-index:-1;inset:0;background:var(--photo-overlay)}
-.mobile-app .mobile-task-content{min-width:0;display:grid;gap:5px;padding-top:50px}
+.mobile-app .mobile-task-content{width:100%;min-width:0;display:grid;gap:5px;padding-top:50px}
 .mobile-app .mobile-task-content h2{margin:0;font-size:30px;line-height:1.2;font-weight:600;color:var(--photo-ink)}
 .mobile-app .mobile-task-content p{margin:0;color:var(--photo-ink);font-size:12px;line-height:1.5}
 .mobile-app .mobile-task-card .status-chip{position:absolute;top:16px;inset-inline-end:16px;font-size:11px;box-shadow:var(--shadow-sm)}
@@ -1126,7 +1126,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .mobile-app .mobile-task-card .sla-line{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--photo-ink)}
 .mobile-app .mobile-task-card .sla-breached{font-weight:700}
 .mobile-app .mobile-task-card .sla-line svg{width:14px;height:14px}
-.mobile-app .mobile-task-card .m-card-cta{display:flex;align-items:center;gap:6px;color:var(--photo-ink);font-size:12px;font-weight:600;margin:7px 0 0;padding-top:10px;border-top:1px solid color-mix(in oklch,var(--card) 30%,transparent)}
+.mobile-app .mobile-task-card .m-card-cta{display:flex;align-items:center;justify-content:flex-start;gap:6px;grid-column:auto;min-height:28px;border-radius:0;background:transparent;color:var(--photo-ink);font-size:12px;font-weight:600;margin:7px 0 0;padding-top:10px;border-top:1px solid color-mix(in oklch,var(--card) 30%,transparent)}
 .mobile-app .mobile-task-card .m-card-cta svg{width:16px;height:16px;flex:none}
 .mobile-app .mobile-task-card .m-card-cta svg:last-child{margin-inline-start:auto}
 .mobile-task-priority{position:absolute;top:16px;inset-inline-end:16px;display:flex;gap:5px;align-items:center;padding:6px 9px;border-radius:99px;background:var(--warning-100);color:var(--warning-800);font-size:11px;font-weight:700}
