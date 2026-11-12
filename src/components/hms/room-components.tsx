@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from "lucide-react";
 import { wingLabel, fmtDuration, heritageNotice, type Room, type RoomStatus, statusMeta, taskLabel } from "@/lib/demo-data";
 import { activeMinutes, checklistProgress, displayStatus, type HmsState, staffById, stdMinutes } from "@/lib/hms-store";
+import { useSharedT } from "@/lib/mobile-i18n";
 import { cn } from "@/lib/utils";
 import { RoomPhoto, taskIcon } from "./illustrations";
 import { StatusChip } from "./status";
@@ -38,25 +39,30 @@ export function ArchIcon({ className }: { className?: string }) {
 
 /** Heritage warning. Text only — never a care recipe until a specialist approves one. */
 export function HeritageNotice({ room, compact = false }: { room: Room; compact?: boolean }) {
+  const tr = useSharedT();
   if (!room.heritage.length) return null;
+  const title = tr.t(heritageNotice.title, heritageNotice.titleAr);
   return (
-    <section className={cn("heritage-notice", compact && "heritage-notice-compact")} aria-label={heritageNotice.title}>
+    <section className={cn("heritage-notice", compact && "heritage-notice-compact")} aria-label={title}>
       <ArchIcon />
       <div>
         <strong>
-          {heritageNotice.title}
+          {title}
         </strong>
         <ul>
-          {room.heritage.map((asset) => (
-            <li key={asset.id}>
-              {asset.name} <small>({asset.material})</small>
-            </li>
-          ))}
+          {room.heritage.map((asset) => {
+            const a = tr.asset(asset);
+            return (
+              <li key={asset.id}>
+                {a.name} <small>({a.material})</small>
+              </li>
+            );
+          })}
         </ul>
         {!compact ? (
-          <p>{heritageNotice.body}</p>
+          <p>{tr.t(heritageNotice.body, heritageNotice.bodyAr)}</p>
         ) : (
-          <p>Care procedure awaiting specialist approval — report, don&apos;t treat.</p>
+          <p>{tr.t("Care procedure awaiting specialist approval — report, don't treat.", "إجراء العناية بانتظار اعتماد المتخصص — أبلغ ولا تعالج.")}</p>
         )}
       </div>
     </section>
@@ -65,13 +71,15 @@ export function HeritageNotice({ room, compact = false }: { room: Room; compact?
 
 export function RoomBadges({ room, showAnomaly = true, max = 3 }: { room: Room; showAnomaly?: boolean; max?: number }) {
   const badges = badgesFor(room, showAnomaly);
+  const tr = useSharedT();
   if (!badges.length) return null;
+  const label = (b: RoomBadge) => (b === "Anomaly" ? tr.t("Alert", "تنبيه") : b === "Queue" ? tr.t("Queue", "ضيف ينتظر") : b === "VIP" ? tr.t("VIP", "ضيف مميز") : tr.t("Re-clean", "إعادة تنظيف"));
   return (
     <span className="badge-row">
       {badges.slice(0, max).map((badge) => (
         <span className={cn("room-badge", `badge-${badge.toLowerCase().replace("-", "")}`)} key={badge}>
           <BadgeIcon badge={badge} />
-          <span>{badge === "Anomaly" ? "Alert" : badge}</span>
+          <span>{label(badge)}</span>
         </span>
       ))}
     </span>
@@ -206,28 +214,30 @@ export function RoomCard({ room, s }: { room: Room; s: HmsState }) {
   const progress = checklistProgress(s, room);
   const minutes = activeMinutes(s, room);
   const std = stdMinutes(room);
+  const tr = useSharedT();
+  const { t } = tr;
   const meta =
     room.hk === "IN_PROGRESS" || room.hk === "PAUSED"
-      ? `${room.hk === "PAUSED" ? "Paused" : "In progress"} · ${fmtDuration(minutes)} of ~${std} min`
+      ? `${room.hk === "PAUSED" ? t("Paused", "متوقفة") : t("In progress", "قيد التنظيف")} · ${t(`${fmtDuration(minutes)} of ~${std} min`, `${tr.duration(minutes)} من ~${std} د`)}`
       : room.hk === "CLEAN"
-        ? "Waiting for inspection"
+        ? t("Waiting for inspection", "بانتظار الفحص")
         : room.hk === "INSPECTED"
-          ? "Done · inspected"
+          ? t("Done · inspected", "انتهت · تم فحصها")
           : room.dnd
-            ? "DND — try later"
-            : `~${std} min · ${room.taskType === "STAYOVER" ? "Stayover" : room.taskType === "RECLEAN" ? "Re-clean" : "Departure"}`;
+            ? t("DND — try later", "عدم الإزعاج — حاول لاحقًا")
+            : `~${std} ${t("min", "د")} · ${room.taskType === "STAYOVER" ? t("Stayover", "إقامة") : room.taskType === "RECLEAN" ? t("Re-clean", "إعادة تنظيف") : t("Departure", "مغادرة")}`;
   return (
     <Link to="/m/rooms/$roomId" params={{ roomId: room.number }} className="mobile-room-card">
       <div className="mobile-room-main mobile-room-main-art">
         <RoomPhoto type={room.type} className="room-thumb" />
         <div>
           <p className="mobile-room-meta">
-            {room.type} · {wingLabel(room.floor)}
+            {tr.roomType(room.type)} · {tr.wing(room.floor)}
           </p>
           <h3>
-            <bdi>Room {room.number}</bdi>
+            {t("Room", "غرفة")} <bdi>{room.number}</bdi>
           </h3>
-          <span className="task-tag"><TaskIcon aria-hidden="true" /> {taskLabel[room.taskType]}</span>
+          <span className="task-tag"><TaskIcon aria-hidden="true" /> {tr.task(room.taskType)}</span>
         </div>
         <StatusChip status={status} />
       </div>

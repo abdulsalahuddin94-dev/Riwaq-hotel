@@ -77,7 +77,11 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 | Front desk tiles | `desktop-pages.tsx` | `.fd-*` |
 | Reports charts | `reports-page.tsx` (Recharts) | `.chart-*`, `.report-*` |
 | Dialogs | `desktop-dialogs.tsx` | `.hms-dialog`, `.dialog-*` |
-| Mobile shell, bottom tabs, sheet | `mobile-shell.tsx` | `.mobile-*`, `.m-sheet-*` |
+| Mobile shell, Android device frame, sheet | `mobile-shell.tsx` | `.mobile-*`, `.device-*`, `.m-sheet-*` |
+| Tab dock: floating espresso glass, active tab under a gliding brass arch, label shown only on the active tab | `mobile-shell.tsx` `TabDock` | `.tab-dock*` |
+| Immersive room hero: full-bleed photo from the top edge, collapses into a compact top bar on scroll (one CSS var `--hero-p`) | `room-hero.tsx` | `.room-hero*`, `.room-topbar*`, `.room-body` |
+| Hotel mark «دار المجلس» (khatam star + dallah), separate from the Riwaq product mark | `hotel-mark.tsx` | `.hotel-badge*` |
+| Staff-app language switch (EN / ع) | `mobile-pages.tsx` `LangSwitch` | `.lang-switch` |
 | Mobile checklist, meter, inspection | `mobile-detail.tsx` | `.m-check*`, `.m-meter*`, `.m-point*` |
 | Empty / skeleton / error states (optional `art` picture) | `demo-states.tsx` | `.empty-state-art` |
 | Illustration kit: `CourtyardScene`, `RoomArt`, `StaffAvatar`, `RoleArt`, `EmptyArt`, `Picto` + icon maps | `illustrations.tsx` | `.picto`, `.zone-*`, `.cat-*`, `.tone-*` |
@@ -91,6 +95,11 @@ Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP fi
 - A picture never replaces words or status: status chips (colour + icon + text) stay next to it.
 - Decorative SVG is `aria-hidden`; the text label beside it is the accessible name.
 - The Live Board welcome image is `majlis-luxury.jpg`: a generated daylight lounge with refined arcades, tailored sofas and polished finishes. It replaces the rustic night majlis on this screen only; the existing overlay keeps the greeting legible.
+
+## 7b. Staff app language
+- **One language per screen.** English is the default (Gulf housekeeping teams are multinational); Arabic switches the whole staff app to RTL. Never show English and Arabic labels side by side.
+- Strings live in `src/lib/mobile-i18n.ts`: `useMobileT()` in pages, `useSharedT()` in shared components (desktop has no provider, so it stays English). Seeded data (room types, wings, checklist items, staff and guest names, notes, event history) has Arabic mappings; text typed by staff stays as typed.
+- The choice is a per-device preference (`localStorage["riwaq-mobile-lang"]`), set on the sign-in hero, in Me → Language, or in the presenter panel.
 
 ## 8. States every screen needs
 Room drawers use `RoomDrawerHeader` with photographs resolved by the existing floor-to-wing assignment in `wing-photos.ts`. Najdi, Palm Garden, Fort Tower and Royal have distinct generated photographs; Courtyard Wing retains its existing courtyard image. The image fades into the semantic background, with compact room-type/task tags and conditional existing badges. No changes to room assignments or operational state.
