@@ -14,9 +14,9 @@ colors:
   dnd: "oklch(0.49 0.21 304)"
   blocked: "oklch(0.43 0.015 50)" # basalt
 typography:
-  sans: '-apple-system, "SF Pro Text", Inter, "Riwaq Arabic" (Thmanyah, local only), "IBM Plex Sans Arabic", system-ui'
+  sans: '-apple-system, "SF Pro Text", Inter, "Riwaq Arabic" (Thmanyah, local only), Almarai, system-ui'
   brand: '"Cormorant Garamond", Georgia, serif'
-  brand-ar: '"Riwaq Arabic Display" (Thmanyah Serif Display, local only)'
+  brand-ar: '"Riwaq Arabic Display" (Thmanyah Serif Display, local only), "Markazi Text"'
   h1: 26px / 1.25
   body: 15px
   label: 13px

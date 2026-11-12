@@ -8,9 +8,9 @@ Riwaq should feel like a shaded Gulf courtyard: calm, warm and precise. Usabilit
 - **Status:** palm green = ready, terracotta = dirty, ochre = cleaning, muted blue = awaiting inspection, plum = DND, basalt = blocked. Always paired with an icon and a label.
 
 ## Type
-- The UI uses the system stack / Inter, plus IBM Plex Sans Arabic.
-- Arabic uses **Thmanyah**, referenced via `local()` only (see the licence note in `decision-log.md`), with IBM Plex Sans Arabic as fallback.
-- The brand wordmark uses Thmanyah Serif Display for «رِواق» and Cormorant Garamond for "Riwaq".
+- The UI uses the system stack / Inter for Latin.
+- Arabic uses **Thmanyah**, referenced via `local()` only (see the licence note in `decision-log.md`). Viewers without it installed get the closest free web fonts: **Almarai** (UI) and **Markazi Text** (display).
+- The brand wordmark uses Thmanyah Serif Display (web fallback Markazi Text) for «رِواق» and Cormorant Garamond for "Riwaq".
 
 ## Mark
 `src/assets/riwaq-mark.svg` is an arcade arch under Najdi triangular crenellations (also `public/favicon.svg`).
