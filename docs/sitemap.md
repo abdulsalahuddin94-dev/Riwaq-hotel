@@ -56,13 +56,13 @@ Sidebar order as in `desktop-shell.tsx`. Personas: Manager, Front Desk, Admin (s
 **Overlays on desktop** (not URLs): Room drawer (`room-drawer.tsx`), Queue guest, Work order, New work order, Staff day, Event log, Report preview, Settings dialogs (`desktop-dialogs.tsx`), Account menu (account switch, restore sample data).
 
 ## Phone app (`/m/*`)
-Bottom tabs depend on persona (`mobile-shell.tsx`): Attendant = Rooms · Alerts · Me; Supervisor = Inspect · Wings · Alerts · Me; Engineer = Jobs · Alerts · Me.
+Shown inside a generic Android phone frame (shared hotel devices). Bottom tab dock depends on persona (`mobile-shell.tsx`): Attendant = Rooms · Alerts · Me; Supervisor = Inspect · Wings · Alerts · Me; Engineer = Jobs · Alerts · Me. Language: English default, Arabic RTL via the EN / ع switch (one language per screen).
 
 | URL | Screen (component) | Persona | What it does |
 |---|---|---|---|
 | `/m/login` | `MobileLoginPage` | All | Picture-first: pick job → tap your face → PIN. Full-screen (no tabs). |
 | `/m/rooms` | `MobileRoomsPage` | Attendant | My shift: assigned rooms in priority order (queue guests first). |
-| `/m/rooms/:roomId` | `MobileRoomDetailPage` | Attendant | Room info, heritage notices, start / pause / report issue / DND. |
+| `/m/rooms/:roomId` | `MobileRoomDetailPage` | Attendant | Full-bleed room hero that collapses on scroll; room info, heritage notices, start / pause / report issue / DND. |
 | `/m/rooms/:roomId/checklist` | `MobileChecklistPage` | Attendant | Zone-by-zone checklist with meter; finish → Awaiting inspection. |
 | `/m/inspections` | `MobileInspectionsPage` | Supervisor | Inspection queue. |
 | `/m/inspections/:roomId` | `MobileInspectionFormPage` | Supervisor | Scored inspection incl. heritage check; pass → Ready (internal), fail → re-clean. |

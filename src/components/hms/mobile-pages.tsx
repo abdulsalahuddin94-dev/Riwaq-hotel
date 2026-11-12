@@ -4,7 +4,7 @@ import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Delete
 import riwaqMark from "@/assets/riwaq-mark.svg";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { wingLabel, wingShort, fmtDuration, fmtTime, personaStaff, property, type Room, roleLabel } from "@/lib/demo-data";
+import { personaStaff, property, type Room } from "@/lib/demo-data";
 import {
   activeMinutes,
   checklistProgress,
@@ -13,11 +13,13 @@ import {
   hms,
   lastInspection,
   roomCredits,
-  staffName,
+  staffById,
   useHms,
 } from "@/lib/hms-store";
+import { setLang, useMobileT } from "@/lib/mobile-i18n";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
+import { HotelBadge } from "./hotel-mark";
 import { EmptyArt, Picto, RoleArt, RoomArt, RoomPhoto, StaffAvatar, categoryIcon, photos } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
 import { MobileSheet, MobileShell, mobilePersonaHome, useMobilePersona } from "./mobile-shell";
@@ -36,10 +38,22 @@ function priority(r: Room) {
   return r.taskType === "STAYOVER" ? 50 : 40;
 }
 
+/** English / العربية switch. One language on screen at a time. */
+export function LangSwitch({ className }: { className?: string }) {
+  const { lang } = useMobileT();
+  return (
+    <div className={cn("lang-switch", className)} dir="ltr" role="group" aria-label="Language / اللغة">
+      <button type="button" aria-pressed={lang === "en"} className={cn(lang === "en" && "on")} onClick={() => setLang("en")}>EN</button>
+      <button type="button" aria-pressed={lang === "ar"} className={cn(lang === "ar" && "on")} onClick={() => setLang("ar")} lang="ar">ع</button>
+    </div>
+  );
+}
+
 /* ───────────── Attendant: My Rooms ───────────── */
 
 export function MobileRoomsPage() {
   const s = useHms();
+  const { t } = useMobileT();
   const [filter, setFilter] = useState<"todo" | "done" | "issues">("todo");
   const me = personaStaff.Attendant;
   const mine = s.rooms.filter((r) => r.attendant === me).sort((a, b) => priority(a) - priority(b) || a.number.localeCompare(b.number));
@@ -49,24 +63,24 @@ export function MobileRoomsPage() {
   const list = filter === "todo" ? todo : filter === "done" ? done : issues;
   const pct = mine.length ? Math.round((done.length / mine.length) * 100) : 0;
   return (
-    <MobileShell title="My Rooms">
-      <div className="mobile-sync"><Wifi aria-hidden="true" /> Saved on this device <span>{done.length} of {mine.length} complete</span></div>
+    <MobileShell title={t("My Rooms", "غرفي")}>
+      <div className="mobile-sync"><Wifi aria-hidden="true" /> {t("Saved on this device", "محفوظ على هذا الجهاز")} <span>{t(`${done.length} of ${mine.length} complete`, `${done.length} من ${mine.length} مكتملة`)}</span></div>
       <div className="m-day-card">
         <RoomArt type="Heritage Room" state={pct === 100 ? "made" : "messy"} className="m-day-art" />
         <div>
-          <strong>{done.length} <small>of {mine.length} rooms done</small></strong>
+          <strong>{done.length} <small>{t(`of ${mine.length} rooms done`, `من ${mine.length} غرف انتهت`)}</small></strong>
           <div className="mobile-progress-summary"><div><span style={{ inlineSize: `${pct}%` }} /></div><b>{pct}%</b></div>
         </div>
       </div>
       <div className="m-chips" role="tablist">
-        {([["todo", "To do", todo.length], ["done", "Done", done.length], ["issues", "Issues", issues.length]] as const).map(([k, label, n]) => (
+        {([["todo", t("To do", "المطلوب"), todo.length], ["done", t("Done", "انتهت"), done.length], ["issues", t("Issues", "مشكلات"), issues.length]] as const).map(([k, label, n]) => (
           <button type="button" role="tab" aria-selected={filter === k} key={k} className={cn("m-chip", filter === k && "m-chip-on")} onClick={() => setFilter(k)}>
             {label} <b>{n}</b>
           </button>
         ))}
       </div>
       {list.length === 0 ? (
-        <EmptyState art={<EmptyArt kind={filter === "issues" ? "rest" : filter === "todo" ? "done" : "search"} className="empty-art" />} title={filter === "todo" ? "All your rooms are done" : filter === "done" ? "Nothing finished yet" : "No issues on your rooms"} />
+        <EmptyState art={<EmptyArt kind={filter === "issues" ? "rest" : filter === "todo" ? "done" : "search"} className="empty-art" />} title={filter === "todo" ? t("All your rooms are done", "خلصت كل غرفك") : filter === "done" ? t("Nothing finished yet", "لا شيء مكتمل بعد") : t("No issues on your rooms", "لا مشكلات في غرفك")} />
       ) : (
         <div className="mobile-room-list">{list.map((room) => <RoomCard room={room} s={s} key={room.number} />)}</div>
       )}
@@ -78,10 +92,11 @@ export function MobileRoomsPage() {
 
 export function MobileAlertsPage() {
   const alerts = useMobileAlerts();
+  const { t } = useMobileT();
   return (
-    <MobileShell title="Alerts">
+    <MobileShell title={t("Alerts", "التنبيهات")}>
       {alerts.length === 0 ? (
-        <EmptyState art={<EmptyArt kind="rest" className="empty-art" />} title="You're all caught up" />
+        <EmptyState art={<EmptyArt kind="rest" className="empty-art" />} title={t("You're all caught up", "لا جديد الآن")} />
       ) : (
         <div className="mobile-alert-list">
           {alerts.map((alert) => (
@@ -101,6 +116,8 @@ export function MobileAlertsPage() {
 
 export function MobileMePage() {
   const s = useHms();
+  const tr = useMobileT();
+  const { t } = tr;
   const persona = useMobilePersona();
   const navigate = useNavigate();
   const id = personaStaff[persona];
@@ -110,29 +127,29 @@ export function MobileMePage() {
     const mine = s.rooms.filter((r) => r.attendant === id);
     const done = mine.filter((r) => r.hk === "CLEAN" || r.hk === "INSPECTED");
     const ins = mine.flatMap((r) => r.inspections);
-    stats = [[`${done.length}/${mine.length}`, "Rooms done"], [mine.reduce((a, r) => a + roomCredits(r), 0).toFixed(1), "Credits"], [ins.length ? `${Math.round((ins.filter((i) => i.result === "PASSED").length / ins.length) * 100)}%` : "—", "Pass rate"]];
+    stats = [[`${done.length}/${mine.length}`, t("Rooms done", "غرف منتهية")], [mine.reduce((a, r) => a + roomCredits(r), 0).toFixed(1), t("Credits", "النقاط")], [ins.length ? `${Math.round((ins.filter((i) => i.result === "PASSED").length / ins.length) * 100)}%` : "—", t("Pass rate", "نسبة النجاح")]];
   } else if (persona === "Supervisor") {
     const mine = s.rooms.flatMap((r) => r.inspections).filter((i) => i.by === id);
     const avg = mine.length ? Math.round(mine.reduce((a, i) => a + i.score, 0) / mine.length) : 0;
-    stats = [[String(mine.length), "Inspected"], [String(mine.filter((i) => i.result === "FAILED").length), "Rejected"], [mine.length ? `${avg}%` : "—", "Avg. score"]];
+    stats = [[String(mine.length), t("Inspected", "تم فحصها")], [String(mine.filter((i) => i.result === "FAILED").length), t("Rejected", "مرفوضة")], [mine.length ? `${avg}%` : "—", t("Avg. score", "متوسط الدرجة")]];
   } else {
     const mine = s.workOrders.filter((w) => w.assignee === id);
-    stats = [[String(mine.filter((w) => ["RESOLVED", "VERIFIED"].includes(w.state)).length), "Resolved"], [String(mine.filter((w) => !["RESOLVED", "VERIFIED"].includes(w.state)).length), "Open"], [String(mine.filter((w) => w.urgency === "P1").length), "P1 jobs"]];
+    stats = [[String(mine.filter((w) => ["RESOLVED", "VERIFIED"].includes(w.state)).length), t("Resolved", "تم حلها")], [String(mine.filter((w) => !["RESOLVED", "VERIFIED"].includes(w.state)).length), t("Open", "مفتوحة")], [String(mine.filter((w) => w.urgency === "P1").length), t("Urgent jobs", "مهام عاجلة")]];
   }
   return (
-    <MobileShell title="Me">
+    <MobileShell title={t("Me", "حسابي")}>
       <div className="mobile-profile">
         {person ? <StaffAvatar staff={person} className="profile-art" /> : null}
-        <h2>{person?.name}</h2>
-        <p>{person ? roleLabel[person.role] : ""} · Morning shift · started 07:30</p>
+        <h2>{tr.person(person?.name)}</h2>
+        <p>{person ? tr.role(person.role) : ""} · {t("Morning shift · started 07:30", "الوردية الصباحية · بدأت 07:30")}</p>
       </div>
       <div className="mobile-stats">
         {stats.map(([v, l]) => <article key={l}><strong>{v}</strong><span>{l}</span></article>)}
       </div>
       <div className="mobile-settings-list">
-        <button type="button" onClick={() => toast.info("All changes are saved on this device.", { duration: 2500 })}><Wifi aria-hidden="true" /> Sync status <span>On device · {fmtTime(demoNow(s))}</span></button>
-        <button type="button" onClick={() => toast.info("Arabic is coming soon", { duration: 2500 })}><Languages aria-hidden="true" /> Language <span>English</span></button>
-        <button type="button" onClick={() => { toast.success("Shift ended · see you tomorrow", { duration: 2500 }); void navigate({ to: "/m/login" }); }}><LogOut aria-hidden="true" /> End shift <ChevronRight aria-hidden="true" /></button>
+        <button type="button" onClick={() => toast.info(t("All changes are saved on this device.", "كل التغييرات محفوظة على هذا الجهاز."), { duration: 2500 })}><Wifi aria-hidden="true" /> {t("Sync status", "حالة المزامنة")} <span>{t("On device", "على الجهاز")} · {tr.time(demoNow(s))}</span></button>
+        <div className="mobile-settings-row"><Languages aria-hidden="true" /> {t("Language", "اللغة")} <LangSwitch /></div>
+        <button type="button" onClick={() => { toast.success(t("Shift ended · see you tomorrow", "انتهت الوردية · نراك غدًا"), { duration: 2500 }); void navigate({ to: "/m/login" }); }}><LogOut aria-hidden="true" /> {t("End shift", "إنهاء الوردية")} <ChevronRight aria-hidden="true" /></button>
       </div>
     </MobileShell>
   );
@@ -142,6 +159,8 @@ export function MobileMePage() {
 
 export function MobileInspectionsPage() {
   const s = useHms();
+  const tr = useMobileT();
+  const { t } = tr;
   const me = s.staff.find((p) => p.id === personaStaff.Supervisor);
   const [scope, setScope] = useState<"mine" | "all">("mine");
   const now = demoNow(s);
@@ -150,35 +169,36 @@ export function MobileInspectionsPage() {
     .sort((a, b) => Number(!!b.queue) - Number(!!a.queue) || Number(!!b.vip) - Number(!!a.vip) || (a.completedAt ?? 0) - (b.completedAt ?? 0));
   const queued = list.filter((r) => r.queue).length;
   return (
-    <MobileShell title="Inspection Queue">
-      {queued ? <div className="mobile-callout"><Zap aria-hidden="true" /> {queued} queue room{queued > 1 ? "s" : ""} — guest waiting, inspect first.</div> : null}
+    <MobileShell title={t("Inspection Queue", "قائمة الفحص")}>
+      {queued ? <div className="mobile-callout"><Zap aria-hidden="true" /> {t(`${queued} queue room${queued > 1 ? "s" : ""} — guest waiting, inspect first.`, `${queued} غرفة عليها ضيف ينتظر — افحصها أولًا.`)}</div> : null}
       <div className="m-chips">
-        <button type="button" className={cn("m-chip", scope === "mine" && "m-chip-on")} onClick={() => setScope("mine")}>My wings</button>
-        <button type="button" className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>All wings</button>
+        <button type="button" className={cn("m-chip", scope === "mine" && "m-chip-on")} onClick={() => setScope("mine")}>{t("My wings", "أجنحتي")}</button>
+        <button type="button" className={cn("m-chip", scope === "all" && "m-chip-on")} onClick={() => setScope("all")}>{t("All wings", "كل الأجنحة")}</button>
       </div>
       {list.length === 0 ? (
-        <EmptyState art={<EmptyArt kind="done" className="empty-art" />} title="All caught up · no rooms waiting" />
+        <EmptyState art={<EmptyArt kind="done" className="empty-art" />} title={t("All caught up · no rooms waiting", "لا غرف بانتظار الفحص")} />
       ) : (
         <div className="mobile-room-list">
           {list.map((room) => {
             const left = room.completedAt !== undefined ? room.completedAt + s.settings.queueSlaMin - now : 0;
             const p = checklistProgress(s, room);
+            const guest = tr.guest(room.queue?.guest);
             return (
               <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
                 <div className="insp-head">
                   <RoomPhoto type={room.type} className="room-thumb" />
                   <div>
-                    <span>{room.type} · {wingShort(room.floor)}</span>
+                    <span>{tr.roomType(room.type)} · {tr.wingShort(room.floor)}</span>
                     <h2><bdi>{room.number}</bdi></h2>
                   </div>
                 </div>
                 <StatusChip status={displayStatus(room, s.settings)} />
                 <p className="insp-meta">
-                  {staffName(s, room.attendant)} · {fmtDuration(activeMinutes(s, room))} · {p.done}/{p.total} items{p.skipped ? ` (${p.skipped} skipped)` : ""}
+                  {tr.person(staffById(s, room.attendant)?.name)} · {tr.duration(activeMinutes(s, room))} · {p.done}/{p.total} {t("items", "بند")}{p.skipped ? t(` (${p.skipped} skipped)`, ` (${p.skipped} متخطى)`) : ""}
                 </p>
                 <RoomBadges room={room} />
-                {room.queue ? <p className={cn("sla-line", left <= 0 && "sla-breached")}>⏱ {left > 0 ? `${left} min left for ${room.queue.guest}` : `SLA breached ${-left} min ago`}</p> : null}
-                <span className="m-card-cta">Inspect <ChevronRight aria-hidden="true" /></span>
+                {room.queue ? <p className={cn("sla-line", left <= 0 && "sla-breached")}>⏱ {left > 0 ? t(`${left} min left for ${guest}`, `باقي ${left} د على ${guest}`) : t(`SLA breached ${-left} min ago`, `تجاوز المهلة منذ ${-left} د`)}</p> : null}
+                <span className="m-card-cta">{t("Inspect", "افحص")} <ChevronRight aria-hidden="true" /></span>
               </Link>
             );
           })}
@@ -192,6 +212,8 @@ export function MobileInspectionsPage() {
 
 export function MobileFloorPage() {
   const s = useHms();
+  const tr = useMobileT();
+  const { t } = tr;
   const me = s.staff.find((p) => p.id === personaStaff.Supervisor);
   const [floor, setFloor] = useState(me?.floors?.[0] ?? 1);
   const [open, setOpen] = useState<string | null>(null);
@@ -200,11 +222,12 @@ export function MobileFloorPage() {
   const actor = personaStaff.Supervisor;
   const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
   const wo = room ? s.workOrders.find((w) => w.room === room.number && w.state !== "VERIFIED") : undefined;
+  const nameOf = (id: string | null | undefined) => tr.person(staffById(s, id)?.name);
   return (
-    <MobileShell title="Wings">
+    <MobileShell title={t("Wings", "الأجنحة")}>
       <div className="m-chips">
         {[1, 2, 3, 4, 5].map((f) => (
-          <button type="button" key={f} className={cn("m-chip", floor === f && "m-chip-on")} onClick={() => setFloor(f)}>{wingShort(f)}</button>
+          <button type="button" key={f} className={cn("m-chip", floor === f && "m-chip-on")} onClick={() => setFloor(f)}>{tr.wingShort(f)}</button>
         ))}
       </div>
       <div className="mobile-floor-grid">
@@ -214,44 +237,44 @@ export function MobileFloorPage() {
             <button type="button" className={cn("m-floor-tile", statusClass[st])} key={r.number} onClick={() => setOpen(r.number)}>
               <strong><bdi>{r.number}</bdi></strong>
               <StatusChip status={st} compact />
-              <span>{r.attendant ? s.staff.find((p) => p.id === r.attendant)?.initials : "—"}{r.queue ? " · ⚡" : ""}{r.anomalies.length ? " · ⚠" : ""}</span>
+              <span>{r.attendant ? tr.first(staffById(s, r.attendant)?.name) : "—"}{r.queue ? " · ⚡" : ""}{r.anomalies.length ? " · ⚠" : ""}</span>
             </button>
           );
         })}
       </div>
-      <MobileSheet open={!!room} onClose={() => setOpen(null)} title={room ? `Room ${room.number}` : ""}>
+      <MobileSheet open={!!room} onClose={() => setOpen(null)} title={room ? t(`Room ${room.number}`, `غرفة ${room.number}`) : ""}>
         {room ? (
           <div className="m-sheet-stack">
-            <div className="m-row-between"><span>{room.type} · {wingLabel(room.floor)}</span><StatusChip status={displayStatus(room, s.settings)} /></div>
+            <div className="m-row-between"><span>{tr.roomType(room.type)} · {tr.wing(room.floor)}</span><StatusChip status={displayStatus(room, s.settings)} /></div>
             <dl className="m-facts">
-              <div><dt>Attendant</dt><dd>{staffName(s, room.attendant)}</dd></div>
-              <div><dt>Checklist</dt><dd>{checklistProgress(s, room).done}/{checklistProgress(s, room).total}</dd></div>
-              <div><dt>Time</dt><dd>{fmtDuration(activeMinutes(s, room))}</dd></div>
-              <div><dt>Last inspection</dt><dd>{lastInspection(room) ? `${lastInspection(room)?.result === "PASSED" ? "✔" : "✘"} ${lastInspection(room)?.score}%` : "—"}</dd></div>
+              <div><dt>{t("Attendant", "العاملة")}</dt><dd>{nameOf(room.attendant)}</dd></div>
+              <div><dt>{t("Checklist", "القائمة")}</dt><dd>{checklistProgress(s, room).done}/{checklistProgress(s, room).total}</dd></div>
+              <div><dt>{t("Time", "الوقت")}</dt><dd>{tr.duration(activeMinutes(s, room))}</dd></div>
+              <div><dt>{t("Last inspection", "آخر فحص")}</dt><dd>{lastInspection(room) ? `${lastInspection(room)?.result === "PASSED" ? "✔" : "✘"} ${lastInspection(room)?.score}%` : "—"}</dd></div>
             </dl>
-            {room.block ? <p className="m-note m-note-blocked"><Wrench aria-hidden="true" /> {room.block.reason}</p> : null}
+            {room.block ? <p className="m-note m-note-blocked"><Wrench aria-hidden="true" /> {tr.phrase(room.block.reason)}</p> : null}
             {room.hk === "CLEAN" ? (
-              <Button asChild variant="hmsPrimary" size="hmsXl"><Link to="/m/inspections/$roomId" params={{ roomId: room.number }}><ShieldCheck aria-hidden="true" /> Inspect now</Link></Button>
+              <Button asChild variant="hmsPrimary" size="hmsXl"><Link to="/m/inspections/$roomId" params={{ roomId: room.number }}><ShieldCheck aria-hidden="true" /> {t("Inspect now", "افحص الآن")}</Link></Button>
             ) : null}
             {wo?.state === "RESOLVED" ? (
-              <Button variant="hmsPrimary" size="hmsXl" onClick={() => { hms.woVerify(wo.id, actor); toast.success(`Room ${room.number} released — post-repair clean queued`, { duration: 3000 }); setOpen(null); }}>
-                Verify repair & release
+              <Button variant="hmsPrimary" size="hmsXl" onClick={() => { hms.woVerify(wo.id, actor); toast.success(t(`Room ${room.number} released — post-repair clean queued`, `تم فك حجز الغرفة ${room.number} — أُضيف تنظيف بعد الصيانة`), { duration: 3000 }); setOpen(null); }}>
+                {t("Verify repair & release", "تأكيد الإصلاح وفك الحجز")}
               </Button>
             ) : null}
             {room.dnd ? (
-              <Button variant="hmsSecondary" size="hmsLg" onClick={() => { hms.clearDnd(room.number, actor, "Welfare check done by supervisor"); toast.success("DND cleared", { duration: 2500 }); }}>Welfare check done · clear DND</Button>
+              <Button variant="hmsSecondary" size="hmsLg" onClick={() => { hms.clearDnd(room.number, actor, "Welfare check done by supervisor"); toast.success(t("DND cleared", "أُزيلت علامة عدم الإزعاج"), { duration: 2500 }); }}>{t("Welfare check done · clear DND", "تم الاطمئنان · إزالة عدم الإزعاج")}</Button>
             ) : null}
             {!room.block ? (
               <label className="m-field">
-                Reassign attendant
-                <select value={room.attendant ?? ""} onChange={(e) => { hms.assignRoom(room.number, e.target.value || null, actor); toast.success(e.target.value ? `Assigned to ${staffName(s, e.target.value)}` : "Unassigned", { duration: 2500 }); }}>
-                  <option value="">Unassigned</option>
-                  {attendants.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+                {t("Reassign attendant", "إعادة إسناد العاملة")}
+                <select value={room.attendant ?? ""} onChange={(e) => { hms.assignRoom(room.number, e.target.value || null, actor); toast.success(e.target.value ? t(`Assigned to ${nameOf(e.target.value)}`, `أُسندت إلى ${nameOf(e.target.value)}`) : t("Unassigned", "بدون إسناد"), { duration: 2500 }); }}>
+                  <option value="">{t("Unassigned", "غير مُسند")}</option>
+                  {attendants.map((a) => <option key={a.id} value={a.id}>{tr.person(a.name)}</option>)}
                 </select>
               </label>
             ) : null}
             {room.hk !== "DIRTY" && room.occupancy === "VACANT" && !room.block ? (
-              <Button variant="hmsGhost" size="hmsLg" onClick={() => { hms.resetStatus(room.number, actor, "Supervisor reset"); toast.success("Reset to dirty", { duration: 2500 }); }}>Reset to dirty</Button>
+              <Button variant="hmsGhost" size="hmsLg" onClick={() => { hms.resetStatus(room.number, actor, "Supervisor reset"); toast.success(t("Reset to dirty", "أُعيدت إلى غير نظيفة"), { duration: 2500 }); }}>{t("Reset to dirty", "إعادة إلى غير نظيفة")}</Button>
             ) : null}
           </div>
         ) : null}
@@ -264,29 +287,31 @@ export function MobileFloorPage() {
 
 export function MobileWorkOrdersPage() {
   const s = useHms();
+  const tr = useMobileT();
+  const { t } = tr;
   const me = personaStaff.Engineer;
   const [tab, setTab] = useState<"mine" | "open" | "done">("mine");
   const list = s.workOrders.filter((w) =>
     tab === "mine" ? w.assignee === me && !["RESOLVED", "VERIFIED"].includes(w.state) : tab === "open" ? !w.assignee && w.state === "OPEN" : ["RESOLVED", "VERIFIED"].includes(w.state),
   );
   return (
-    <MobileShell title="My Jobs">
+    <MobileShell title={t("My Jobs", "مهامي")}>
       <div className="m-chips">
-        {([["mine", "Assigned to me"], ["open", "Unassigned"], ["done", "Resolved"]] as const).map(([k, l]) => (
+        {([["mine", t("Assigned to me", "مُسندة لي")], ["open", t("Unassigned", "غير مُسندة")], ["done", t("Resolved", "تم حلها")]] as const).map(([k, l]) => (
           <button type="button" key={k} className={cn("m-chip", tab === k && "m-chip-on")} onClick={() => setTab(k)}>{l}</button>
         ))}
       </div>
       {list.length === 0 ? (
-        <EmptyState art={<EmptyArt kind="tools" className="empty-art" />} title={tab === "mine" ? "No jobs assigned to you" : tab === "open" ? "No unassigned jobs" : "Nothing resolved yet"} />
+        <EmptyState art={<EmptyArt kind="tools" className="empty-art" />} title={tab === "mine" ? t("No jobs assigned to you", "لا مهام مُسندة لك") : tab === "open" ? t("No unassigned jobs", "لا مهام غير مُسندة") : t("Nothing resolved yet", "لا شيء تم حله بعد")} />
       ) : (
         <div className="mobile-room-list">
           {list.map((order) => (
             <Link to="/m/work-orders/$woId" params={{ woId: order.id }} className="mobile-job-card" key={order.id}>
               <span className="job-lead">
                 <Picto icon={categoryIcon[order.category]} className="picto-lg" tone={`cat-${order.category === "Heritage surface" ? "heritage" : order.category.toLowerCase()}`} />
-                <span className={cn("priority", order.urgency === "P1" && "priority-critical")}>{order.urgency}</span>
+                <span className={cn("priority", order.urgency === "P1" && "priority-critical")}>{tr.ar ? tr.urgency(order.urgency) : order.urgency}</span>
               </span>
-              <div><h2>{order.category} · Room <bdi>{order.room}</bdi></h2><p>{order.description}</p><p className="m-muted">{order.id} · {order.state.replace("_", " ").toLowerCase()} · opened {fmtTime(order.createdAt)}</p></div>
+              <div><h2>{tr.category(order.category)} · {t("Room", "غرفة")} <bdi>{order.room}</bdi></h2><p>{tr.phrase(order.description)}</p><p className="m-muted"><bdi>{order.id}</bdi> · {tr.woState(order.state).toLowerCase()} · {t("opened", "فُتح")} {tr.time(order.createdAt)}</p></div>
               <ChevronRight aria-hidden="true" />
             </Link>
           ))}
@@ -299,10 +324,10 @@ export function MobileWorkOrdersPage() {
 /* ───────────── Login ───────────── */
 
 type ShiftRole = "ATTENDANT" | "SUPERVISOR" | "ENGINEER";
-const shiftRoles: { role: ShiftRole; label: string; labelAr: string }[] = [
-  { role: "ATTENDANT", label: "Housekeeping", labelAr: "تنظيف الغرف" },
-  { role: "SUPERVISOR", label: "Supervisor", labelAr: "مشرف" },
-  { role: "ENGINEER", label: "Maintenance", labelAr: "صيانة" },
+const shiftRoles: { role: ShiftRole; label: string; labelAr: string; hint: string; hintAr: string }[] = [
+  { role: "ATTENDANT", label: "Housekeeping", labelAr: "تنظيف الغرف", hint: "Clean and prepare rooms", hintAr: "تنظيف الغرف وتجهيزها" },
+  { role: "SUPERVISOR", label: "Supervisor", labelAr: "مشرف", hint: "Inspect and release rooms", hintAr: "فحص الغرف واعتمادها" },
+  { role: "ENGINEER", label: "Maintenance", labelAr: "صيانة", hint: "Fix reported issues", hintAr: "إصلاح الأعطال المبلّغ عنها" },
 ];
 
 function greeting(min: number) {
@@ -312,6 +337,8 @@ function greeting(min: number) {
 
 export function MobileLoginPage() {
   const s = useHms();
+  const tr = useMobileT();
+  const { t } = tr;
   const navigate = useNavigate();
   const [role, setRole] = useState<ShiftRole | null>(null);
   const [who, setWho] = useState<string | null>(null);
@@ -319,40 +346,40 @@ export function MobileLoginPage() {
   const people = s.staff.filter((p) => p.role === role);
   const person = s.staff.find((p) => p.id === who);
   const hello = greeting(demoNow(s));
+  const roleInfo = shiftRoles.find((r) => r.role === role);
   const press = (d: string) => {
     const next = (pin + d).slice(0, 4);
     setPin(next);
     if (next.length === 4 && person) {
       const persona = person.role === "SUPERVISOR" ? "Supervisor" : person.role === "ENGINEER" ? "Engineer" : "Attendant";
       hms.setPersona("mobile", persona);
-      toast.success(`Welcome, ${person.name.split(" ")[0]} · shift started`, { duration: 3500 });
+      toast.success(t(`Welcome, ${tr.first(person.name)} · shift started`, `أهلًا ${tr.first(person.name)} · بدأت الوردية`), { duration: 3500 });
       void navigate({ to: mobilePersonaHome[persona] });
     }
   };
   const back = () => (who ? setWho(null) : setRole(null));
   return (
-    <MobileShell title="Shift sign-in" bare>
+    <MobileShell title={t("Shift sign-in", "تسجيل الدخول للوردية")} bare>
       <div className={cn("m-login", person && "m-login-pin")}>
         <div className="m-login-hero">
           <img src={photos.courtyardDawn} alt="" className="m-login-scene" />
-          <div className="m-login-brand">
-            <img src={riwaqMark} alt="" />
-            <div><strong lang="ar">{property.nameAr}</strong><span>{property.name}</span></div>
-          </div>
+          <HotelBadge className="m-login-brand" />
           {role ? (
-            <button type="button" className="m-login-back" onClick={back} aria-label="Back"><ChevronLeft aria-hidden="true" /></button>
-          ) : null}
+            <button type="button" className="m-login-back" onClick={back} aria-label={t("Back", "رجوع")}><ChevronLeft aria-hidden="true" /></button>
+          ) : (
+            <LangSwitch className="m-login-lang" />
+          )}
         </div>
         <div className="m-login-sheet">
           {!role ? (
             <>
-              <p className="m-login-hello"><span lang="ar">{hello.ar}</span> · {hello.en}</p>
-              <h2>What is your job today?</h2>
+              <p className="m-login-hello">{t(hello.en, hello.ar)}</p>
+              <h2>{t("What is your job today?", "ما هي وظيفتك اليوم؟")}</h2>
               <div className="m-role-cards">
                 {shiftRoles.map((r) => (
                   <button type="button" key={r.role} className={`m-role-card role-${r.role.toLowerCase()}`} onClick={() => setRole(r.role)}>
                     <RoleArt role={r.role} />
-                    <span><b>{r.label}</b><small lang="ar">{r.labelAr}</small></span>
+                    <span><b>{t(r.label, r.labelAr)}</b><small>{t(r.hint, r.hintAr)}</small></span>
                     <ChevronRight aria-hidden="true" />
                   </button>
                 ))}
@@ -360,13 +387,13 @@ export function MobileLoginPage() {
             </>
           ) : !person ? (
             <>
-              <p className="m-login-hello"><span lang="ar">{shiftRoles.find((r) => r.role === role)?.labelAr}</span> · {shiftRoles.find((r) => r.role === role)?.label}</p>
-              <h2>Tap your photo</h2>
+              <p className="m-login-hello">{roleInfo ? t(roleInfo.label, roleInfo.labelAr) : ""}</p>
+              <h2>{t("Tap your photo", "اضغط على صورتك")}</h2>
               <div className="m-face-grid">
                 {people.map((p) => (
                   <button type="button" key={p.id} onClick={() => { setWho(p.id); setPin(""); }}>
                     <StaffAvatar staff={p} />
-                    <b>{p.name.split(" ")[0]}</b>
+                    <b>{tr.first(p.name)}</b>
                   </button>
                 ))}
               </div>
@@ -374,14 +401,14 @@ export function MobileLoginPage() {
           ) : (
             <div className="pin-pad">
               <StaffAvatar staff={person} className="pin-avatar" />
-              <h2>{person.name}</h2>
-              <p>Enter your 4-digit PIN · <span lang="ar">أدخل الرقم السري</span></p>
-              <div className="pin-dots" aria-label={`${pin.length} of 4 digits`}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")} />)}</div>
-              <div className="pin-keys">
+              <h2>{tr.person(person.name)}</h2>
+              <p>{t("Enter your 4-digit PIN", "أدخل الرقم السري من 4 أرقام")}</p>
+              <div className="pin-dots" aria-label={t(`${pin.length} of 4 digits`, `${pin.length} من 4 أرقام`)}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")} />)}</div>
+              <div className="pin-keys" dir="ltr">
                 {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => <button type="button" key={d} onClick={() => press(d)}>{d}</button>)}
-                <button type="button" onClick={() => setWho(null)} aria-label="Back"><CircleUserRound aria-hidden="true" /></button>
+                <button type="button" onClick={() => setWho(null)} aria-label={t("Back", "رجوع")}><CircleUserRound aria-hidden="true" /></button>
                 <button type="button" onClick={() => press("0")}>0</button>
-                <button type="button" onClick={() => setPin((p) => p.slice(0, -1))} aria-label="Delete"><Delete aria-hidden="true" /></button>
+                <button type="button" onClick={() => setPin((p) => p.slice(0, -1))} aria-label={t("Delete", "مسح")}><Delete aria-hidden="true" /></button>
               </div>
             </div>
           )}

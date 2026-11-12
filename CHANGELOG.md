@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Premium staff app: one language, hotel mark, tab dock, immersive room, Android frame · @abdulsalahuddin94-dev
+- **What:** Staff app (`/m/*`) shows one language at a time: English by default, full Arabic RTL behind an EN / ع switch (sign-in hero, Me → Language, presenter panel). New `src/lib/mobile-i18n.ts` holds the strings and Arabic mappings for seeded data; shared chips, badges, heritage notice and room cards follow the staff-app language while desktop stays English. New Dar Al Majlis hotel mark (`hotel-mark.tsx`) replaces the Riwaq icon on the mobile sign-in. The plain tab bar is now a floating espresso dock with a gliding brass arch under the active tab. Room detail opens with a full-bleed photo from the top edge, room name and data on it; on scroll the photo drifts and fades and the title shrinks into a compact top bar (`room-hero.tsx`). The iPhone mockup is now a generic Android phone (`.device-*` classes, renamed from `.iphone-*`). Sign-in flow unchanged, restyled.
+- **Why:** Owner feedback: mixed Arabic/English text, hotel badge reused the product icon, boring tab bar, dull room header; asked for premium work. Owner chose to keep the PIN sign-in after the reasoning (shared devices, fast handover, low-literacy staff) and asked for an Android-style device since hotels hand out phones.
+- **Decisions:** English default + Arabic switch; PIN sign-in kept; Android mockup, no tablet; own hotel mark. Logged in `docs/decision-log.md`. Docs: `design-system.md` (§7, §7b), `sitemap.md`.
+- **PR:** #PRNUM
+
 ## 2026-11-12 · Wing-specific room drawer photography · @abdulsalahuddin94-dev
 - **What:** Added four distinct generated wing photographs and a faded drawer header with wing identity, room type/task icons and existing VIP/Queue/Alert/Re-clean tags. Existing Courtyard Wing keeps its courtyard photo.
 - **Why:** Owner requested a visual wing-level header instead of a long descriptive line.
