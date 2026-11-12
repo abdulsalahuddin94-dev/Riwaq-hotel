@@ -9,6 +9,7 @@
 - [x] Distinct wing photography with faded room-drawer headers and compact room tags
 - [x] Refresh mobile PIN, navigation, photo-led room cards and fixed-photo room scrolling; verify all three roles
 - [x] Fix language switch sizing and verify English/Arabic selection at phone and desktop-preview widths
+- [x] Compact mobile header on scroll, hide navigation while scrolling and restore on idle, reduce room-card height
 - [ ] Full Arabic RTL with a language switch
 - [ ] Simulated offline outbox with spec §14 sync states
 - [ ] Clearly labelled mock PMS acknowledgement

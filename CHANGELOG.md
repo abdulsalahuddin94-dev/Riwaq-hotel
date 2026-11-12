@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Compact mobile scroll chrome and room cards · @abdulsalahuddin94-dev
+- **What:** Standard mobile headers shrink on scroll, navigation hides while scrolling and slides back after idle, and room cards reduce from 260px to 224px minimum height.
+- **Why:** Requested more space for rooms and less fixed chrome during scrolling.
+- **Decisions:** Keep immersive room headers and fixed photography unchanged; preserve title, role, navigation labels and all operational data. Hidden dock is inert and motion respects reduced-motion preferences.
+- **PR:** Not created; direct Lovable edit. No Git merge performed.
+
 ## 2026-11-12 · Repair staff language switch geometry · @abdulsalahuddin94-dev
 - **What:** Fixed the stretched EN / ع selection in Me; both options use shared buttons with equal 44px targets and centered labels, with a direction-aware settings row.
 - **Why:** Settings-list button rules were overriding the switch height and borders.
