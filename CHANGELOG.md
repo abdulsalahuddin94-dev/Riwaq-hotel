@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Unified photo-led staff app across roles · @abdulsalahuddin94-dev
+- **What:** Supervisor and maintenance task lists now share housekeeping-style photography and summaries; wing tiles and detail screens gain matching photo surfaces. Unified filters, inspection controls, forms, sheets, profile surfaces and sign-in typography.
+- **Why:** Requested a more modern and consistent mobile app, with supervisor and maintenance matching housekeeping.
+- **Decisions:** Shared mobile photo/content primitives reuse existing refined imagery. No changes to role permissions, sign-in steps, readiness, inspection scoring or maintenance transitions; all protected decisions preserved.
+- **PR:** Not created; direct Lovable edit. No Git merge performed.
+
 ## 2026-11-12 · Compact mobile scroll chrome and room cards · @abdulsalahuddin94-dev
 - **What:** Standard mobile headers shrink on scroll, navigation hides while scrolling and slides back after idle, and room cards reduce from 260px to 224px minimum height.
 - **Why:** Requested more space for rooms and less fixed chrome during scrolling.

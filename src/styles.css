@@ -1112,3 +1112,63 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .mobile-app .mobile-alert{border-radius:12px}
 @media(max-width:767px){[data-platform="mobile"]{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:max(12px,env(safe-area-inset-bottom,0px))}.device-frame,.device-screen{height:100dvh}.mobile-app .room-body{min-height:calc(100dvh - 140px)}}
 @media(prefers-reduced-motion:reduce){.mobile-app .pin-keys button,.mobile-app .pin-dots i,.mobile-app .tab-dock-arch{transition:none}}
+
+/* One staff-app vocabulary: photo-led tasks, quiet surfaces, equal controls. */
+[data-platform="mobile"]{--mobile-card-radius:16px;--mobile-control-radius:10px}
+.mobile-app .mobile-task-card{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;min-height:224px;padding:16px;gap:8px;background:var(--secondary);color:var(--photo-ink);border-radius:var(--mobile-card-radius)!important;box-shadow:var(--mobile-lift);text-decoration:none}
+.mobile-app .mobile-task-card:before,.mobile-app .mobile-wing-room:before,.mobile-app .mobile-detail-photo:before{content:"";position:absolute;z-index:-1;inset:0;background:var(--photo-overlay)}
+.mobile-app .mobile-task-content{min-width:0;display:grid;gap:5px;padding-top:50px}
+.mobile-app .mobile-task-content h2{margin:0;font-size:30px;line-height:1.2;font-weight:600;color:var(--photo-ink)}
+.mobile-app .mobile-task-content p{margin:0;color:var(--photo-ink);font-size:12px;line-height:1.5}
+.mobile-app .mobile-task-card .status-chip{position:absolute;top:16px;inset-inline-end:16px;font-size:11px;box-shadow:var(--shadow-sm)}
+.mobile-app .mobile-task-card .badge-row{position:absolute;top:16px;inset-inline-start:16px;max-width:55%;flex-wrap:wrap}
+.mobile-app .mobile-task-card .insp-meta{font-size:11px}
+.mobile-app .mobile-task-card .sla-line{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--photo-ink)}
+.mobile-app .mobile-task-card .sla-breached{font-weight:700}
+.mobile-app .mobile-task-card .sla-line svg{width:14px;height:14px}
+.mobile-app .mobile-task-card .m-card-cta{display:flex;align-items:center;gap:6px;color:var(--photo-ink);font-size:12px;font-weight:600;margin:7px 0 0;padding-top:10px;border-top:1px solid color-mix(in oklch,var(--card) 30%,transparent)}
+.mobile-app .mobile-task-card .m-card-cta svg{width:16px;height:16px;flex:none}
+.mobile-app .mobile-task-card .m-card-cta svg:last-child{margin-inline-start:auto}
+.mobile-task-priority{position:absolute;top:16px;inset-inline-end:16px;display:flex;gap:5px;align-items:center;padding:6px 9px;border-radius:99px;background:var(--warning-100);color:var(--warning-800);font-size:11px;font-weight:700}
+.mobile-task-priority.priority-critical{background:var(--error-100);color:var(--error-800)}
+.mobile-task-priority svg{width:14px;height:14px}
+.mobile-app .mobile-summary-meta{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--photo-ink);margin:14px 0 0;line-height:1.5}
+.mobile-summary-meta svg{width:16px;height:16px;flex:none}
+.mobile-app .m-chips{overflow-x:auto;flex:none}
+.mobile-app .m-chip{height:auto;flex:1 0 auto;white-space:normal;line-height:1.35}
+.mobile-app .mobile-wing-room{position:relative;isolation:isolate;overflow:hidden;min-height:156px;height:auto;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:6px;padding:12px;border:0;border-radius:var(--mobile-card-radius);color:var(--photo-ink);white-space:normal;text-align:start;background:var(--secondary)}
+.mobile-app .mobile-wing-room strong{font-size:25px;color:var(--photo-ink);line-height:1.1}
+.mobile-app .mobile-wing-room>span:last-child{font-size:11px;color:var(--photo-ink)}
+.mobile-app .mobile-wing-room .status-chip{max-width:100%;font-size:10px}
+.mobile-app .mobile-detail-photo{position:relative;isolation:isolate;overflow:hidden;min-height:180px;display:flex;align-items:flex-end;padding:18px;margin:0 0 18px;border-radius:var(--mobile-card-radius);background:var(--secondary);color:var(--photo-ink)}
+.mobile-app .mobile-detail-photo h2{margin:4px 0 0;font-size:30px;font-weight:600}
+.mobile-app .mobile-detail-photo p{margin:0;font-size:12px;line-height:1.5}
+.mobile-app .m-point,.mobile-app .m-check,.mobile-app .m-score,.mobile-app .m-check-summary,.mobile-app .m-attendant-card,.mobile-app .m-progress-card,.mobile-app .mobile-alert,.mobile-app .mobile-stats article{border-radius:var(--mobile-card-radius)!important;background:var(--card);box-shadow:var(--shadow-sm)}
+.mobile-app .m-point{gap:12px;padding:16px;margin-bottom:10px}
+.mobile-app .m-point>span{min-width:0;font-size:15px;line-height:1.45}
+.mobile-app .m-point-fail{background:var(--error-100)}
+.mobile-app .m-check-done{background:var(--success-100)}
+.mobile-app .m-passfail{flex:none;gap:6px}
+.mobile-app .m-passfail button{width:44px;height:44px;border-radius:var(--mobile-control-radius);background:var(--muted);color:var(--muted-foreground);border:1px solid var(--border)}
+.mobile-app .m-passfail button.pass{background:var(--success-100);color:var(--success-800);border-color:var(--success-500)}
+.mobile-app .m-passfail button.fail{background:var(--error-100);color:var(--error-800);border-color:var(--error-500)}
+.mobile-app .m-facts{gap:0;border-block:1px solid var(--border);margin:18px 0}
+.mobile-app .m-facts>div{background:transparent;border-radius:0;padding:13px 0;box-shadow:none;border-bottom:1px solid var(--border)}
+.mobile-app .m-facts>div:last-child{border-bottom:0}
+.mobile-app .m-facts dd{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.mobile-app .m-zone h2{font-size:18px;letter-spacing:0;margin:24px 0 12px}
+.mobile-app .m-field input,.mobile-app .m-field select,.mobile-app .m-field textarea{border-radius:var(--mobile-control-radius);background:var(--card);border:1px solid var(--border);padding:12px;font-size:16px;min-height:48px}
+.mobile-app .m-sheet{background:var(--background);border-radius:24px 24px 0 0}
+.mobile-app .m-sheet-header{border-bottom:1px solid var(--border);padding-bottom:16px}
+.mobile-app .m-stepper{display:flex;overflow-x:auto;gap:6px;padding:0 0 12px;scrollbar-width:none}
+.mobile-app .m-stepper span{flex:none;padding:7px 10px;border-radius:99px;background:var(--muted);color:var(--muted-foreground);font-size:11px}
+.mobile-app .m-stepper span.on{background:var(--success-100);color:var(--success-800)}
+.mobile-app .m-login-sheet h2,.mobile-app .pin-pad>h3{font-family:var(--font-sans);font-size:26px;line-height:1.25;font-weight:650;letter-spacing:0}
+.mobile-app .m-role-card{border-radius:var(--mobile-card-radius);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:14px;gap:14px}
+.mobile-app .m-role-card b{font-size:17px;letter-spacing:0}
+.mobile-app .m-role-card small{color:var(--muted-foreground);font-size:12px!important}
+.mobile-app .m-face-grid button{border-radius:var(--mobile-card-radius);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.mobile-app .mobile-settings-list{border-radius:var(--mobile-card-radius)}
+.mobile-app .mobile-profile h2{font-size:24px;line-height:1.3}
+.mobile-app .mobile-alert h2{font-size:16px;line-height:1.35}
+.mobile-app .mobile-alert p{font-size:12px;line-height:1.5}
