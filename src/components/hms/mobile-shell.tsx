@@ -183,8 +183,7 @@ export function MobileShell({
 type Tab = { to: string; label: string; labelAr: string; icon: React.ComponentType<{ "aria-hidden"?: boolean | "true" }> };
 
 /**
- * Floating espresso dock. The active tab sits under a brass arch (the riwaq arcade shape) that glides
- * between tabs; only the active tab shows its label, so the bar stays calm.
+ * Light floating navigation with persistent labels and a sliding active indicator.
  */
 function TabDock({ tabs, pathname, alerts }: { tabs: readonly Tab[]; pathname: string; alerts: number }) {
   const { t } = useMobileT();
@@ -196,7 +195,7 @@ function TabDock({ tabs, pathname, alerts }: { tabs: readonly Tab[]; pathname: s
         const Icon = tab.icon;
         const active = i === activeIndex;
         return (
-          <Link key={tab.to} to={tab.to as never} className={cn("tab-dock-item", active && "on")} aria-current={active ? "page" : undefined}>
+          <Link key={tab.to} to={tab.to as never} className={cn("tab-dock-item", active && "on")} aria-label={t(tab.label, tab.labelAr)} title={t(tab.label, tab.labelAr)} aria-current={active ? "page" : undefined}>
             <span className="tab-dock-icon">
               <Icon aria-hidden="true" />
               {tab.to === "/m/alerts" && alerts ? <b className="tab-dock-badge" aria-label={t(`${alerts} new`, `${alerts} جديدة`)}>{alerts}</b> : null}

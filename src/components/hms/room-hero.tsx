@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { Room, RoomStatus } from "@/lib/demo-data";
 import { useMobileT } from "@/lib/mobile-i18n";
 import { RoomPhoto } from "./illustrations";
@@ -14,9 +15,8 @@ const BAR = 52; // px, collapsed top bar height below the status bar
 
 /**
  * Full-bleed room hero. The photo starts at the very top of the screen (under the status bar)
- * with the room name and data over it. On scroll the photo drifts and fades away while the big
- * title shrinks into a compact top bar. Progress is one CSS variable (--hero-p, 0 → 1) set on the
- * app root, so every transform runs on the compositor.
+ * with the room name and data over it. The photograph is fixed to the app host while the body
+ * scrolls over it, leaving a compact title at the top. Progress is --hero-p on the app host.
  */
 export function RoomHero({ room, status, back }: { room: Room; status: RoomStatus; back: { to: string; label: string } }) {
   const { app, scroller } = useContext(AppHostContext);
@@ -57,10 +57,6 @@ export function RoomHero({ room, status, back }: { room: Room; status: RoomStatu
   return (
     <>
       <header className="room-hero" style={{ "--hero-h": `${HERO}px` } as React.CSSProperties}>
-        <div className="room-hero-media">
-          <RoomPhoto type={room.type} className="room-hero-photo" />
-        </div>
-        <div className="room-hero-shade" aria-hidden="true" />
         <div className="room-hero-copy">
           <p className="room-hero-eyebrow">{tr.wing(room.floor)}</p>
           <h1 className="room-hero-title">
@@ -77,13 +73,14 @@ export function RoomHero({ room, status, back }: { room: Room; status: RoomStatu
       </header>
       {app
         ? createPortal(
+            <>
+            <div className="room-fixed-photo" aria-hidden="true"><RoomPhoto type={room.type} className="room-hero-photo" refined /><div className="room-hero-shade" /></div>
             <div className="room-topbar">
-              <Link to={back.to as never} className="room-topbar-back" aria-label={back.label}>
-                <ChevronLeft aria-hidden="true" />
-              </Link>
+              <Button asChild variant="hmsGhost" className="room-topbar-back"><Link to={back.to as never} aria-label={tr.t("Back to", "العودة إلى") + " " + back.label} title={back.label}><ChevronLeft aria-hidden="true" /></Link></Button>
               <strong className="room-topbar-title" aria-hidden="true">{title}</strong>
               <span className="room-topbar-chip"><StatusChip status={status} compact /></span>
-            </div>,
+            </div>
+            </>,
             app,
           )
         : null}

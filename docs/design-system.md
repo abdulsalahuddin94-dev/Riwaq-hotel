@@ -78,8 +78,8 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 | Reports charts | `reports-page.tsx` (Recharts) | `.chart-*`, `.report-*` |
 | Dialogs | `desktop-dialogs.tsx` | `.hms-dialog`, `.dialog-*` |
 | Mobile shell, Android device frame, sheet | `mobile-shell.tsx` | `.mobile-*`, `.device-*`, `.m-sheet-*` |
-| Tab dock: floating espresso glass, active tab under a gliding brass arch, label shown only on the active tab | `mobile-shell.tsx` `TabDock` | `.tab-dock*` |
-| Immersive room hero: full-bleed photo from the top edge, collapses into a compact top bar on scroll (one CSS var `--hero-p`) | `room-hero.tsx` | `.room-hero*`, `.room-topbar*`, `.room-body` |
+| Tab dock: light floating surface, sliding palm-green active indicator, persistent icon-and-text labels | `mobile-shell.tsx` `TabDock` | `.tab-dock*` |
+| Immersive room hero: photograph fixed within the phone; content scrolls over it; persistent back button and start-aligned collapsed room title | `room-hero.tsx` | `.room-fixed-photo`, `.room-hero*`, `.room-topbar*`, `.room-body` |
 | Hotel mark «دار المجلس» (khatam star + dallah), separate from the Riwaq product mark | `hotel-mark.tsx` | `.hotel-badge*` |
 | Staff-app language switch (EN / ع) | `mobile-pages.tsx` `LangSwitch` | `.lang-switch` |
 | Mobile checklist, meter, inspection | `mobile-detail.tsx` | `.m-check*`, `.m-meter*`, `.m-point*` |
@@ -97,6 +97,8 @@ Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP fi
 - The Live Board welcome image is `majlis-luxury.jpg`: a generated daylight lounge with refined arcades, tailored sofas and polished finishes. It replaces the rustic night majlis on this screen only; the existing overlay keeps the greeting legible.
 
 ## 7b. Staff app language
+Mobile visual refresh: room cards use full-card photography with a semantic contrast overlay, short room/task labels, existing status badges and checklist progress. The shift summary uses `mobile-shift-suite.jpg`, a generated refined daylight suite, also available to mobile Heritage Room photos only. PIN keeps job → face → four digits, with a compact identity row, four masked slots and a 64px keypad. No operational rules changed.
+
 - **One language per screen.** English is the default (Gulf housekeeping teams are multinational); Arabic switches the whole staff app to RTL. Never show English and Arabic labels side by side.
 - Strings live in `src/lib/mobile-i18n.ts`: `useMobileT()` in pages, `useSharedT()` in shared components (desktop has no provider, so it stays English). Seeded data (room types, wings, checklist items, staff and guest names, notes, event history) has Arabic mappings; text typed by staff stays as typed.
 - The choice is a per-device preference (`localStorage["riwaq-mobile-lang"]`), set on the sign-in hero, in Me → Language, or in the presenter panel.

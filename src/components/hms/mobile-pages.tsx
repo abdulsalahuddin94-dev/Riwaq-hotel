@@ -65,7 +65,7 @@ export function MobileRoomsPage() {
     <MobileShell title={t("My Rooms", "غرفي")}>
       <div className="mobile-sync"><Wifi aria-hidden="true" /> {t("Saved on this device", "محفوظ على هذا الجهاز")} <span>{t(`${done.length} of ${mine.length} complete`, `${done.length} من ${mine.length} مكتملة`)}</span></div>
       <div className="m-day-card">
-        <RoomArt type="Heritage Room" state={pct === 100 ? "made" : "messy"} className="m-day-art" />
+        <img src={photos.shiftSuite} alt="" width={1536} height={1024} className="m-day-art" />
         <div>
           <strong>{done.length} <small>{t(`of ${mine.length} rooms done`, `من ${mine.length} غرف انتهت`)}</small></strong>
           <div className="mobile-progress-summary"><div><span style={{ inlineSize: `${pct}%` }} /></div><b>{pct}%</b></div>
@@ -186,7 +186,7 @@ export function MobileInspectionsPage() {
             return (
               <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
                 <div className="insp-head">
-                  <RoomPhoto type={room.type} className="room-thumb" />
+                  <RoomPhoto type={room.type} className="room-thumb" refined />
                   <div>
                     <span>{tr.roomType(room.type)} · {tr.wingShort(room.floor)}</span>
                     <h2><bdi>{room.number}</bdi></h2>
@@ -401,16 +401,17 @@ export function MobileLoginPage() {
             </>
           ) : (
             <div className="pin-pad">
-              <StaffAvatar staff={person} className="pin-avatar" />
-              <h2>{tr.person(person.name)}</h2>
+              <div className="pin-person"><StaffAvatar staff={person} className="pin-avatar" /><div><h2>{tr.person(person.name)}</h2><p>{tr.role(person.role)}</p></div><ShieldCheck aria-hidden="true" /></div>
+              <h3>{t("Welcome back", "أهلًا بعودتك")}</h3>
               <p>{t("Enter your 4-digit PIN", "أدخل الرقم السري من 4 أرقام")}</p>
-              <div className="pin-dots" aria-label={t(`${pin.length} of 4 digits`, `${pin.length} من 4 أرقام`)}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")} />)}</div>
+              <div className="pin-dots" aria-live="polite" aria-label={t(`${pin.length} of 4 digits`, `${pin.length} من 4 أرقام`)}>{[0, 1, 2, 3].map((i) => <i key={i} className={cn(i < pin.length && "on")}>{i < pin.length ? "•" : ""}</i>)}</div>
               <div className="pin-keys" dir="ltr">
-                {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => <button type="button" key={d} onClick={() => press(d)}>{d}</button>)}
-                <button type="button" onClick={() => setWho(null)} aria-label={t("Back", "رجوع")}><CircleUserRound aria-hidden="true" /></button>
-                <button type="button" onClick={() => press("0")}>0</button>
-                <button type="button" onClick={() => setPin((p) => p.slice(0, -1))} aria-label={t("Delete", "مسح")}><Delete aria-hidden="true" /></button>
+                {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d, i) => <Button variant="hmsGhost" type="button" key={d} aria-label={d} onClick={() => press(d)}><span>{d}</span><small aria-hidden="true">{["", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ"][i]}</small></Button>)}
+                <Button variant="hmsGhost" type="button" onClick={() => setWho(null)} aria-label={t("Switch person", "تغيير الموظف")} title={t("Switch person", "تغيير الموظف")}><CircleUserRound aria-hidden="true" /></Button>
+                <Button variant="hmsGhost" type="button" onClick={() => press("0")}>0</Button>
+                <Button variant="hmsGhost" type="button" onClick={() => setPin((p) => p.slice(0, -1))} aria-label={t("Delete", "مسح")} title={t("Delete", "مسح")}><Delete aria-hidden="true" /></Button>
               </div>
+              <p className="pin-demo-note">{t("Simulated shift sign-in", "تسجيل دخول تجريبي للوردية")}</p>
             </div>
           )}
         </div>
