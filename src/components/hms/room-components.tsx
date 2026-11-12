@@ -228,7 +228,7 @@ export function RoomCard({ room, s }: { room: Room; s: HmsState }) {
             : `~${std} ${t("min", "د")} · ${room.taskType === "STAYOVER" ? t("Stayover", "إقامة") : room.taskType === "RECLEAN" ? t("Re-clean", "إعادة تنظيف") : t("Departure", "مغادرة")}`;
   return (
     <Link to="/m/rooms/$roomId" params={{ roomId: room.number }} className="mobile-room-card">
-      <RoomPhoto type={room.type} className="mobile-card-photo" />
+      <RoomPhoto type={room.type} className="mobile-card-photo" refined />
       <div className="mobile-room-main mobile-room-main-art">
         <div>
           <p className="mobile-room-meta">

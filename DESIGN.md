@@ -59,6 +59,9 @@ Rounded but not bubbly: 10–24px radii by size. Tiles 12px, panels 24px, pills 
 - **Welcome hero (Live Board):** daylight luxury heritage lounge photograph, greeting by name and one readiness gauge (rooms ready of sellable). The only ring in the product. Dark left-side overlay preserves text contrast.
 - **Sign-in:** desktop is a split screen (scene left, night form right); mobile is picture-first: pick your job, tap your face, enter PIN.
 - **Account menu:** account switch and "Restore sample data" for presenters.
+- **Mobile room cards:** full-card photography with compact overlay data, labelled status and checklist progress. Shift completion uses refined hotel photography rather than illustrated bed art.
+- **Mobile detail:** fixed phone-local photograph behind scrolling content; always-visible 48px back control; room title remains start-aligned in the collapsed top bar.
+- **Mobile navigation and PIN:** light floating dock with all tab labels visible; four masked PIN slots and 64px keys, preserving job → photo → PIN sign-in.
 
 ## Do's and Don'ts
 - Do pair every status colour with an icon and words.

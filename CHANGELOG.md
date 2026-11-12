@@ -16,6 +16,13 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Photo-led mobile refresh and visible room back navigation · @abdulsalahuddin94-dev
+- **What:** Refined generated suite photograph replaces illustrated shift-progress artwork; mobile room cards use full-card photos and compact overlay details. PIN has masked slots, a compact identity row and 64px keys. Navigation is a light floating dock with persistent labels. Room imagery stays fixed behind scrolling content; a visible back button and start-aligned collapsed title remain at the top.
+- **Why:** Requested a more polished mobile experience, larger room imagery, clearer back navigation and improved PIN entry.
+- **Decisions:** Preserve all protected decisions and operational logic. Refined mobile photos are opt-in; desktop wing imagery is unchanged.
+- **Checks:** Browser sign-in for housekeeper, supervisor and engineer; PIN delete; room back navigation; fixed image during scroll; collapsed title; phone-width layout; entry-flow tests. No runtime errors observed.
+- **PR:** Not created; direct Lovable edit. No Git merge performed.
+
 ## 2026-11-12 · Explain and confirm before undoing a reasoned decision · @abdulsalahuddin94-dev
 - **What:** New `docs/protected-decisions.md`: nine reasoned decisions (`PD-01`…`PD-09`: mobile job → photo → PIN sign-in, one language per screen with English default, shared Android phones and no tablet, picture-first staff app, hotel brand first with "Powered by RIWAQ SYSTEMS", no backend, Thmanyah licence and fallback, heritage "report, don't treat", separate status dimensions), each with what, why, best-practice basis, what breaks if changed, and where in the code. A rule at its top (also in `CLAUDE.md`, `AGENTS.md`, `docs/workflow.md` and the PR template) tells every Claude to stop before changing one, explain it in the person's language, ask "are you sure?", and edit only after a clear yes, then log `Supersedes PD-xx`. Decision log: moved four 2026-11-12 rows that sat outside the table back into it, removed blank lines that split the table, updated the outdated Arabic gap note.
 - **Why:** Owner wants @EmG38 or any teammate to understand why something was built a certain way (for example the mobile sign-in) before changing it, so good choices aren't undone by mistake.

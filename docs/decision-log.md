@@ -35,6 +35,8 @@ Format: newest at the bottom of each table. `By` is the GitHub login of the pers
 
 Room drawer photography (2026-11-12, Lovable for @abdulsalahuddin94-dev): distinct refined imagery for each requested wing, faded into the header. Preserve the existing fifth Courtyard Wing and all room-type assignments. Icons supplement short labels; VIP and other flags appear only when present in room data.
 
+Mobile visual refresh (2026-11-12, Lovable for @abdulsalahuddin94-dev): full-photo room cards, refined shift-summary photography, light labelled tab dock and masked-slot PIN keypad. The room photograph stays fixed within the app host as content scrolls over it; back is always reachable and the collapsed room name stays at the start edge. Preserves PD-01 through PD-09, including sign-in steps, languages, Android frame, hotel brand, client-only simulation and separate status dimensions. Desktop wing imagery is unchanged.
+
 ## Still OPEN (spec §25)
 Launch country and property · PMS provider · inspection and release authority · heritage SOP owner · BYOD policy · data retention and residency · SLA configuration · brand clearance for "Riwaq" · multi-property rollout · audio strategy · accessibility target.
 

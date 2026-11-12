@@ -51,12 +51,13 @@ import courtyardDusk from "@/assets/photos/courtyard-dusk.webp";
 import majlisNight from "@/assets/photos/majlis-night.webp";
 import majlisLuxury from "@/assets/photos/majlis-luxury.jpg";
 import roomCourtyard from "@/assets/photos/room-courtyard.webp";
-import roomHeritage from "@/assets/photos/mobile-shift-suite.jpg";
+import roomHeritage from "@/assets/photos/room-heritage.webp";
+import mobileShiftSuite from "@/assets/photos/mobile-shift-suite.jpg";
 import roomSuite from "@/assets/photos/room-suite.webp";
 import roomTwin from "@/assets/photos/room-twin.webp";
 
 /** AI-generated imagery (Lovable image generation, 2026-11-11). Fictional property: no real hotel is shown. */
-export const photos = { courtyardDawn, courtyardDusk, majlisNight, majlisLuxury, shiftSuite: roomHeritage };
+export const photos = { courtyardDawn, courtyardDusk, majlisNight, majlisLuxury, shiftSuite: mobileShiftSuite };
 
 const roomPhotos: Record<RoomType, string> = {
   "Heritage Room": roomHeritage,
@@ -66,8 +67,8 @@ const roomPhotos: Record<RoomType, string> = {
 };
 
 /** Photo of the room type. Decorative: the room number and status sit next to it in text. */
-export function RoomPhoto({ type, className }: { type: RoomType; className?: string }) {
-  return <img src={roomPhotos[type]} alt="" className={cn("room-photo", className)} loading="lazy" decoding="async" />;
+export function RoomPhoto({ type, className, refined = false }: { type: RoomType; className?: string; refined?: boolean }) {
+  return <img src={refined && type === "Heritage Room" ? mobileShiftSuite : roomPhotos[type]} alt="" width={1536} height={1024} className={cn("room-photo", className)} loading="lazy" decoding="async" />;
 }
 
 const C = {

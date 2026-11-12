@@ -74,7 +74,7 @@ export function RoomHero({ room, status, back }: { room: Room; status: RoomStatu
       {app
         ? createPortal(
             <>
-            <div className="room-fixed-photo" aria-hidden="true"><RoomPhoto type={room.type} className="room-hero-photo" /><div className="room-hero-shade" /></div>
+            <div className="room-fixed-photo" aria-hidden="true"><RoomPhoto type={room.type} className="room-hero-photo" refined /><div className="room-hero-shade" /></div>
             <div className="room-topbar">
               <Button asChild variant="hmsGhost" className="room-topbar-back"><Link to={back.to as never} aria-label={tr.t("Back to", "العودة إلى") + " " + back.label} title={back.label}><ChevronLeft aria-hidden="true" /></Link></Button>
               <strong className="room-topbar-title" aria-hidden="true">{title}</strong>

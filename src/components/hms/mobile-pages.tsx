@@ -186,7 +186,7 @@ export function MobileInspectionsPage() {
             return (
               <Link to="/m/inspections/$roomId" params={{ roomId: room.number }} className="inspection-card" key={room.number}>
                 <div className="insp-head">
-                  <RoomPhoto type={room.type} className="room-thumb" />
+                  <RoomPhoto type={room.type} className="room-thumb" refined />
                   <div>
                     <span>{tr.roomType(room.type)} · {tr.wingShort(room.floor)}</span>
                     <h2><bdi>{room.number}</bdi></h2>
