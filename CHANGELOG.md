@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-12 · Explain and confirm before undoing a reasoned decision · @abdulsalahuddin94-dev
+- **What:** New `docs/protected-decisions.md`: nine reasoned decisions (`PD-01`…`PD-09`: mobile job → photo → PIN sign-in, one language per screen with English default, shared Android phones and no tablet, picture-first staff app, hotel brand first with "Powered by RIWAQ SYSTEMS", no backend, Thmanyah licence and fallback, heritage "report, don't treat", separate status dimensions), each with what, why, best-practice basis, what breaks if changed, and where in the code. A rule at its top (also in `CLAUDE.md`, `AGENTS.md`, `docs/workflow.md` and the PR template) tells every Claude to stop before changing one, explain it in the person's language, ask "are you sure?", and edit only after a clear yes, then log `Supersedes PD-xx`. Decision log: moved four 2026-11-12 rows that sat outside the table back into it, removed blank lines that split the table, updated the outdated Arabic gap note.
+- **Why:** Owner wants @EmG38 or any teammate to understand why something was built a certain way (for example the mobile sign-in) before changing it, so good choices aren't undone by mistake.
+- **Decisions:** Applies to everyone, owner included. Owner sign-off entries (brand, no backend) need Abdul's OK when someone else asks; licence/safety entries (Thmanyah files, heritage care) can't be overridden. Logged in `docs/decision-log.md`.
+- **PR:** #13
+
 ## 2026-11-12 · Dar Al Majlis is the front brand (desktop) · @abdulsalahuddin94-dev
 - **What:** Desktop `/login` left side now shows the hotel lockup (Arabic «دار المجلس» over "DAR AL MAJLIS", tight and start-aligned, "Heritage Hotel · فندق تراثي"); footer reads "© 2026 Dar Al Majlis Hotel · Powered by RIWAQ Systems". Sidebar brand and the sign-in form use the shared Dar Al Majlis seal (`HotelMark` from `hotel-mark.tsx`, same as mobile) with the hotel name and "Powered by RIWAQ Systems"; the footer uses `PoweredByRiwaq`. Desktop tab titles end with "· Dar Al Majlis"; chart exports credit the hotel. Files: `mobile-pages.tsx` (DesktopLoginPage only), `desktop-shell.tsx`, `reports-page.tsx`, `src/routes/app/*`, `login.tsx`, `index.tsx`, `__root.tsx`, `styles.css`.
 - **Why:** Owner: the Arabic and English sat far apart, and hotel staff shouldn't see RIWAQ more than their own hotel. A Dar Al Majlis website is planned.

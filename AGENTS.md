@@ -10,6 +10,7 @@ Team: **@abdulsalahuddin94-dev** (owner) and **@EmG38**, each working through th
 - `docs/specs/riwaq-product-spec.md`: the primary product spec. It wins over every other document.
 - `docs/specs/hms-supplementary-spec.md`: supplementary only. Treat its hard numbers and material-care steps as proposals.
 - `docs/decision-log.md`: decisions taken (with why and by whom) and decisions still OPEN.
+- `docs/protected-decisions.md`: reasoned decisions with their basis. **Before changing one, stop, explain why it was built that way, and ask "are you sure?"** (rule at the top of that file).
 - `docs/research/`: domain research (OPERA, Cloudbeds, competitors, personas) and raw inputs.
 - `docs/information-architecture.md` and `docs/sitemap.md`: structure, status dimensions, every route.
 - `docs/design-system.md`, `DESIGN.md`, `docs/design-direction.md`: tokens, components, mood.

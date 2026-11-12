@@ -7,6 +7,7 @@ Start with `../CLAUDE.md` (agents) or `../README.md` (humans). Then:
 | What the product must do (wins over all others) | `specs/riwaq-product-spec.md` |
 | Supplementary detail (numbers are proposals) | `specs/hms-supplementary-spec.md` |
 | Why things are the way they are | `decision-log.md` |
+| Decisions not to undo without explaining and asking first | `protected-decisions.md` |
 | What changed, who, why | `../CHANGELOG.md` |
 | How the two of us + Claude + Lovable work | `workflow.md` |
 | Research (domain, competitors, personas, raw inputs) | `research/README.md` |
