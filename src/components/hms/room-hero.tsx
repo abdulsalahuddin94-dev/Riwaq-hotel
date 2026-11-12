@@ -79,7 +79,7 @@ export function RoomHero({ room, status, back }: { room: Room; status: RoomStatu
               <Button asChild variant="hmsGhost" className="room-topbar-back"><Link to={back.to as never} aria-label={tr.t("Back to", "العودة إلى") + " " + back.label} title={back.label}><ChevronLeft aria-hidden="true" /></Link></Button>
               <strong className="room-topbar-title" aria-hidden="true">{title}</strong>
               <span className="room-topbar-chip"><StatusChip status={status} compact /></span>
-            </div>,
+            </div>
             </>,
             app,
           )
