@@ -18,7 +18,7 @@ import {
 import { setLang, useMobileT } from "@/lib/mobile-i18n";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
-import marsaLogo from "@/assets/marsa-dhahab-logo.png";
+import marsaLogo from "@/assets/marsa-dhahab-logo-on-dark.png";
 import { HotelBadge, HotelMark, PoweredByRiwaq } from "./hotel-mark";
 import { EmptyArt, Picto, RoleArt, RoomArt, RoomPhoto, StaffAvatar, categoryIcon, photos } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
@@ -438,7 +438,6 @@ export function DesktopLoginPage() {
           <div className="login-logo-card">
             <img src={marsaLogo} alt="" width={900} height={664} />
           </div>
-          <em>Heritage Hotel · <span lang="ar">فندق تراثي</span></em>
         </div>
       </section>
       <section className="login-side">
