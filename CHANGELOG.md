@@ -22,6 +22,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **Decisions:** Logged in `docs/decision-log.md`. This supersedes the 2026-11-18 "Settings = property only" row and the "no stranger portraits" choice from PR #20. The `/m` routes stay reachable by URL, and narrow screens opening `/login` still go to the staff sign-in. Uploaded photos always win over the sample portrait.
 - **PR:** #22
 
+## 2026-11-18 · Balanced sign-in logo alignment · @abdulsalahuddin94-dev
+- **What:** Reduced the sign-in logo to a stable 128px width, removed obsolete card/shadow overrides, and normalized the heading margin with a 24px logo-to-heading gap.
+- **Why:** The oversized right-aligned logo looked disconnected from the form in Abdul's screenshot.
+- **Decisions:** Presentation only; keep the requested top-right position above the heading and preserve sign-in behavior.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Sign-in logo moved above the heading, on the right · @abdulsalahuddin94-dev
 - **What:** On the desktop sign-in screen (`/login`) the hotel logo left the photo panel and now sits above the "Nice to see you" heading, at the right edge of the sign-in panel. `mobile-pages.tsx` moves `.login-logo-card` from `.login-visual-copy` into the form as its first child (the empty `.login-visual-copy` was dropped), and `styles.css` keeps `justify-self:end` with the width clamp down to `150–190px` (150px under 900px). Files: `mobile-pages.tsx`, `styles.css`.
 - **Why:** Abdul first asked for the logo on the right, then clarified he meant the top of the sign-in side — above "Nice to see you" — not on the photograph.

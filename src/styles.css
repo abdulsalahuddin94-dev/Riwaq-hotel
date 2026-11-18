@@ -1313,14 +1313,10 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .welcome-date small{font-size:10px}
 @media(max-width:767px){.desktop-shell .desktop-menu-floating{position:fixed;z-index:35;top:12px;left:12px;box-shadow:var(--lift-1)}.desktop-shell .desktop-content{padding-top:68px}.desktop-shell .sidebar-account .user-menu-text{display:grid}}
 
-/* Desktop sign-in: Eman's full Marsa Dhahab logo (emblem + مرسى ذهب + MARSA DHAHAB HOTEL). Its navy
-   wordmark needs a light ground, so it sits on a white card over the photo (2026-11-18). */
-.login-logo-card{justify-self:end;width:clamp(150px,15vw,190px);padding:22px 26px 18px;border-radius:24px;background:rgb(255 255 255 / .94);box-shadow:0 2px 4px rgb(1 41 71 / .08),0 18px 48px rgb(1 41 71 / .28);backdrop-filter:blur(8px);margin-bottom:6px}
+/* Compact hotel mark above the form, anchored to the same right edge as the fields. */
+.login-logo-card{justify-self:end;width:128px;max-width:100%;padding:0;margin:0 0 8px;background:none}
 .login-logo-card img{display:block;width:100%;height:auto}
-@media (max-width:900px){.login-logo-card{width:150px;padding:14px 18px 12px;border-radius:18px}}
-/* Logo variant with #E48B20 wordmark sits directly on the photo, no card (Abdul, 2026-11-18) */
-.login-logo-card{padding:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;filter:drop-shadow(0 4px 18px rgb(1 26 46 / .55))}
-@media (max-width:900px){.login-logo-card{padding:0;border-radius:0}}
+.login-screen .login-panel h1{margin:0;line-height:1.2}
 
 /* ───────── 2026-11-18 · Simplified dashboard: notification bell, Users, Front Desk requests ───────── */
 .now-success{--tone:var(--success-700);--tone-bg:var(--success-100)}
