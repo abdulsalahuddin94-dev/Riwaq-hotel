@@ -66,13 +66,12 @@ export const LangContext = createContext<Lang>("en");
 /* ───────────── Dictionaries for demo data ───────────── */
 
 const roomTypeAr: Record<RoomType, string> = {
-  "Heritage Room": "غرفة تراثية",
-  "Courtyard Room": "غرفة الفناء",
-  "Twin Room": "غرفة بسريرين",
+  Standard: "غرفة قياسية",
+  Deluxe: "غرفة ديلوكس",
   Suite: "جناح",
 };
 
-const wingShortAr: Record<number, string> = { 1: "الفناء", 2: "النجدي", 3: "حديقة النخيل", 4: "برج الحصن", 5: "الملكي" };
+const wingShortAr: Record<number, string> = { 1: "المرسى", 2: "البحيرة", 3: "النخيل", 4: "الكثبان", 5: "الواحة" };
 
 const taskAr: Record<TaskType, string> = {
   DEPARTURE: "تنظيف مغادرة",

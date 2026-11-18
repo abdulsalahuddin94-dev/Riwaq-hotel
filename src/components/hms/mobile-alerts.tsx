@@ -1,5 +1,5 @@
-import { personaStaff } from "@/lib/demo-data";
-import { demoNow, escalations, lastInspection, useHms } from "@/lib/hms-store";
+import { guestRequestLabel, personaStaff } from "@/lib/demo-data";
+import { demoNow, escalations, hms, lastInspection, useHms } from "@/lib/hms-store";
 import { useMobileT } from "@/lib/mobile-i18n";
 
 export type MobileAlert = {
@@ -8,6 +8,8 @@ export type MobileAlert = {
   detail: string;
   tone: "warning" | "error" | "dnd" | "info";
   link: { to: string; params?: Record<string, string> };
+  /** One-tap reply, e.g. acknowledging a reception request. */
+  action?: { label: string; run: () => void };
 };
 
 /** Role-aware notifications derived from live demo state. */
@@ -48,6 +50,27 @@ export function useMobileAlerts(): MobileAlert[] {
           : t(`Marked clean at ${tr.time(r.completedAt)}`, `نظيفة منذ ${tr.time(r.completedAt)}`),
         tone: r.queue ? (left > 0 ? "warning" : "error") : "info",
         link: { to: "/m/inspections/$roomId", params: { roomId: r.number } },
+      });
+    }
+    const reqTitle: Record<string, [string, string]> = {
+      towels: ["Extra towels", "مناشف إضافية"],
+      amenities: ["Amenities", "مستلزمات"],
+      late_checkout: ["Late checkout", "مغادرة متأخرة"],
+      housekeeping: ["Extra housekeeping", "تنظيف إضافي"],
+      other: ["Request", "طلب"],
+    };
+    for (const q of s.requests.filter((x) => (x.status === "pending" || x.status === "acknowledged") && floors.includes(Number(x.room[0])))) {
+      const [en, ar] = reqTitle[q.type] ?? [guestRequestLabel[q.type], "طلب"];
+      const pending = q.status === "pending";
+      alerts.push({
+        id: `req-${q.id}`,
+        title: t(`${en} · Room ${q.room}`, `${ar} · غرفة ${q.room}`),
+        detail: pending ? t(`From reception ${now - q.requestedAt} min ago${q.note ? ` · ${q.note}` : ""}`, `من الاستقبال منذ ${now - q.requestedAt} د${q.note ? ` · ${q.note}` : ""}`) : t("You're on it · tap Done when delivered", "جاري التنفيذ · اضغط تم عند التسليم"),
+        tone: q.urgent || (pending && now - q.requestedAt > 15) ? "warning" : "info",
+        link: { to: "/m/rooms/$roomId", params: { roomId: q.room } },
+        action: pending
+          ? { label: t("On my way", "في الطريق"), run: () => hms.setRequestStatus(q.id, "acknowledged", personaStaff.Supervisor) }
+          : { label: t("Done", "تم"), run: () => hms.setRequestStatus(q.id, "completed", personaStaff.Supervisor) },
       });
     }
     for (const w of s.workOrders.filter((x) => x.state === "RESOLVED")) {

@@ -101,11 +101,14 @@ export function MobileAlertsPage() {
       ) : (
         <div className="mobile-alert-list">
           {alerts.map((alert) => (
-            <Link to={alert.link.to as never} params={alert.link.params as never} className={cn("mobile-alert", `alert-${alert.tone}`)} key={alert.id}>
-              {alert.tone === "error" ? <AlertTriangle aria-hidden="true" /> : alert.tone === "warning" ? <Zap aria-hidden="true" /> : <Bell aria-hidden="true" />}
-              <div><h2>{alert.title}</h2><p>{alert.detail}</p></div>
-              <ChevronRight aria-hidden="true" />
-            </Link>
+            <div className="mobile-alert-wrap" key={alert.id}>
+              <Link to={alert.link.to as never} params={alert.link.params as never} className={cn("mobile-alert", `alert-${alert.tone}`)}>
+                {alert.tone === "error" ? <AlertTriangle aria-hidden="true" /> : alert.tone === "warning" ? <Zap aria-hidden="true" /> : <Bell aria-hidden="true" />}
+                <div><h2>{alert.title}</h2><p>{alert.detail}</p></div>
+                <ChevronRight aria-hidden="true" />
+              </Link>
+              {alert.action ? <Button variant="hmsPrimary" size="hmsSm" className="mobile-alert-action" onClick={alert.action.run}>{alert.action.label}</Button> : null}
+            </div>
           ))}
         </div>
       )}
@@ -222,7 +225,7 @@ export function MobileFloorPage() {
   const rooms = s.rooms.filter((r) => r.floor === floor);
   const room = s.rooms.find((r) => r.number === open);
   const actor = personaStaff.Supervisor;
-  const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
+  const attendants = s.staff.filter((p) => p.active !== false && p.role === "ATTENDANT");
   const wo = room ? s.workOrders.find((w) => w.room === room.number && w.state !== "VERIFIED") : undefined;
   const nameOf = (id: string | null | undefined) => tr.person(staffById(s, id)?.name);
   return (
@@ -334,7 +337,6 @@ type ShiftRole = "ATTENDANT" | "SUPERVISOR" | "ENGINEER";
 const shiftRoles: { role: ShiftRole; label: string; labelAr: string; hint: string; hintAr: string }[] = [
   { role: "ATTENDANT", label: "Housekeeping", labelAr: "تنظيف الغرف", hint: "Clean and prepare rooms", hintAr: "تنظيف الغرف وتجهيزها" },
   { role: "SUPERVISOR", label: "Supervisor", labelAr: "مشرف", hint: "Inspect and release rooms", hintAr: "فحص الغرف واعتمادها" },
-  { role: "ENGINEER", label: "Maintenance", labelAr: "صيانة", hint: "Fix reported issues", hintAr: "إصلاح الأعطال المبلّغ عنها" },
 ];
 
 function greeting(min: number) {
@@ -350,7 +352,7 @@ export function MobileLoginPage() {
   const [role, setRole] = useState<ShiftRole | null>(null);
   const [who, setWho] = useState<string | null>(null);
   const [pin, setPin] = useState("");
-  const people = s.staff.filter((p) => p.role === role);
+  const people = s.staff.filter((p) => p.active !== false && p.role === role);
   const person = s.staff.find((p) => p.id === who);
   const hello = greeting(demoNow(s));
   const roleInfo = shiftRoles.find((r) => r.role === role);
@@ -358,6 +360,11 @@ export function MobileLoginPage() {
     const next = (pin + d).slice(0, 4);
     setPin(next);
     if (next.length === 4 && person) {
+      if (person.pin && next !== person.pin) {
+        toast.error(t("Wrong PIN. Try again or ask your supervisor.", "الرقم السري غير صحيح. حاول مرة أخرى أو اسأل المشرف."), { duration: 3000 });
+        setPin("");
+        return;
+      }
       const persona = person.role === "SUPERVISOR" ? "Supervisor" : person.role === "ENGINEER" ? "Engineer" : "Attendant";
       hms.setPersona("mobile", persona);
       toast.success(t(`Welcome, ${tr.first(person.name)} · shift started`, `أهلًا ${tr.first(person.name)} · بدأت الوردية`), { duration: 3500 });

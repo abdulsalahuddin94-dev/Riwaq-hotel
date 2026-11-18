@@ -1,9 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  AlertTriangle,
   BarChart3,
   BriefcaseBusiness,
+  CalendarDays,
   ClipboardList,
   LayoutGrid,
   Check,
@@ -14,8 +14,8 @@ import {
   PanelLeftOpen,
   RotateCcw,
   Settings,
+  UserRoundCog,
   Users,
-  Wrench,
   X,
 } from "./msym";
 import { toast } from "sonner";
@@ -30,18 +30,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type Persona, property } from "@/lib/demo-data";
-import { escalations, hms, useHms } from "@/lib/hms-store";
+import { hms, needsFollowUp, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { RoomDrawer } from "./room-drawer";
+import { NotificationBell } from "./notifications";
 
 const navItems = [
   { to: "/app/board", label: "Live Board", icon: LayoutGrid },
-  { to: "/app/team", label: "Team Progress", icon: Users },
-  { to: "/app/assign", label: "Assignments", icon: ClipboardList },
-  { to: "/app/reports", label: "Reports", icon: BarChart3 },
   { to: "/app/front-desk", label: "Front Desk", icon: BriefcaseBusiness },
-  { to: "/app/work-orders", label: "Work Orders", icon: Wrench },
-  { to: "/app/escalations", label: "Escalations", icon: AlertTriangle },
+  { to: "/app/reservations", label: "Reservations", icon: CalendarDays },
+  { to: "/app/assign", label: "Assignments", icon: ClipboardList },
+  { to: "/app/team", label: "Team Progress", icon: Users },
+  { to: "/app/reports", label: "Reports", icon: BarChart3 },
+  { to: "/app/users", label: "Users", icon: UserRoundCog },
   { to: "/app/settings", label: "Settings", icon: Settings },
 ] as const;
 
@@ -49,14 +50,14 @@ type NavPath = (typeof navItems)[number]["to"];
 
 const personaNav: Record<"Manager" | "Front Desk" | "Admin", NavPath[]> = {
   Manager: navItems.map((n) => n.to),
-  "Front Desk": ["/app/front-desk", "/app/board", "/app/work-orders"],
-  Admin: ["/app/settings", "/app/board", "/app/team", "/app/reports"],
+  "Front Desk": ["/app/front-desk", "/app/reservations"],
+  Admin: ["/app/users", "/app/settings", "/app/board", "/app/reports"],
 };
 
 export const personaHome: Record<"Manager" | "Front Desk" | "Admin", NavPath> = {
   Manager: "/app/board",
   "Front Desk": "/app/front-desk",
-  Admin: "/app/settings",
+  Admin: "/app/users",
 };
 
 const personas: Persona[] = ["Manager", "Front Desk", "Admin"];
@@ -125,7 +126,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
   const [openRoom, setOpenRoom] = useState<string | null>(null);
   const persona = (personas.includes(s.desktopPersona) ? s.desktopPersona : "Manager") as keyof typeof personaNav;
   const allowed = personaNav[persona];
-  const escalationCount = escalations(s).length;
+  const followUps = s.reservations.filter((r) => needsFollowUp(s, r)).length;
 
   const changePersona = (next: Persona) => {
     hms.setPersona("desktop", next);
@@ -170,7 +171,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
                   >
                     <span className="sidebar-link-icon"><Icon aria-hidden="true" filled={isActive} /></span>
                     {!collapsed ? <span>{item.label}</span> : null}
-                    {item.to === "/app/escalations" && escalationCount ? <b className="nav-count">{escalationCount}</b> : null}
+                    {item.to === "/app/reservations" && followUps ? <b className="nav-count" aria-label={`${followUps} to follow up`}>{followUps}</b> : null}
                   </Link>
                 );
               })}
@@ -188,7 +189,12 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
             <Menu aria-hidden="true" />
           </Button>
           <main className="desktop-content" id="main-content" tabIndex={-1}>
-            {pathname !== "/app/board" ? <div className="desktop-page-heading"><h1>{title}</h1><p>{eyebrow}</p></div> : null}
+            {pathname !== "/app/board" ? (
+              <div className="desktop-page-heading">
+                <div><h1>{title}</h1><p>{eyebrow}</p></div>
+                <NotificationBell />
+              </div>
+            ) : null}
             {children}
           </main>
         </div>

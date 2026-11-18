@@ -4,7 +4,7 @@ import { RoomPhoto } from "./illustrations";
 
 /** Shared photo surface for inspection and maintenance tasks. */
 export function MobileTaskPhoto({ type }: { type?: RoomType | undefined }) {
-  return <RoomPhoto type={type ?? "Heritage Room"} refined className="mobile-card-photo" />;
+  return <RoomPhoto type={type ?? "Standard"} refined className="mobile-card-photo" />;
 }
 
 export function MobileTaskContent({ eyebrow, title, children }: { eyebrow: ReactNode; title: ReactNode; children: ReactNode }) {

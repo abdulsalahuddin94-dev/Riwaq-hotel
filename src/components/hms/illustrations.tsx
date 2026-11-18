@@ -54,21 +54,19 @@ import roomCourtyard from "@/assets/photos/room-courtyard.webp";
 import roomHeritage from "@/assets/photos/room-heritage.webp";
 import mobileShiftSuite from "@/assets/photos/mobile-shift-suite.jpg";
 import roomSuite from "@/assets/photos/room-suite.webp";
-import roomTwin from "@/assets/photos/room-twin.webp";
 
 /** AI-generated imagery (Lovable image generation, 2026-11-11). Fictional property: no real hotel is shown. */
 export const photos = { courtyardDawn, courtyardDusk, majlisNight, majlisLuxury, shiftSuite: mobileShiftSuite };
 
 const roomPhotos: Record<RoomType, string> = {
-  "Heritage Room": roomHeritage,
-  "Courtyard Room": roomCourtyard,
-  "Twin Room": roomTwin,
+  Standard: roomHeritage,
+  Deluxe: roomCourtyard,
   Suite: roomSuite,
 };
 
 /** Photo of the room type. Decorative: the room number and status sit next to it in text. */
 export function RoomPhoto({ type, className, refined = false }: { type: RoomType; className?: string; refined?: boolean }) {
-  return <img src={refined && type === "Heritage Room" ? mobileShiftSuite : roomPhotos[type]} alt="" width={1536} height={1024} className={cn("room-photo", className)} loading="lazy" decoding="async" />;
+  return <img src={refined && type === "Standard" ? mobileShiftSuite : roomPhotos[type]} alt="" width={1536} height={1024} className={cn("room-photo", className)} loading="lazy" decoding="async" />;
 }
 
 const C = {
@@ -302,9 +300,9 @@ function Sparkle({ x, y, s = 5 }: { x: number; y: number; s?: number }) {
 /** Interior thumbnail for a room type. State drives the bed: messy (to clean), progress, made (clean). */
 export function RoomArt({ type, state = "made", className, anchor = "xMidYMid" }: { type: RoomType; state?: BedState; className?: string; anchor?: "xMidYMid" | "xMidYMax" }) {
   const id = useId().replace(/:/g, "");
-  const twin = type === "Twin Room";
+  const twin = false;
   const suite = type === "Suite";
-  const courtyard = type === "Courtyard Room";
+  const courtyard = type === "Deluxe";
   return (
     <svg className={className} viewBox="0 0 120 90" preserveAspectRatio={`${anchor} slice`} aria-hidden="true">
       <defs>
