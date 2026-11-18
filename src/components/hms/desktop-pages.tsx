@@ -44,8 +44,7 @@ import {
   EventLogDialog,
   QueueGuestDialog,
   SendRequestDialog,
-  SettingsDialog,
-  type SettingsKey,
+  PropertySettings,
   StaffDayDialog,
 } from "./desktop-dialogs";
 import { DesktopShell, useDesktop } from "./desktop-shell";
@@ -597,7 +596,7 @@ function FrontDeskContent() {
 
 export function SettingsPage() {
   return (
-    <DesktopShell title="Settings" eyebrow="Property and housekeeping configuration">
+    <DesktopShell title="Settings" eyebrow="Property">
       <SettingsContent />
     </DesktopShell>
   );
@@ -605,25 +604,15 @@ export function SettingsPage() {
 
 function SettingsContent() {
   const s = useHms();
-  const [open, setOpen] = useState<SettingsKey | null>(null);
-  const cards: { key: SettingsKey; title: string; copy: string; icon: typeof ClipboardList }[] = [
-    { key: "property", title: "Property", copy: `5 wings · ${s.rooms.length} keys · 4 room types · ${property.location}`, icon: CalendarDays },
-    { key: "checklists", title: "Checklists", copy: `Departure ${s.templates.departure.length} items · Stayover ${s.templates.stayover.length} items`, icon: ClipboardList },
-    { key: "rules", title: "Inspection & SLA rules", copy: `Pass ${s.settings.passScore}% · ${s.settings.inspectionRequired ? "every room inspected" : "inspection optional"} · queue SLA ${s.settings.queueSlaMin} min`, icon: ShieldCheck },
-  ];
   return (
-    <>
-      <section className="settings-grid">
-        {cards.map((c) => (
-          <button type="button" className="settings-card" key={c.key} onClick={() => setOpen(c.key)}>
-            <c.icon aria-hidden="true" />
-            <h2>{c.title}</h2>
-            <p>{c.copy}</p>
-            <span className="settings-open">Open settings <ArrowUpRight aria-hidden="true" /></span>
-          </button>
-        ))}
-      </section>
-      <SettingsDialog which={open} onClose={() => setOpen(null)} />
-    </>
+    <section className="content-panel">
+      <div className="section-heading">
+        <div>
+          <h2>{property.name}</h2>
+          <p>5 wings · {s.rooms.length} rooms · Standard, Deluxe and Suite. The same wings and room types as the staff app.</p>
+        </div>
+      </div>
+      <PropertySettings />
+    </section>
   );
 }

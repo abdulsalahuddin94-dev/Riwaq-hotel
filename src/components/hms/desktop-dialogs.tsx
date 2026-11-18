@@ -361,30 +361,11 @@ export function ReportPreviewDialog({ reportKey, onClose }: { reportKey: ReportK
 
 /* ───────────── Settings ───────────── */
 
-export type SettingsKey = "property" | "checklists" | "rules";
-
-export function SettingsDialog({ which, onClose }: { which: SettingsKey | null; onClose: () => void }) {
-  const titles: Record<SettingsKey, string> = { property: "Property", checklists: "Checklists", rules: "Inspection & SLA rules" };
-  return (
-    <Dialog open={!!which} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent data-platform="desktop" className="hms-dialog hms-dialog-wide">
-        {which ? (
-          <>
-            <DialogHeader>
-              <DialogTitle>{titles[which]}</DialogTitle>
-              <DialogDescription>Changes apply immediately across Desktop and Mobile views.</DialogDescription>
-            </DialogHeader>
-            {which === "property" ? <PropertySettings /> : null}
-            {which === "checklists" ? <ChecklistSettings /> : null}
-            {which === "rules" ? <RulesSettings /> : null}
-          </>
-        ) : null}
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function PropertySettings() {
+/**
+ * Settings shows the property only. Checklists and inspection rules live in the staff app
+ * (EmG38/hotel-hearth-ops has them built in, with no editor), so the dashboard no longer edits them (owner, 2026-11-18).
+ */
+export function PropertySettings() {
   const s = useHms();
   return (
     <div className="settings-body">
@@ -407,101 +388,3 @@ function PropertySettings() {
     </div>
   );
 }
-
-function ChecklistSettings() {
-  const s = useHms();
-  const actor = actorFor(s, "desktop");
-  const [tpl, setTpl] = useState<"departure" | "stayover">("departure");
-  const [label, setLabel] = useState("");
-  const [zone, setZone] = useState<Zone>("FINAL_AUDIT");
-  const list = s.templates[tpl];
-  return (
-    <div className="settings-body">
-      <div className="segmented segmented-inline">
-        {(["departure", "stayover"] as const).map((t) => (
-          <button type="button" key={t} className={cn(tpl === t && "segmented-on")} onClick={() => setTpl(t)}>
-            {t === "departure" ? "Departure / re-clean" : "Stayover"} ({s.templates[t].length})
-          </button>
-        ))}
-      </div>
-      <div className="dialog-table checklist-editor">
-        <div className="dt-row dt-head dt-cl"><span>Item</span><span>Zone</span><span>Required</span><span>Photo</span><span /></div>
-        {list.map((it) => (
-          <div className="dt-row dt-cl" key={it.id}>
-            <span>{it.label}<small className="ar" lang="ar">{it.labelAr}</small></span>
-            <span className="muted">{zoneLabel[it.zone].split(" · ")[1]}</span>
-            <span><Switch checked={it.mandatory} onCheckedChange={(v) => hms.updateChecklistItem(tpl, it.id, { mandatory: v }, actor)} aria-label={`${it.label} required`} /></span>
-            <span><Switch checked={it.photo} onCheckedChange={(v) => hms.updateChecklistItem(tpl, it.id, { photo: v }, actor)} aria-label={`${it.label} photo`} /></span>
-            <span>
-              <Button variant="hmsGhost" size="hmsIcon" aria-label={`Remove ${it.label}`} onClick={() => { hms.removeChecklistItem(tpl, it.id, actor); toast.success("Item removed", { duration: 2000 }); }}>
-                <Trash2 aria-hidden="true" />
-              </Button>
-            </span>
-          </div>
-        ))}
-      </div>
-      <form
-        className="add-item-row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!label.trim()) return;
-          hms.addChecklistItem(tpl, { label: label.trim(), labelAr: label.trim(), zone, mandatory: true, photo: false }, actor);
-          setLabel("");
-          toast.success("Item added", { duration: 2000 });
-        }}
-      >
-        <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="New checklist item" />
-        <select value={zone} onChange={(e) => setZone(e.target.value as Zone)}>
-          {(Object.keys(zoneLabel) as Zone[]).map((z) => <option key={z} value={z}>{zoneLabel[z]}</option>)}
-        </select>
-        <Button type="submit" variant="hmsPrimary" size="hmsMd"><Plus aria-hidden="true" /> Add</Button>
-      </form>
-    </div>
-  );
-}
-
-function RulesSettings() {
-  const s = useHms();
-  const actor = actorFor(s, "desktop");
-  const [draft, setDraft] = useState(s.settings);
-  const changed = JSON.stringify(draft) !== JSON.stringify(s.settings);
-  return (
-    <div className="settings-body form-grid form-grid-2">
-      <label className="switch-row span-2">
-        <span>
-          <b>Supervisor inspection required before READY</b>
-          <small>When off, rooms become READY as soon as they are marked clean.</small>
-        </span>
-        <Switch checked={draft.inspectionRequired} onCheckedChange={(v) => setDraft({ ...draft, inspectionRequired: v })} />
-      </label>
-      <label>
-        Pass score (%)
-        <input type="number" min={50} max={100} value={draft.passScore} onChange={(e) => setDraft({ ...draft, passScore: Number(e.target.value) })} />
-      </label>
-      <label>
-        Queue inspection SLA (min)
-        <input type="number" min={5} max={60} value={draft.queueSlaMin} onChange={(e) => setDraft({ ...draft, queueSlaMin: Number(e.target.value) })} />
-      </label>
-      <label>
-        Attendant target credits
-        <input type="number" min={6} max={24} value={draft.targetCredits} onChange={(e) => setDraft({ ...draft, targetCredits: Number(e.target.value) })} />
-      </label>
-      <DialogFooter className="span-2">
-        <Button variant="hmsGhost" size="hmsMd" disabled={!changed} onClick={() => setDraft(s.settings)}>Discard</Button>
-        <Button
-          variant="hmsPrimary"
-          size="hmsMd"
-          disabled={!changed}
-          onClick={() => {
-            const patch = Object.fromEntries(Object.entries(draft).filter(([k, v]) => s.settings[k as keyof typeof draft] !== v));
-            hms.updateSettings(patch, actor);
-            toast.success("Rules saved", { duration: 2500 });
-          }}
-        >
-          Save rules
-        </Button>
-      </DialogFooter>
-    </div>
-  );
-}
-
