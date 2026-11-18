@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Hero's dark zone recoloured to the sidebar navy gradient · @abdulsalahuddin94-dev
+- **What:** `src/assets/photos/majlis-luxury.jpg` (Live Board welcome hero) edited in place — the dark left third now uses the sidebar's exact navy `#012947` → Gulf blue `#1C82AB` gradient instead of a generic dark overlay, so the banner reads as a continuous extension of the sidebar. Same file name, format and 1920×768 size; no code, layout or colour changes. The rest of the scene (coastal majlis, turquoise water, dhow, orange lantern accents) is untouched.
+- **Why:** Abdul: "ممكن الجزئ الغامق اللي على شمال الصورة يبقى بنفس درجات الأزرق اللي في الـSidebar".
+- **Decisions:** None new.
+- **PR:** —
+
 ## 2026-11-18 · Real Marsa Dhahab emblem replaces the interim mark · @abdulsalahuddin94-dev
 - **What:** `HotelMark` now renders @EmG38's emblem (`src/assets/marsa-dhahab-emblem.png`, transparent 400×275, sent by Abdul) instead of the interim dhow drawing, on the desktop sidebar, desktop sign-in and the staff app badge. Wide emblem is contained, never stretched (`.hotel-mark-img`).
 - **Why:** Abdul: "مش نفس اللوجو"; the first version used a placeholder because the file lived only on Eman's Lovable CDN.
