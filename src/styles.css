@@ -1403,3 +1403,31 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .res-room{justify-items:stretch}.res-room>button,.res-room>span{justify-self:start}
 @media (max-width:1100px){.res-row{grid-template-columns:72px minmax(0,1fr) auto}}
 @media (max-width:767px){.res-row{grid-template-columns:1fr}}
+
+/* Reservations: summary strip + hourly timeline */
+[data-platform="desktop"] .res-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 22px}
+[data-platform="desktop"] .res-summary-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;border:1px solid var(--border);background:var(--card);text-align:start;cursor:pointer;transition:border-color .15s var(--ease),box-shadow .15s var(--ease)}
+[data-platform="desktop"] .res-summary-item:hover{box-shadow:var(--shadow-sm)}
+[data-platform="desktop"] .res-summary-item:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+[data-platform="desktop"] .res-summary-on{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}
+[data-platform="desktop"] .res-summary-icon{display:grid;place-items:center;inline-size:42px;block-size:42px;border-radius:12px;background:var(--muted);color:var(--foreground);flex:none}
+[data-platform="desktop"] .res-summary-icon svg{inline-size:22px;block-size:22px}
+[data-platform="desktop"] .res-summary-alert .res-summary-icon{background:color-mix(in oklab,var(--primary) 18%,transparent)}
+[data-platform="desktop"] .res-summary-text{display:grid;line-height:1.2;min-width:0}
+[data-platform="desktop"] .res-summary-text strong{font-size:24px;font-variant-numeric:tabular-nums}
+[data-platform="desktop"] .res-summary-text span{font-size:14px;font-weight:600}
+[data-platform="desktop"] .res-summary-text small{font-size:12px;color:var(--muted-foreground)}
+[data-platform="desktop"] .res-timeline{position:relative;display:grid;gap:22px;padding-inline-start:28px}
+[data-platform="desktop"] .res-timeline:before{content:"";position:absolute;inset-block:8px;inset-inline-start:7px;inline-size:2px;background:var(--border);border-radius:2px}
+[data-platform="desktop"] .res-hour{position:relative}
+[data-platform="desktop"] .res-hour-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+[data-platform="desktop"] .res-hour-head:before{content:"";position:absolute;inset-inline-start:-27px;top:6px;inline-size:14px;block-size:14px;border-radius:50%;background:var(--card);border:3px solid var(--primary)}
+[data-platform="desktop"] .res-hour-time{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+[data-platform="desktop"] .res-hour-day{font-size:14px;font-weight:600;color:var(--muted-foreground)}
+[data-platform="desktop"] .res-hour-count{margin-inline-start:auto;font-size:12px;color:var(--muted-foreground)}
+[data-platform="desktop"] .res-hour .res-list{display:grid;gap:8px}
+[data-platform="desktop"] .res-hour .res-row{border:1px solid var(--border);border-radius:16px;background:var(--card)}
+[data-platform="desktop"] .res-hour .inline-select select{min-inline-size:230px}
+@media (max-width:1100px){[data-platform="desktop"] .res-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+[data-platform="desktop"] .res-hour .res-row{column-gap:20px}
+[data-platform="desktop"] .res-hour .inline-select select{min-inline-size:0;inline-size:100%}

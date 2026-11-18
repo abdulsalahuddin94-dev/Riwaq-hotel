@@ -135,32 +135,39 @@ function ReservationsContent() {
             </Button>
           </div>
         </div>
-        <div className="users-filters">
-          <div className="segmented segmented-inline" role="radiogroup" aria-label="Show bookings">
-            {(["followup", "today", "upcoming", "closed"] as Tab[]).map((k) => (
+        <div className="res-summary" role="radiogroup" aria-label="Show bookings">
+          {(["followup", "today", "upcoming", "closed"] as Tab[]).map((k) => {
+            const meta = {
+              followup: { label: "Follow up", hint: "Not arrived, call them", icon: Phone },
+              today: { label: "Arriving today", hint: "Expected at the desk", icon: CalendarDays },
+              upcoming: { label: "Upcoming", hint: "Future dates", icon: Clock },
+              closed: { label: "Checked in & closed", hint: "Done or cancelled", icon: CheckCircle2 },
+            }[k];
+            const I = meta.icon;
+            return (
               <button
                 type="button"
                 role="radio"
                 aria-checked={tab === k}
                 key={k}
                 className={cn(
-                  tab === k && "segmented-on",
-                  k === "followup" && counts.followup && "seg-attention",
+                  "res-summary-item",
+                  tab === k && "res-summary-on",
+                  k === "followup" && counts.followup > 0 && "res-summary-alert",
                 )}
                 onClick={() => setTab(k)}
               >
-                {
-                  {
-                    followup: "Follow up",
-                    today: "Arriving today",
-                    upcoming: "Upcoming",
-                    closed: "Checked in & closed",
-                  }[k]
-                }{" "}
-                <span className="fd-tab-count">{counts[k]}</span>
+                <span className="res-summary-icon">
+                  <I aria-hidden="true" />
+                </span>
+                <span className="res-summary-text">
+                  <strong>{counts[k]}</strong>
+                  <span>{meta.label}</span>
+                  <small>{meta.hint}</small>
+                </span>
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
         {list.length === 0 ? (
           <EmptyState
@@ -173,8 +180,18 @@ function ReservationsContent() {
             onAction={() => setNewOpen(true)}
           />
         ) : (
-          <ul className="res-list">
-            {list.map((res) => {
+          <div className="res-timeline">
+            {groupByHour(list).map((g) => (
+              <section key={g.key} className="res-hour" aria-label={g.label}>
+                <header className="res-hour-head">
+                  <span className="res-hour-time">{g.hour}</span>
+                  <span className="res-hour-day">{g.day}</span>
+                  <span className="res-hour-count">
+                    {g.items.length} booking{g.items.length > 1 ? "s" : ""}
+                  </span>
+                </header>
+                <ul className="res-list">
+            {g.items.map((res) => {
               const late = needsFollowUp(s, res);
               const meta = late
                 ? { label: "Not arrived", icon: Phone, className: "req-pending" }
@@ -289,13 +306,33 @@ function ReservationsContent() {
                 </li>
               );
             })}
-          </ul>
+                </ul>
+              </section>
+            ))}
+          </div>
         )}
       </section>
       <NewReservationDialog open={newOpen} onOpenChange={setNewOpen} />
       <FollowUpDialog id={followId} onClose={() => setFollowId(null)} />
     </>
   );
+}
+
+function groupByHour(list: Reservation[]) {
+  const groups: { key: string; hour: string; day: string; label: string; items: Reservation[] }[] =
+    [];
+  for (const r of list) {
+    const hour = `${r.expectedCheckIn.slice(0, 2)}:00`;
+    const key = `${r.arrivalDate} ${hour}`;
+    let g = groups.find((x) => x.key === key);
+    if (!g) {
+      const day = r.arrivalDate === DEMO_DATE ? "Today" : fmtDay(r.arrivalDate);
+      g = { key, hour, day, label: `${day}, ${hour}`, items: [] };
+      groups.push(g);
+    }
+    g.items.push(r);
+  }
+  return groups;
 }
 
 /* ───────────── New reservation ───────────── */

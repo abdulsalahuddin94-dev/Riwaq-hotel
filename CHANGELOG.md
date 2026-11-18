@@ -5,6 +5,9 @@ What changed, **who** changed it, and **why**. Newest first. Every merge into `m
 Entry format:
 
 ```
+## 2026-11-18 · Reservations timeline (@abdulsalahuddin94-dev)
+- Reservations page: filter tabs became a 4-card summary strip; bookings grouped under hourly timeline markers. Presentation only.
+
 ## YYYY-MM-DD · <short title> · @<github-login>
 - **What:** the change, in plain words (screens/files touched).
 - **Why:** the reason or the request behind it. Link a decision if there is one.
