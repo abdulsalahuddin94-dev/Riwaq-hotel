@@ -10,6 +10,24 @@ The working reference for anyone (or any Claude) touching the UI. Three files, o
 
 **When you change a token, a component's look, or add a component: update this file and `DESIGN.md` in the same commit, and add a `CHANGELOG.md` line.**
 
+## 0. Desktop dashboard: Marsa Dhahab design system (2026-11-18)
+The desktop app (`/app/*`, `/login`, room drawer) uses @EmG38's design system from `EmG38/hotel-hearth-ops` (its README tokens and `src/styles.css`; that repo has no separate Design.md). It is applied as one scoped layer at the end of `src/styles.css` ("Marsa Dhahab design system") that remaps the primitive scales, so existing component classes follow. Sections 1–7 below still describe the staff app and the component names.
+
+| Token | Value | Use |
+|---|---|---|
+| primary | `#E99023` orange (`--brass-*` scale remapped) | primary buttons, active nav tile, focus ring. Text on it is navy `#012947` (white is 2.4:1 and fails WCAG). |
+| navy | `#012947` (`--neutral-900`) | text, sidebar top, secondary buttons |
+| sky | `#1C82AB` / soft `#83AEC8` | sidebar gradient end, third accent |
+| surfaces | `#F7F9FB` page · `#FFFFFF` cards · `#EEF3F7` muted · border `#CFDBE6` | |
+| text | `#012947` · variant `#45546B` · subtle `#8F9BAB` | |
+| status | Dirty `#DC2626` · Cleaning `#D97706` · Inspect `#4389B1` · Ready `#0D9488` · OOO `#1E2A3E` · OOS `#9AA6B4` | always with icon + words |
+
+- **Type:** Inter for UI and headings; Arabic falls back to Riwaq Arabic (Thmanyah, local only) then Almarai.
+- **Icons:** Google Material Symbols Rounded (Google Fonts). `src/components/hms/msym.tsx` draws each ligature inside an `<svg>` and keeps the old lucide export names, so desktop files switch by import only. Filled variant for active nav and solid status icons. The staff app still uses lucide.
+- **Sidebar:** navy → sky gradient with soft orange/sand glows; centred hotel mark (64px) and name; each link is a 16px-radius card with a 40px icon tile (orange tile + white-glass card when active).
+- **Shape:** cards 16–20px radius, soft navy-tinted shadows, pill buttons (`--btn-radius: 999px`).
+- **Room drawer:** no checklist; a "Supervisor check" box shows the state the supervisor confirmed on their phone (`.supervisor-check`).
+
 ## 1. Principles
 1. Operate mode: calm, warm, precise. The work leads; ornament is rare.
 2. One signature: the riwaq arch (brand mark + heritage marker). Nothing else decorative.

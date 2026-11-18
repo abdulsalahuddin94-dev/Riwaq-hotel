@@ -210,8 +210,8 @@ export const roomTypeInfo: Record<RoomType, { credits: number; departure: number
 
 /** Fictional property used by the prototype. Launch country and property are OPEN decisions (see docs/decision-log.md). */
 export const property = {
-  name: "Dar Al Majlis",
-  nameAr: "دار المجلس",
+  name: "Marsa Dhahab",
+  nameAr: "مرسى ذهب",
   location: "Heritage District",
   clock: "local time",
 };

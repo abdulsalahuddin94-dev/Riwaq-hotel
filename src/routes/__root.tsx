@@ -81,16 +81,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Dar Al Majlis — Hotel Operations" },
+      { title: "Marsa Dhahab — Hotel Operations" },
       {
         name: "description",
-        content: "Dar Al Majlis hotel operations, powered by Riwaq Systems (رِواق).",
+        content: "Marsa Dhahab hotel operations, powered by Riwaq Systems (رِواق).",
       },
       { name: "author", content: "Riwaq Systems" },
-      { property: "og:title", content: "Dar Al Majlis — Hotel Operations" },
+      { property: "og:title", content: "Marsa Dhahab — Hotel Operations" },
       {
         property: "og:description",
-        content: "Dar Al Majlis hotel operations, powered by Riwaq Systems (رِواق).",
+        content: "Marsa Dhahab hotel operations, powered by Riwaq Systems (رِواق).",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -117,6 +117,10 @@ function RootShell({ children }: { children: ReactNode }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Almarai:wght@300;400;700;800&family=Markazi+Text:wght@400..700&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
           rel="stylesheet"
         />
         <HeadContent />

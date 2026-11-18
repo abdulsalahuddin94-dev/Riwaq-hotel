@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from "lucide-react";
+import { AlertTriangle, ChevronRight, Clock, Crown, Moon, RotateCcw, Zap } from "./msym";
 import { wingLabel, fmtDuration, heritageNotice, type Room, type RoomStatus, statusMeta, taskLabel } from "@/lib/demo-data";
 import { activeMinutes, checklistProgress, displayStatus, type HmsState, staffById, stdMinutes } from "@/lib/hms-store";
 import { useSharedT } from "@/lib/mobile-i18n";

@@ -1,4 +1,9 @@
 ---
+# Desktop dashboard (since 2026-11-18): Marsa Dhahab system from @EmG38/hotel-hearth-ops.
+# desktop: { primary: "#e99023", on-primary: "#012947", navy: "#012947", sky: "#1c82ab", surface: "#f7f9fb",
+#   card: "#ffffff", border: "#cfdbe6", ready: "#0d9488", inspect: "#4389b1", cleaning: "#d97706", dirty: "#dc2626",
+#   ooo: "#1e2a3e", oos: "#9aa6b4", font: Inter, icons: Material Symbols Rounded }
+# The values below are the staff app's (mobile) palette.
 colors:
   plaster: "#f6f1e8"              # page background (juss)
   surface: "#ffffff"
@@ -32,10 +37,12 @@ components: [now-strip, readiness-ribbon, arrivals-timeline, room-tile, status-c
 Operate mode. A calm, warm console that lets the work lead. One signature move: the riwaq arch, used as the brand mark and as the heritage marker. Everything else is restraint.
 
 ## Colors
-Committed shell: deep basalt-brown sidebar (`shell`) with sand type and a brass active marker; content sits on warm plaster with white surfaces. Brass is the single accent (primary buttons, focus, selection). Status colours are functional only and always paired with an icon and a label.
+**Desktop (2026-11-18):** Eman's Marsa Dhahab system. Navy → Gulf-blue gradient sidebar with card-style links and an orange icon tile when active; cool slate page, white cards, orange primary with navy text, status red/amber/blue/teal. See `docs/design-system.md` §0.
+
+**Staff app:** Committed shell: deep basalt-brown sidebar (`shell`) with sand type and a brass active marker; content sits on warm plaster with white surfaces. Brass is the single accent (primary buttons, focus, selection). Status colours are functional only and always paired with an icon and a label.
 
 ## Typography
-System sans for UI, tabular numbers wherever a count or time appears. Cormorant Garamond only for the hotel name and the RIWAQ credit. The hotel («دار المجلس · Dar Al Majlis») is the front brand; Riwaq is "Powered by Riwaq Systems". Thmanyah for Arabic, loaded from the user's machine via `local()`.
+System sans for UI, tabular numbers wherever a count or time appears. Cormorant Garamond only for the hotel name and the RIWAQ credit. The hotel («مرسى ذهب · Marsa Dhahab», since 2026-11-18) is the front brand. Desktop uses Inter and Material Symbols Rounded; Riwaq is "Powered by Riwaq Systems". Thmanyah for Arabic, loaded from the user's machine via `local()`.
 
 ## Layout
 Desktop: sidebar, sticky top bar (title first, date beneath), content. The board opens with the readiness ribbon, then rooms grouped by wing. Mobile: header, scroll area, bottom nav or a 64px footer action.

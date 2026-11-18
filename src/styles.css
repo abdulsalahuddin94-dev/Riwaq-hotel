@@ -1172,3 +1172,89 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .mobile-app .mobile-profile h2{font-size:24px;line-height:1.3}
 .mobile-app .mobile-alert h2{font-size:16px;line-height:1.35}
 .mobile-app .mobile-alert p{font-size:12px;line-height:1.5}
+
+/* ═════════════ Marsa Dhahab design system (desktop dashboard) ═════════════
+   Adopted 2026-11-18 from @EmG38's hotel-hearth-ops (README tokens + src/styles.css):
+   orange primary #E99023, navy #012947, Gulf sky blue #1C82AB, cool slate surfaces,
+   status Dirty red · In progress amber · Clean blue · Ready teal, Inter, Material Symbols Rounded,
+   navy→blue gradient sidebar. Scoped to the desktop app; the staff app is handled separately.
+   The raw scales (--brass-*, --neutral-*, status) are remapped so every existing rule follows. */
+:root:has(.desktop-shell),:root:has(.login-screen),[data-platform="desktop"]{
+  --md-primary:#e99023;--md-primary-container:#fdf0dc;--md-navy:#012947;--md-sky:#1c82ab;--md-sky-soft:#83aec8;--md-sand:#f3dfb8;
+  --brass-50:#fef8ef;--brass-100:#fdf0dc;--brass-200:#fadcb0;--brass-300:#f5c27e;--brass-400:#efa84d;--brass-500:#e99023;--brass-600:#c97814;--brass-700:#a15f10;--brass-800:#7a4810;--brass-900:#5a350d;--brass-950:#3b2208;
+  --neutral-50:#f7f9fb;--neutral-100:#eef3f7;--neutral-200:#cfdbe6;--neutral-300:#aebccb;--neutral-400:#8f9bab;--neutral-500:#6b7a8f;--neutral-600:#45546b;--neutral-700:#2c3e55;--neutral-800:#1a3150;--neutral-900:#012947;--neutral-950:#011a2e;
+  --success-50:#effaf8;--success-100:#ccf0eb;--success-200:#a3e2d9;--success-300:#5cc6b8;--success-500:#0d9488;--success-600:#0b7d73;--success-700:#0a6560;--success-800:#0b4f4b;
+  --warning-50:#fffaeb;--warning-100:#fef3c7;--warning-300:#fcd34d;--warning-500:#d97706;--warning-600:#b45309;--warning-700:#92400e;--warning-800:#78350f;
+  --error-50:#fef2f2;--error-100:#fee2e2;--error-300:#fca5a5;--error-500:#dc2626;--error-600:#b91c1c;--error-700:#991b1b;--error-800:#7f1d1d;
+  --info-50:#f2f8fb;--info-100:#dcebf4;--info-300:#93bfd8;--info-500:#4389b1;--info-700:#2c5f7d;--info-800:#1f4559;
+  --blocked-100:#e5e9ee;--blocked-300:#9aa6b4;--blocked-500:#1e2a3e;--blocked-800:#111a28;
+  --background:#f7f9fb;--foreground:#012947;--card:#fff;--card-foreground:#012947;--popover:#fff;--popover-foreground:#012947;
+  /* Navy text on orange: white on #E99023 is 2.4:1 and fails WCAG 1.4.3; navy is 6.2:1. */
+  --primary:#e99023;--primary-foreground:#012947;--primary-hover:#d9801a;--primary-press:#c97814;
+  --secondary:#012947;--secondary-foreground:#fff;--muted:#eef3f7;--muted-foreground:#45546b;--accent:#fdf0dc;--accent-foreground:#012947;
+  --destructive:#dc2626;--destructive-foreground:#fff;--border:#cfdbe6;--input:#cfdbe6;--ring:#e99023;
+  --sidebar:#012947;--sidebar-foreground:#fff;--sidebar-accent:rgb(255 255 255 / .12);--sidebar-accent-foreground:#fff;
+  --r-2xl:24px;--r-xl:20px;--r-lg:16px;--r-md:12px;--r-sm:10px;
+  --hairline:0 0 0 1px #cfdbe6;
+  --lift-1:0 1px 2px rgb(20 35 63 / .04),0 4px 12px rgb(20 35 63 / .06);
+  --lift-2:0 2px 4px rgb(20 35 63 / .05),0 12px 32px rgb(20 35 63 / .1);
+  --shadow-sm:0 1px 2px rgb(20 35 63 / .04);--shadow-md:0 1px 2px rgb(20 35 63 / .04),0 4px 12px rgb(20 35 63 / .06);--shadow-lg:0 2px 4px rgb(20 35 63 / .05),0 12px 32px rgb(20 35 63 / .1);
+  --frost:rgb(255 255 255 / .86);
+  --font-sans:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Riwaq Arabic","Riwaq Arabic Files","Almarai",sans-serif;
+  --font-brand:"Inter",ui-sans-serif,system-ui,sans-serif;
+}
+[data-platform="desktop"]{--btn-radius:999px}
+.desktop-shell,.login-screen,.room-drawer,:root:has(.desktop-shell) body{font-family:var(--font-sans);color:#012947}
+.desktop-shell :is(h1,h2,h3,h4){font-family:var(--font-sans);letter-spacing:-.02em}
+
+/* Material Symbols drawn inside svg boxes (msym.tsx) */
+.msym{overflow:hidden;flex:0 0 auto}
+.msym-glyph{font-family:"Material Symbols Rounded";font-size:24px;font-weight:400;font-feature-settings:"liga";-webkit-font-feature-settings:"liga";letter-spacing:normal;text-transform:none}
+
+/* Sidebar: navy → Gulf blue gradient with soft glows, card-style links (Eman's AppShell) */
+.desktop-shell .desktop-sidebar{overflow:hidden;background:linear-gradient(180deg,#012947 0%,#012947 45%,#1c82ab 100%);backdrop-filter:none;color:#fff;box-shadow:none}
+.desktop-shell .desktop-sidebar::before{content:"";pointer-events:none;position:absolute;bottom:-96px;left:-64px;width:288px;height:288px;border-radius:50%;background:rgb(233 144 35 / .3);filter:blur(64px)}
+.desktop-shell .desktop-sidebar::after{content:"";pointer-events:none;position:absolute;top:-80px;right:-40%;width:224px;height:224px;border-radius:50%;background:rgb(243 223 184 / .2);filter:blur(64px)}
+.desktop-shell .desktop-sidebar>*{position:relative;z-index:1}
+.desktop-shell .desktop-sidebar{width:272px}.desktop-shell .desktop-sidebar.desktop-sidebar-collapsed{width:80px}
+.desktop-shell .sidebar-brand{height:auto;flex-direction:column;justify-content:center;gap:10px;padding:24px 16px 8px;text-align:center;border-bottom:0}
+.desktop-shell .sidebar-brand .sidebar-mark{width:64px;height:64px;filter:drop-shadow(0 6px 12px rgb(0 0 0 / .25))}
+.desktop-shell .desktop-sidebar-collapsed .sidebar-brand .sidebar-mark{width:44px;height:44px}
+.desktop-shell .sidebar-brand div{min-width:0;justify-items:center;gap:4px}
+.desktop-shell .sidebar-brand strong{display:grid;gap:2px;font-family:var(--font-sans);font-size:16px;font-weight:600;letter-spacing:.02em;color:#fff;line-height:1.2}
+.desktop-shell .sidebar-brand strong [lang="ar"]{font-family:var(--font-brand-ar);font-size:20px;font-weight:700;color:#f5c27e}
+.desktop-shell .sidebar-brand span{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgb(255 255 255 / .7)}
+.desktop-shell .sidebar-nav{gap:6px;padding:16px 12px;overflow-y:auto}
+.desktop-shell .sidebar-link{height:auto;min-height:52px;gap:12px;padding:6px 8px;border:1px solid transparent;border-radius:16px;color:rgb(255 255 255 / .82);font-weight:600;font-size:14px;transform:none;transition:background 150ms var(--ease),border-color 150ms var(--ease)}
+.desktop-shell .sidebar-link:hover{background:rgb(255 255 255 / .1);color:#fff;transform:none}
+.desktop-shell .sidebar-link-icon{display:grid;place-items:center;width:40px;height:40px;flex:0 0 auto;border-radius:12px;background:rgb(255 255 255 / .15)}
+.desktop-shell .sidebar-link-icon svg{width:22px;height:22px;color:#fff}
+.desktop-shell .sidebar-link-active,.desktop-shell .sidebar-link-active:hover{background:rgb(255 255 255 / .2);border-color:rgb(255 255 255 / .4);color:#fff;box-shadow:0 10px 24px rgb(0 0 0 / .18);backdrop-filter:blur(8px)}
+.desktop-shell .sidebar-link-active::before{display:none}
+.desktop-shell .sidebar-link-active .sidebar-link-icon{background:#e99023}
+.desktop-shell .sidebar-link-active .sidebar-link-icon svg{color:#012947}
+.desktop-shell .desktop-sidebar-collapsed .sidebar-link{justify-content:center;padding:6px}
+.desktop-shell .sidebar-link .nav-count{margin-inline-start:auto;background:#dc2626;color:#fff}
+.desktop-shell .sidebar-collapse{margin:auto 12px 10px;border-radius:999px;color:rgb(255 255 255 / .8)!important}
+.desktop-shell .sidebar-collapse:hover{background:rgb(255 255 255 / .1)!important;color:#fff!important}
+.desktop-shell .sidebar-property{margin:0 12px 18px;border:1px solid rgb(255 255 255 / .18);border-radius:16px;background:rgb(255 255 255 / .1);box-shadow:none}
+.desktop-shell .sidebar-property strong{color:#fff}.desktop-shell .sidebar-property span,.desktop-shell .sidebar-property small{color:rgb(255 255 255 / .7)}
+.desktop-shell .sidebar-close{color:#fff!important}
+.desktop-shell .desktop-sidebar :focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* Surfaces: white cards on cool slate, 16–20px radius, soft shadow, pill controls */
+.desktop-shell .desktop-topbar{background:rgb(255 255 255 / .9);box-shadow:0 1px 0 #cfdbe6}
+
+/* Room drawer: supervisor-confirmed state replaces the attendant checklist (2026-11-18) */
+.supervisor-check{display:flex;gap:12px;align-items:flex-start;margin:0 0 14px;padding:14px 16px;border:1px solid var(--border);border-radius:16px;background:var(--card)}
+.supervisor-check>svg{width:24px;height:24px;margin-top:2px}
+.supervisor-check div{display:grid;gap:2px}
+.supervisor-check-eyebrow{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground)}
+.supervisor-check strong{font-size:15px}
+.supervisor-check p{margin:0;font-size:13px;color:var(--muted-foreground)}
+.supervisor-check-pass{border-color:var(--success-200);background:var(--success-50)}.supervisor-check-pass>svg{color:var(--success-600)}
+.supervisor-check-fail{border-color:var(--error-300);background:var(--error-50)}.supervisor-check-fail>svg{color:var(--error-600)}
+.supervisor-check-pending{background:var(--neutral-100)}.supervisor-check-pending>svg{color:var(--neutral-500)}
+.room-drawer[data-platform="desktop"]{background:#f7f9fb!important;box-shadow:0 2px 4px rgb(20 35 63 / .05),0 24px 64px rgb(20 35 63 / .18)!important}
+.login-screen .login-submit{border-radius:999px!important;background:#e99023!important;color:#012947!important;box-shadow:0 10px 30px rgb(233 144 35 / .35)}
+.login-screen .login-submit:hover{background:#d9801a!important}

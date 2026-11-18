@@ -16,7 +16,7 @@ import {
   Wrench,
   X,
   Zap,
-} from "lucide-react";
+} from "./msym";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { wingLabel, wingShort, fmtDuration, fmtTime, personaStaff, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";

@@ -53,7 +53,7 @@ Sidebar order as in `desktop-shell.tsx`. Personas: Manager, Front Desk, Admin (s
 | `/app/settings` | Settings (`SettingsPage`) | Admin | Property rules: inspection required, pass score, queue-guest SLA, P1 accept time, DND welfare hours, attendant credit target. |
 | `/login` | Desktop sign-in (`DesktopLoginPage`) | All | Split screen: courtyard illustration + night form (no real auth). |
 
-**Overlays on desktop** (not URLs): Room drawer (`room-drawer.tsx`), Queue guest, Work order, New work order, Staff day, Event log, Report preview, Settings dialogs (`desktop-dialogs.tsx`), Account menu (account switch, restore sample data).
+**Overlays on desktop** (not URLs): Room drawer (`room-drawer.tsx`: readiness, supervisor-confirmed state, facts, actions, Supervisor checks + Timeline tabs; no attendant checklist since 2026-11-18), Queue guest, Work order, New work order, Staff day, Event log, Report preview, Settings dialogs (`desktop-dialogs.tsx`), Account menu (account switch, restore sample data).
 
 ## Phone app (`/m/*`)
 Shown inside a generic Android phone frame (shared hotel devices). Bottom tab dock depends on persona (`mobile-shell.tsx`): Attendant = Rooms · Alerts · Me; Supervisor = Inspect · Wings · Alerts · Me; Engineer = Jobs · Alerts · Me. Language: English default, Arabic RTL via the EN / ع switch (one language per screen).
