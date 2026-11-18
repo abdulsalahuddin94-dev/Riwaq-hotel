@@ -1,4 +1,4 @@
-import { BedDouble, BedSingle, Building2, Crown, Landmark, Trees } from "./msym";
+import { BedDouble, Building2, Crown, Landmark } from "./msym";
 import { SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { taskLabel, wingLabel, type Room, type RoomStatus, type RoomType } from "@/lib/demo-data";
 import { RoomBadges } from "./room-components";
@@ -7,9 +7,8 @@ import { taskIcon } from "./illustrations";
 import { wingPhotos } from "./wing-photos";
 
 const roomTypeIcons: Record<RoomType, typeof BedDouble> = {
-  "Heritage Room": Landmark,
-  "Twin Room": BedSingle,
-  "Courtyard Room": Trees,
+  Standard: BedDouble,
+  Deluxe: Landmark,
   Suite: Crown,
 };
 

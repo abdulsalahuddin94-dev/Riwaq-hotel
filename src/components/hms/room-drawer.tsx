@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { AlertTriangle, CheckCircle2, ClipboardCheck, Clock, LogIn, LogOut, RotateCcw, ShieldCheck, UserRoundCog, Wrench, XCircle, Zap } from "./msym";
+import { AlertTriangle, CheckCircle2, ClipboardCheck, Clock, LogIn, LogOut, RotateCcw, Send, ShieldCheck, UserRoundCog, XCircle, Zap } from "./msym";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { fmtDuration, fmtTime, hkLabel, inspectionPoints } from "@/lib/demo-data";
+import { fmtDuration, fmtTime, guestRequestLabel, hkLabel, inspectionPoints } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
@@ -20,7 +20,7 @@ import {
   useHms,
 } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
-import { QueueGuestDialog, WorkOrderDialog } from "./desktop-dialogs";
+import { QueueGuestDialog, SendRequestDialog } from "./desktop-dialogs";
 import { HeritageNotice } from "./room-components";
 import { RoomDrawerHeader } from "./room-drawer-header";
 
@@ -38,7 +38,7 @@ function RoomDrawerBody({ number }: { number: string }) {
   const s = useHms();
   const room = s.rooms.find((r) => r.number === number);
   const [queueOpen, setQueueOpen] = useState(false);
-  const [woOpen, setWoOpen] = useState<string | null>(null);
+  const [requestOpen, setRequestOpen] = useState(false);
   if (!room) return null;
   const actor = actorFor(s, "desktop");
   const persona = s.desktopPersona;
@@ -48,10 +48,12 @@ function RoomDrawerBody({ number }: { number: string }) {
   const events = roomEvents(s, number).slice().reverse();
   const inspection = lastInspection(room);
   const minutes = activeMinutes(s, room);
-  const openWo = s.workOrders.find((w) => w.room === number && w.state !== "VERIFIED");
-  const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
+  const attendants = s.staff.filter((p) => p.active !== false && p.role === "ATTENDANT");
   const isManager = persona === "Manager" || persona === "Admin";
   const isFrontDesk = persona === "Front Desk" || persona === "Manager";
+  /** Reception sees the confirmed state only; details stay with the floor supervisor (owner, 2026-11-18). */
+  const lite = persona === "Front Desk";
+  const openRequests = s.requests.filter((q) => q.room === number && (q.status === "pending" || q.status === "acknowledged"));
 
   return (
     <div className="drawer-body">
@@ -68,8 +70,17 @@ function RoomDrawerBody({ number }: { number: string }) {
 
       <SupervisorCheck inspection={inspection} by={inspection ? staffName(s, inspection.by) : ""} hk={hkLabel[room.hk]} />
 
-      <HeritageNotice room={room} compact />
+      {lite ? null : <HeritageNotice room={room} compact />}
 
+      {lite ? (
+        <dl className="fact-grid">
+          <div><dt>Occupancy</dt><dd>{room.occupancy === "OCCUPIED" ? `Occupied${room.guest ? ` · ${room.guest}` : ""}` : "Vacant"}</dd></div>
+          {room.arrival ? <div><dt>Arrival</dt><dd>{room.arrival.guest} · {room.arrival.eta}</dd></div> : null}
+          {openRequests.map((q) => (
+            <div key={q.id}><dt>Request</dt><dd>{guestRequestLabel[q.type]} · {q.status === "pending" ? "sent" : "on the way"}</dd></div>
+          ))}
+        </dl>
+      ) : (
       <dl className="fact-grid">
         <div><dt>Occupancy</dt><dd>{room.occupancy === "OCCUPIED" ? `Occupied${room.guest ? ` · ${room.guest}` : ""}` : "Vacant"}</dd></div>
         <div><dt>Housekeeping</dt><dd>{hkLabel[room.hk]}{room.pauseReason ? ` · ${room.pauseReason}` : ""}</dd></div>
@@ -80,6 +91,7 @@ function RoomDrawerBody({ number }: { number: string }) {
         {room.arrival ? <div><dt>Arrival</dt><dd>{room.arrival.guest} · {room.arrival.eta}</dd></div> : null}
         {room.note ? <div><dt>Note</dt><dd>{room.note}</dd></div> : null}
       </dl>
+      )}
 
       {room.anomalies.length && persona !== "Front Desk" ? (
         <div className="anomaly-box">
@@ -109,6 +121,11 @@ function RoomDrawerBody({ number }: { number: string }) {
             <Zap aria-hidden="true" /> Queue guest
           </Button>
         ) : null}
+        {isFrontDesk && !room.block ? (
+          <Button variant="hmsGhost" size="hmsMd" onClick={() => setRequestOpen(true)}>
+            <Send aria-hidden="true" /> Send request
+          </Button>
+        ) : null}
         {room.queue && isFrontDesk ? (
           <Button variant="hmsGhost" size="hmsMd" onClick={() => { hms.clearQueue(number, actor); toast.success("Queue cleared", { duration: 2500 }); }}>
             Clear queue
@@ -127,11 +144,6 @@ function RoomDrawerBody({ number }: { number: string }) {
         {room.dnd && isManager ? (
           <Button variant="hmsGhost" size="hmsMd" onClick={() => { hms.clearDnd(number, actor, "DND cleared by manager"); toast.success("DND cleared", { duration: 2500 }); }}>
             Clear DND
-          </Button>
-        ) : null}
-        {openWo ? (
-          <Button variant="hmsGhost" size="hmsMd" onClick={() => setWoOpen(openWo.id)}>
-            <Wrench aria-hidden="true" /> {openWo.id}
           </Button>
         ) : null}
         {isManager && !room.block ? (
@@ -154,6 +166,7 @@ function RoomDrawerBody({ number }: { number: string }) {
         ) : null}
       </div>
 
+      {lite ? null : (
       <Tabs defaultValue="inspection" className="drawer-tabs">
         <TabsList>
           <TabsTrigger value="inspection">Supervisor checks ({room.inspections.length})</TabsTrigger>
@@ -200,9 +213,10 @@ function RoomDrawerBody({ number }: { number: string }) {
             ))}
         </TabsContent>
       </Tabs>
+      )}
 
       <QueueGuestDialog open={queueOpen} onOpenChange={setQueueOpen} defaultRoom={number} />
-      <WorkOrderDialog id={woOpen} onClose={() => setWoOpen(null)} />
+      <SendRequestDialog open={requestOpen} onOpenChange={setRequestOpen} defaultRoom={number} />
     </div>
   );
 }

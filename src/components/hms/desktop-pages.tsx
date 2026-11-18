@@ -6,6 +6,9 @@ import {
   CalendarDays,
   CheckCircle2,
   ClipboardList,
+  Clock,
+  Footprints,
+  Send,
   Filter,
   Moon,
   Plus,
@@ -19,7 +22,7 @@ import {
 } from "./msym";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { wingLabel, wingShort, fmtDuration, fmtTime, personaStaff, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
+import { wingLabel, wingShort, fmtDuration, fmtTime, type GuestRequest, guestRequestLabel, personaStaff, property, type Room, type RoomStatus, statusMeta } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
@@ -39,18 +42,16 @@ import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
 import {
   EventLogDialog,
-  NewWorkOrderDialog,
   QueueGuestDialog,
+  SendRequestDialog,
   SettingsDialog,
   type SettingsKey,
   StaffDayDialog,
-  WorkOrderDialog,
 } from "./desktop-dialogs";
 import { DesktopShell, useDesktop } from "./desktop-shell";
 import { FloorBoard, RoomBadges, statusClass } from "./room-components";
 import { ReportsContent } from "./reports-page";
-import { EscalationAction, NowStrip } from "./now-strip";
-import { ArrivalsTimeline } from "./arrivals-timeline";
+import { NotificationBell } from "./notifications";
 import { StatusChip } from "./status";
 import { photos } from "./illustrations";
 
@@ -104,6 +105,7 @@ function WelcomeHero() {
         </svg>
         <div><CheckCircle2 aria-hidden="true" /><strong>{pct}%</strong><small>{ready} of {sellable.length} rooms ready</small></div>
       </div>
+      <NotificationBell onPhoto />
     </section>
   );
 }
@@ -121,7 +123,6 @@ export function BoardPage() {
 function BoardContent() {
   const s = useHms();
   const { openRoom } = useDesktop();
-  const navigate = useNavigate();
   const [showFilters, setShowFilters] = useState(false);
   const [statuses, setStatuses] = useState<RoomStatus[]>([]);
   const [floor, setFloor] = useState("all");
@@ -145,12 +146,11 @@ function BoardContent() {
     setFlag("none");
   };
   const recent = s.events.slice(-5).reverse();
-  const staff = s.staff.filter((p) => p.role === "ATTENDANT");
+  const staff = s.staff.filter((p) => p.active !== false && p.role === "ATTENDANT");
 
   return (
     <>
       <WelcomeHero />
-      <NowStrip />
 
       <section className="readiness-ribbon" aria-label="Room status summary">
         {(() => {
@@ -189,22 +189,10 @@ function BoardContent() {
       <div className="board-workspace">
         <section className="board-panel board-panel-ops">
           <div className="section-heading">
-            <div><h2>Rooms by wing</h2><p>Open a room for who did what, the checklist and inspection.</p></div>
+            <div><h2>Rooms by wing</h2><p>Open a room for its status, who cleaned it and the supervisor's check.</p></div>
             <div className="toolbar-actions">
               <Button variant={showFilters || activeFilters ? "hmsSecondary" : "hmsGhost"} size="hmsMd" onClick={() => setShowFilters((v) => !v)} aria-expanded={showFilters}>
                 <Filter aria-hidden="true" /> Filters{activeFilters ? ` · ${activeFilters}` : ""}
-              </Button>
-              <Button
-                variant="hmsPrimary"
-                size="hmsMd"
-                onClick={() => {
-                  const n = hms.autoAssign(actorFor(s, "desktop"));
-                  if (n) {
-                    toast.success(`${n} unassigned rooms auto-assigned by wing & credits`, { duration: 4000, action: { label: "Review", onClick: () => void navigate({ to: "/app/assign" }) } });
-                  } else toast.info("Every active room already has an attendant", { duration: 3000 });
-                }}
-              >
-                <Sparkles aria-hidden="true" /> Auto-assign
               </Button>
             </div>
           </div>
@@ -278,8 +266,9 @@ function TeamContent() {
   const { openRoom } = useDesktop();
   const navigate = useNavigate();
   const [staffId, setStaffId] = useState<string | null>(null);
-  const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
-  const supervisors = s.staff.filter((p) => p.role === "SUPERVISOR");
+  const attendants = s.staff.filter((p) => p.active !== false && p.role === "ATTENDANT");
+  const supervisors = s.staff.filter((p) => p.active !== false && p.role === "SUPERVISOR");
+  const signals = s.rooms.filter((r) => r.anomalies.length);
   return (
     <>
       <section className="content-panel">
@@ -319,7 +308,7 @@ function TeamContent() {
             return (
               <article key={p.id}>
                 <div className="staff-cell"><i>{p.initials}</i><b>{p.name}</b></div>
-                <p>Floors {(p.floors ?? []).join(", ")}</p>
+                <p>{(p.floors ?? []).map(wingShort).join(" · ")}</p>
                 <div className="mini-kpis">
                   <div><strong>{done.length}</strong><span>Inspected</span></div>
                   <div><strong>{done.filter((i) => i.result === "FAILED").length}</strong><span>Rejected</span></div>
@@ -334,6 +323,20 @@ function TeamContent() {
             );
           })}
         </div>
+      </section>
+      <section className="content-panel mt-5">
+        <div className="section-heading"><div><h2>Accountability signals</h2><p>Raised automatically when a room looks too fast or bulk-ticked. Never blocks the attendant; review with them.</p></div></div>
+        {signals.length === 0 ? <EmptyState title="No signals today" /> : (
+          <div className="signal-list">
+            {signals.map((r) => (
+              <button type="button" key={r.number} onClick={() => openRoom(r.number)}>
+                <AlertTriangle aria-hidden="true" />
+                <div><strong>Room {r.number} · {staffName(s, r.attendant)}</strong><span>{r.anomalies.map((a) => anomalyLabel[a]).join(" · ")}</span></div>
+                <span>{fmtDuration(activeMinutes(s, r))} vs std {stdMinutes(r)} min · {checklistProgress(s, r).done}/{checklistProgress(s, r).total} items</span>
+              </button>
+            ))}
+          </div>
+        )}
       </section>
       <StaffDayDialog staffId={staffId} onClose={() => setStaffId(null)} onOpenRoom={openRoom} />
     </>
@@ -356,7 +359,7 @@ function AssignContent() {
   const actor = actorFor(s, "desktop");
   const [selected, setSelected] = useState<string | null>(null);
   const [over, setOver] = useState<string | null>(null);
-  const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
+  const attendants = s.staff.filter((p) => p.active !== false && p.role === "ATTENDANT");
   const active = (r: Room) => !r.block && !(r.hk === "INSPECTED" && r.occupancy === "VACANT") && !(r.hk === "INSPECTED" && r.taskType === "STAYOVER");
   const unassigned = s.rooms.filter((r) => !r.attendant && active(r));
   const move = (number: string, to: string | null) => {
@@ -461,20 +464,29 @@ export function ReportsPage() {
 
 export function FrontDeskPage() {
   return (
-    <DesktopShell title="Front Desk Board" eyebrow="Internal readiness · PMS sync not connected">
+    <DesktopShell title="Front Desk" eyebrow="Room status confirmed by housekeeping · send requests to the floor supervisor">
       <FrontDeskContent />
     </DesktopShell>
   );
 }
 
+const REQUEST_STATE: Record<GuestRequest["status"], { label: string; icon: typeof Clock; className: string }> = {
+  pending: { label: "Sent", icon: Clock, className: "req-pending" },
+  acknowledged: { label: "On the way", icon: Footprints, className: "req-ack" },
+  completed: { label: "Done", icon: CheckCircle2, className: "req-done" },
+  cancelled: { label: "Cancelled", icon: X, className: "req-cancelled" },
+};
+
+/** Reception needs one answer per room: can I give it to a guest? Details (checklist, timings, signals) stay with the supervisor. */
 function FrontDeskContent() {
   const s = useHms();
   const { openRoom } = useDesktop();
+  const actor = actorFor(s, "desktop");
   const [filter, setFilter] = useState<"ready" | "notready" | "arrivals" | "occupied" | "all">("ready");
   const [query, setQuery] = useState("");
   const [queueOpen, setQueueOpen] = useState(false);
+  const [requestOpen, setRequestOpen] = useState(false);
   const now = demoNow(s);
-  const ready = s.rooms.filter((r) => isReady(s, r));
   const queued = s.rooms.filter((r) => r.queue);
   const list = s.rooms.filter((r) => {
     if (query && !r.number.includes(query.trim())) return false;
@@ -485,190 +497,98 @@ function FrontDeskContent() {
     return true;
   });
   const counts = {
-    ready: ready.length,
+    ready: s.rooms.filter((r) => isReady(s, r)).length,
     notready: s.rooms.filter((r) => !isReady(s, r) && r.occupancy === "VACANT").length,
     arrivals: s.rooms.filter((r) => r.arrival).length,
     occupied: s.rooms.filter((r) => r.occupancy === "OCCUPIED").length,
     all: s.rooms.length,
   };
-  const eta = (r: Room) => {
-    const st = displayStatus(r, s.settings);
-    if (st === "CLEANING") return `~${Math.max(1, stdMinutes(r) - (activeMinutes(s, r) ?? 0)) + (s.settings.inspectionRequired ? 10 : 0)} min`;
-    if (st === "AWAITING_INSPECTION") return "~10 min";
-    return null;
-  };
+  const requests = s.requests.filter((q) => q.status !== "cancelled" && (q.status !== "completed" || (q.completedAt ?? 0) >= now - 120));
   return (
     <>
-
-      {queued.length ? (
-        <section className="content-panel queue-panel">
-          <div className="section-heading"><div><h2>Guests waiting</h2><p>Queued rooms jump to #1 for the attendant; you'll be notified when READY.</p></div></div>
-          <div className="queue-list">
-            {queued.map((r) => (
-              <button type="button" key={r.number} onClick={() => openRoom(r.number)}>
-                <Zap aria-hidden="true" />
-                <div><strong>{r.queue?.guest}</strong><span>Room {r.number} · waiting {Math.max(0, now - (r.queue?.at ?? now))} min</span></div>
-                <StatusChip status={displayStatus(r, s.settings)} />
+      <div className="fd-layout">
+        <section className="content-panel">
+          <div className="section-heading">
+            <div><h2>Rooms</h2><p><strong>{counts.ready}</strong> ready for check-in · {counts.notready} vacant, not ready yet · {counts.occupied} occupied</p></div>
+            <div className="toolbar-actions">
+              <label className="room-search fd-search"><Search aria-hidden="true" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Room #" inputMode="numeric" aria-label="Find a room" /></label>
+              <Button variant="hmsSecondary" size="hmsMd" onClick={() => setQueueOpen(true)}><Zap aria-hidden="true" /> Guest waiting</Button>
+            </div>
+          </div>
+          <div className="segmented segmented-inline fd-tabs" role="radiogroup" aria-label="Show rooms">
+            {(["ready", "notready", "arrivals", "occupied", "all"] as const).map((k) => (
+              <button type="button" role="radio" aria-checked={filter === k} key={k} className={cn(filter === k && "segmented-on")} onClick={() => setFilter(k)}>
+                {{ ready: "Ready", notready: "Not ready", arrivals: "Arrivals", occupied: "Occupied", all: "All" }[k]} <span className="fd-tab-count">{counts[k]}</span>
               </button>
             ))}
           </div>
+          {list.length === 0 ? (
+            <EmptyState title="No rooms in this view" action="Show all rooms" onAction={() => { setFilter("all"); setQuery(""); }} />
+          ) : (
+            <div className="frontdesk-grid">
+              {list.map((room) => {
+                const st = displayStatus(room, s.settings);
+                return (
+                  <button type="button" key={room.number} className={cn("fd-tile", isReady(s, room) && "fd-tile-ready")} onClick={() => openRoom(room.number)}>
+                    <strong><bdi>{room.number}</bdi>{room.queue ? <Zap aria-label="Guest waiting" className="fd-tile-queue" /> : null}</strong>
+                    <span>{room.type} · {wingShort(room.floor)}</span>
+                    <StatusChip status={st} />
+                    {room.arrival ? <small className="fd-guest">{room.arrival.guest} · {room.arrival.eta}</small> : room.guest ? <small className="fd-guest">{room.guest}</small> : null}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </section>
-      ) : null}
 
-      <ArrivalsTimeline s={s} onOpen={openRoom} />
-
-      <section className="content-panel">
-        <div className="section-heading">
-          <div><h2>Rooms</h2><p><strong>{counts.ready}</strong> ready for check-in (internal) · {counts.notready} vacant but not ready · {counts.occupied} occupied. Open a room to check in, check out or see why it isn&apos;t ready.</p></div>
-          <div className="toolbar-actions">
-            <label className="room-search fd-search"><Search aria-hidden="true" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Room #" inputMode="numeric" /></label>
-            <Button variant="hmsPrimary" size="hmsMd" onClick={() => setQueueOpen(true)}><Plus aria-hidden="true" /> Queue guest</Button>
-          </div>
-        </div>
-        <div className="segmented segmented-inline fd-tabs" role="radiogroup" aria-label="Show rooms">
-          {(["ready", "notready", "arrivals", "occupied", "all"] as const).map((k) => (
-            <button type="button" role="radio" aria-checked={filter === k} key={k} className={cn(filter === k && "segmented-on")} onClick={() => setFilter(k)}>
-              {{ ready: "Ready", notready: "Not ready", arrivals: "Arrivals", occupied: "Occupied", all: "All" }[k]} <span className="fd-tab-count">{counts[k]}</span>
-            </button>
-          ))}
-        </div>
-        {list.length === 0 ? (
-          <EmptyState title="No rooms in this view" action="Show all rooms" onAction={() => { setFilter("all"); setQuery(""); }} />
-        ) : (
-          <div className="frontdesk-grid">
-            {list.map((room) => {
-              const st = displayStatus(room, s.settings);
-              const e = eta(room);
-              return (
-                <button type="button" key={room.number} className={cn("fd-tile", isReady(s, room) && "fd-tile-ready")} onClick={() => openRoom(room.number)}>
-                  <strong><bdi>{room.number}</bdi></strong>
-                  <span>{room.type} · {wingShort(room.floor)}</span>
-                  <StatusChip status={st} />
-                  {e ? <small>Ready in {e}</small> : null}
-                  {room.arrival ? <small className="fd-guest">{room.arrival.guest} · {room.arrival.eta}</small> : room.guest ? <small className="fd-guest">{room.guest}</small> : null}
-                  <RoomBadges room={room} showAnomaly={false} max={2} />
-                </button>
-              );
-            })}
-          </div>
-        )}
-      </section>
+        <aside className="fd-side">
+          {queued.length ? (
+            <section className="content-panel queue-panel">
+              <div className="section-heading"><div><h2>Guests waiting</h2><p>Their room is cleaned first. The bell tells you when it's ready.</p></div></div>
+              <div className="queue-list">
+                {queued.map((r) => (
+                  <button type="button" key={r.number} onClick={() => openRoom(r.number)}>
+                    <Zap aria-hidden="true" />
+                    <div><strong>{r.queue?.guest}</strong><span>Room {r.number} · waiting {Math.max(0, now - (r.queue?.at ?? now))} min</span></div>
+                    <StatusChip status={displayStatus(r, s.settings)} />
+                  </button>
+                ))}
+              </div>
+            </section>
+          ) : null}
+          <section className="content-panel">
+            <div className="section-heading">
+              <div><h2>Requests to housekeeping</h2><p>Sent to the floor supervisor's phone.</p></div>
+              <Button variant="hmsPrimary" size="hmsMd" onClick={() => setRequestOpen(true)}><Send aria-hidden="true" /> New request</Button>
+            </div>
+            {requests.length === 0 ? (
+              <EmptyState title="No requests today" action="New request" onAction={() => setRequestOpen(true)} />
+            ) : (
+              <ul className="request-list">
+                {requests.map((q) => {
+                  const meta = REQUEST_STATE[q.status];
+                  const Icon = meta.icon;
+                  return (
+                    <li key={q.id}>
+                      <button type="button" className="link-btn request-room" onClick={() => openRoom(q.room)}>{q.room}</button>
+                      <div>
+                        <strong>{guestRequestLabel[q.type]}{q.urgent ? " · guest waiting" : ""}</strong>
+                        <span>{q.note ? `${q.note} · ` : ""}{staffName(s, q.assignedTo)} · {fmtTime(q.requestedAt)}</span>
+                      </div>
+                      <span className={cn("request-state", meta.className)}><Icon aria-hidden="true" /> {meta.label}</span>
+                      {q.status === "pending" ? (
+                        <Button variant="hmsGhost" size="hmsSm" onClick={() => { hms.setRequestStatus(q.id, "cancelled", actor); toast.success("Request cancelled", { duration: 2000 }); }}>Cancel</Button>
+                      ) : <span />}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        </aside>
+      </div>
       <QueueGuestDialog open={queueOpen} onOpenChange={setQueueOpen} />
-    </>
-  );
-}
-
-/* ───────────────────────── Work orders ───────────────────────── */
-
-export function WorkOrdersPage() {
-  return (
-    <DesktopShell title="Work Orders" eyebrow="Maintenance and room blocks">
-      <WorkOrdersContent />
-    </DesktopShell>
-  );
-}
-
-function WorkOrdersContent() {
-  const s = useHms();
-  const { openRoom } = useDesktop();
-  const [tab, setTab] = useState<"open" | "resolved" | "all">("open");
-  const [openId, setOpenId] = useState<string | null>(null);
-  const [newOpen, setNewOpen] = useState(false);
-  const now = demoNow(s);
-  const list = s.workOrders.filter((w) => (tab === "open" ? ["OPEN", "ACCEPTED", "IN_PROGRESS"].includes(w.state) : tab === "resolved" ? ["RESOLVED", "VERIFIED"].includes(w.state) : true));
-  return (
-    <>
-      <section className="content-panel">
-        <div className="section-heading">
-          <div><h2>Work orders</h2><p>P1 work orders keep the room Out of Order until a supervisor verifies the fix.</p></div>
-          <div className="toolbar-actions">
-            <div className="segmented segmented-inline">
-              {(["open", "resolved", "all"] as const).map((t) => (
-                <button type="button" key={t} className={cn(tab === t && "segmented-on")} onClick={() => setTab(t)}>{t[0]?.toUpperCase()}{t.slice(1)}</button>
-              ))}
-            </div>
-            <Button variant="hmsPrimary" size="hmsLg" onClick={() => setNewOpen(true)}><Plus aria-hidden="true" /> New work order</Button>
-          </div>
-        </div>
-        {list.length === 0 ? (
-          <EmptyState title={tab === "open" ? "No open work orders" : "Nothing here yet"} action="New work order" onAction={() => setNewOpen(true)} />
-        ) : (
-          <div className="work-order-list">
-            {list.map((order) => (
-              <article key={order.id} className="wo-row" onClick={() => setOpenId(order.id)}>
-                <span className={cn("priority", order.urgency === "P1" && "priority-critical")}>{order.urgency}</span>
-                <div>
-                  <h3>{order.id} · {order.category} — {order.description}</h3>
-                  <p>
-                    <button type="button" className="link-btn" onClick={(e) => { e.stopPropagation(); openRoom(order.room); }}>Room {order.room}</button> · {order.assignee ? staffName(s, order.assignee) : "Unassigned"} · opened {fmtTime(order.createdAt)} ({fmtDuration(now - order.createdAt)} ago)
-                  </p>
-                </div>
-                <strong className={cn("wo-state", `wo-${order.state.toLowerCase()}`)}>{order.state === "OPEN" && order.urgency === "P1" && now - order.createdAt >= s.settings.p1AcceptMin ? "SLA breached" : order.state.replace("_", " ").toLowerCase()}</strong>
-                <Button variant="hmsGhost" size="hmsIcon" aria-label={`Open ${order.id}`} onClick={(e) => { e.stopPropagation(); setOpenId(order.id); }}><ArrowUpRight aria-hidden="true" /></Button>
-              </article>
-            ))}
-          </div>
-        )}
-      </section>
-      <WorkOrderDialog id={openId} onClose={() => setOpenId(null)} />
-      <NewWorkOrderDialog open={newOpen} onOpenChange={setNewOpen} />
-    </>
-  );
-}
-
-/* ───────────────────────── Escalations ───────────────────────── */
-
-export function EscalationsPage() {
-  return (
-    <DesktopShell title="Escalation Center" eyebrow="SLA breaches and operational risks">
-      <EscalationsContent />
-    </DesktopShell>
-  );
-}
-
-function EscalationsContent() {
-  const s = useHms();
-  const { openRoom } = useDesktop();
-  const actor = actorFor(s, "desktop");
-  const [woId, setWoId] = useState<string | null>(null);
-  const list = escalations(s);
-  const signals = useMemo(() => s.rooms.filter((r) => r.anomalies.length), [s]);
-  return (
-    <>
-      <section className="alert-list">
-        {list.length === 0 ? <div className="content-panel"><EmptyState title="No open escalations — all SLAs on track" /></div> : null}
-        {list.map((alert) => (
-          <article className={cn("alert-item", `alert-${alert.tone}`)} key={alert.id}>
-            {alert.kind === "DND_WELFARE" ? <Moon aria-hidden="true" /> : alert.kind === "P1_UNACCEPTED" ? <Wrench aria-hidden="true" /> : <AlertTriangle aria-hidden="true" />}
-            <div>
-              <h2>{alert.title}</h2>
-              <p>{alert.detail}</p>
-            </div>
-            <div className="alert-actions">
-              <Button variant="hmsGhost" size="hmsMd" onClick={() => openRoom(alert.room)}>Room {alert.room}</Button>
-              <Button variant="hmsGhost" size="hmsMd" onClick={() => { hms.resolveEscalation(alert.id, actor, `Escalation acknowledged · ${alert.title}`, alert.room); toast.success("Escalation acknowledged", { duration: 2500 }); }}>
-                Acknowledge
-              </Button>
-              <EscalationAction alert={alert} s={s} onAssign={setWoId} />
-            </div>
-          </article>
-        ))}
-      </section>
-      <section className="content-panel mt-5">
-        <div className="section-heading"><div><h2>Accountability signals</h2><p>Automatically raised when work looks too fast, bulk-ticked, or synced with conflicts. Never blocks the attendant.</p></div></div>
-        {signals.length === 0 ? <EmptyState title="No signals today" /> : (
-          <div className="signal-list">
-            {signals.map((r) => (
-              <button type="button" key={r.number} onClick={() => openRoom(r.number)}>
-                <AlertTriangle aria-hidden="true" />
-                <div><strong>Room {r.number} · {staffName(s, r.attendant)}</strong><span>{r.anomalies.map((a) => anomalyLabel[a]).join(" · ")}</span></div>
-                <span>{fmtDuration(activeMinutes(s, r))} vs std {stdMinutes(r)} min · {checklistProgress(s, r).done}/{checklistProgress(s, r).total} items</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </section>
-      <WorkOrderDialog id={woId} onClose={() => setWoId(null)} />
+      <SendRequestDialog open={requestOpen} onOpenChange={setRequestOpen} />
     </>
   );
 }
@@ -690,7 +610,6 @@ function SettingsContent() {
     { key: "property", title: "Property", copy: `5 wings · ${s.rooms.length} keys · 4 room types · ${property.location}`, icon: CalendarDays },
     { key: "checklists", title: "Checklists", copy: `Departure ${s.templates.departure.length} items · Stayover ${s.templates.stayover.length} items`, icon: ClipboardList },
     { key: "rules", title: "Inspection & SLA rules", copy: `Pass ${s.settings.passScore}% · ${s.settings.inspectionRequired ? "every room inspected" : "inspection optional"} · queue SLA ${s.settings.queueSlaMin} min`, icon: ShieldCheck },
-    { key: "users", title: "Users & roles", copy: `${s.staff.length} active team members across 6 roles`, icon: Users },
   ];
   return (
     <>

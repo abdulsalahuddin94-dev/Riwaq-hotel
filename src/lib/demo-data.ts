@@ -25,7 +25,8 @@ export type RoomStatus =
 export type HkStatus = "DIRTY" | "IN_PROGRESS" | "PAUSED" | "CLEAN" | "INSPECTED";
 export type Occupancy = "VACANT" | "OCCUPIED";
 export type TaskType = "DEPARTURE" | "STAYOVER" | "RECLEAN" | "POST_REPAIR";
-export type RoomType = "Heritage Room" | "Courtyard Room" | "Twin Room" | "Suite";
+/** Same room types as the staff app (EmG38/hotel-hearth-ops). */
+export type RoomType = "Standard" | "Deluxe" | "Suite";
 export type Role = "ATTENDANT" | "SUPERVISOR" | "MANAGER" | "FRONT_DESK" | "ENGINEER" | "ADMIN";
 export type Persona = "Manager" | "Front Desk" | "Admin" | "Attendant" | "Supervisor" | "Engineer";
 export type Anomaly = "TOO_FAST" | "BULK_TICK" | "NO_START" | "OFFLINE_CONFLICT";
@@ -38,7 +39,23 @@ export type Zone =
   | "FLOOR"
   | "FINAL_AUDIT";
 
-export type Staff = { id: string; name: string; initials: string; role: Role; floors?: number[] | undefined };
+export type Shift = "Morning" | "Evening";
+/** A team member. Created and managed from the dashboard (Users page); the staff app signs them in with job → photo → PIN (PD-01).
+ * `floors` are wing ids for supervisors. `pin` unset means the seeded sample team (any 4 digits sign in). `active: false` hides them from sign-in and assignment. */
+export type Staff = {
+  id: string;
+  name: string;
+  initials: string;
+  role: Role;
+  floors?: number[] | undefined;
+  shift?: Shift | undefined;
+  phone?: string | undefined;
+  /** Dashboard sign-in (manager, front desk, admin). */
+  email?: string | undefined;
+  pin?: string | undefined;
+  active?: boolean | undefined;
+  createdAt?: number | undefined;
+};
 
 export type ChecklistItem = {
   id: string;
@@ -200,9 +217,8 @@ export const zoneLabel: Record<Zone, string> = {
 };
 
 export const roomTypeInfo: Record<RoomType, { credits: number; departure: number; stayover: number }> = {
-  "Heritage Room": { credits: 1, departure: 30, stayover: 15 },
-  "Courtyard Room": { credits: 1.2, departure: 32, stayover: 16 },
-  "Twin Room": { credits: 1.2, departure: 34, stayover: 17 },
+  Standard: { credits: 1, departure: 30, stayover: 15 },
+  Deluxe: { credits: 1.3, departure: 38, stayover: 18 },
   Suite: { credits: 2, departure: 55, stayover: 25 },
 };
 
@@ -216,13 +232,14 @@ export const property = {
   clock: "local time",
 };
 
-/** Floors are presented as wings around the courtyards. */
+/** Wings along the shoreline, same names and numbering as the staff app (EmG38/hotel-hearth-ops):
+ * wing N holds rooms N01–N20. `floor` on a room is its wing id. */
 export const wings: Record<number, { name: string; short: string; nameAr: string }> = {
-  1: { name: "Courtyard Wing", short: "Courtyard", nameAr: "جناح الفناء" },
-  2: { name: "Najdi Wing", short: "Najdi", nameAr: "الجناح النجدي" },
-  3: { name: "Palm Garden Wing", short: "Palm Garden", nameAr: "جناح حديقة النخيل" },
-  4: { name: "Fort Tower", short: "Fort Tower", nameAr: "برج الحصن" },
-  5: { name: "Royal Wing", short: "Royal", nameAr: "الجناح الملكي" },
+  1: { name: "Marina Wing", short: "Marina", nameAr: "جناح المرسى" },
+  2: { name: "Lagoon Wing", short: "Lagoon", nameAr: "جناح البحيرة" },
+  3: { name: "Palm Wing", short: "Palm", nameAr: "جناح النخيل" },
+  4: { name: "Dune Wing", short: "Dune", nameAr: "جناح الكثبان" },
+  5: { name: "Oasis Wing", short: "Oasis", nameAr: "جناح الواحة" },
 };
 
 export function wingLabel(floor: number) {
@@ -259,22 +276,22 @@ export const issueCategories: WorkOrder["category"][] = ["Heritage surface", "Pl
 /* ───────────────────────── Staff ───────────────────────── */
 
 export const seedStaff: Staff[] = [
-  { id: "ak", name: "Maria Santos", initials: "MS", role: "ATTENDANT" },
-  { id: "ms", name: "Priya Nair", initials: "PN", role: "ATTENDANT" },
-  { id: "ya", name: "Salem Al Harthy", initials: "SH", role: "ATTENDANT" },
-  { id: "ns", name: "Joy Reyes", initials: "JR", role: "ATTENDANT" },
-  { id: "of", name: "Ramesh Kumar", initials: "RK", role: "ATTENDANT" },
-  { id: "ln", name: "Nora Al Ghamdi", initials: "NG", role: "ATTENDANT" },
-  { id: "hm", name: "Grace Mwangi", initials: "GM", role: "ATTENDANT" },
-  { id: "ks", name: "Tariq Hamdan", initials: "TH", role: "ATTENDANT" },
-  { id: "ma", name: "Noura Al Qahtani", initials: "NQ", role: "SUPERVISOR", floors: [1, 2, 3] },
-  { id: "sh", name: "Sultan Al Mutairi", initials: "SM", role: "SUPERVISOR", floors: [4, 5] },
-  { id: "rf", name: "Hessa Al Suwaidi", initials: "HS", role: "MANAGER" },
-  { id: "te", name: "Faisal Al Shehri", initials: "FS", role: "FRONT_DESK" },
-  { id: "dm", name: "Reem Al Dosari", initials: "RD", role: "FRONT_DESK" },
-  { id: "fk", name: "Mansoor Al Balushi", initials: "MB", role: "ENGINEER" },
-  { id: "hf", name: "Yousef Al Kuwari", initials: "YK", role: "ENGINEER" },
-  { id: "km", name: "Khalid Al Otaibi", initials: "KO", role: "ADMIN" },
+  { id: "ak", name: "Maria Santos", initials: "MS", role: "ATTENDANT", shift: "Morning" },
+  { id: "ms", name: "Priya Nair", initials: "PN", role: "ATTENDANT", shift: "Morning" },
+  { id: "ya", name: "Salem Al Harthy", initials: "SH", role: "ATTENDANT", shift: "Morning" },
+  { id: "ns", name: "Joy Reyes", initials: "JR", role: "ATTENDANT", shift: "Morning" },
+  { id: "of", name: "Ramesh Kumar", initials: "RK", role: "ATTENDANT", shift: "Morning" },
+  { id: "ln", name: "Nora Al Ghamdi", initials: "NG", role: "ATTENDANT", shift: "Morning" },
+  { id: "hm", name: "Grace Mwangi", initials: "GM", role: "ATTENDANT", shift: "Morning" },
+  { id: "ks", name: "Tariq Hamdan", initials: "TH", role: "ATTENDANT", shift: "Morning" },
+  { id: "ma", name: "Noura Al Qahtani", initials: "NQ", role: "SUPERVISOR", floors: [1, 2, 3], shift: "Morning" },
+  { id: "sh", name: "Sultan Al Mutairi", initials: "SM", role: "SUPERVISOR", floors: [4, 5], shift: "Morning" },
+  { id: "rf", name: "Hessa Al Suwaidi", initials: "HS", role: "MANAGER", shift: "Morning" },
+  { id: "te", name: "Faisal Al Shehri", initials: "FS", role: "FRONT_DESK", shift: "Morning" },
+  { id: "dm", name: "Reem Al Dosari", initials: "RD", role: "FRONT_DESK", shift: "Morning" },
+  { id: "fk", name: "Mansoor Al Balushi", initials: "MB", role: "ENGINEER", shift: "Morning" },
+  { id: "hf", name: "Yousef Al Kuwari", initials: "YK", role: "ENGINEER", shift: "Morning" },
+  { id: "km", name: "Khalid Al Otaibi", initials: "KO", role: "ADMIN", shift: "Morning" },
 ];
 
 /** Staff member each demo persona acts as. */
@@ -286,6 +303,10 @@ export const personaStaff: Record<Persona, string> = {
   Supervisor: "ma",
   Engineer: "fk",
 };
+
+/** Housekeeping, supervisors and maintenance sign in on the staff phone app with a PIN; the others on the dashboard with email. */
+export const STAFF_APP_ROLES: Role[] = ["ATTENDANT", "SUPERVISOR", "ENGINEER"];
+export const signsInOnPhone = (role: Role) => STAFF_APP_ROLES.includes(role);
 
 export const roleLabel: Record<Role, string> = {
   ATTENDANT: "Room Attendant",
@@ -446,6 +467,81 @@ const guests = [
 
 type Planned = "READY" | "AWAITING" | "CLEANING" | "DIRTY" | "OCC_CLEAN" | "OCC_DIRTY" | "DND" | "OOO" | "OOS";
 
+/** A guest request reception sends to housekeeping. Same types and states as the staff app's GuestRequest
+ * (EmG38/hotel-hearth-ops): the floor supervisor acknowledges and completes it on the phone; reception only sees the status. */
+export type GuestRequestType = "towels" | "amenities" | "late_checkout" | "housekeeping" | "other";
+export type GuestRequestStatus = "pending" | "acknowledged" | "completed" | "cancelled";
+export type GuestRequest = {
+  id: string;
+  room: string;
+  type: GuestRequestType;
+  note: string;
+  requestedAt: number;
+  requestedBy: string;
+  status: GuestRequestStatus;
+  assignedTo: string | null;
+  acknowledgedAt?: number | undefined;
+  completedAt?: number | undefined;
+  urgent?: boolean | undefined;
+};
+
+export const guestRequestLabel: Record<GuestRequestType, string> = {
+  towels: "Extra towels",
+  amenities: "Amenities",
+  late_checkout: "Late checkout",
+  housekeeping: "Extra housekeeping",
+  other: "Other",
+};
+
+/** A booking taken by reception (phone, email, walk-in). Same core fields as the staff app's Reservation
+ * (EmG38/hotel-hearth-ops): code, guestName, roomType, nights, guests, expectedCheckIn/Out, status, roomId, vip.
+ * Dates are ISO days; the demo's "today" is DEMO_DATE. */
+export type ReservationStatus = "expected" | "checked_in" | "no_show" | "cancelled";
+export type FollowUpOutcome = "coming" | "no_answer" | "cancelled" | "no_show";
+export type FollowUp = { at: number; by: string; outcome: FollowUpOutcome; note?: string | undefined; newTime?: string | undefined };
+export type Reservation = {
+  id: string;
+  code: string;
+  guestName: string;
+  phone: string;
+  email?: string | undefined;
+  roomType: RoomType;
+  guests: number;
+  arrivalDate: string;
+  nights: number;
+  expectedCheckIn: string;
+  expectedCheckOut: string;
+  status: ReservationStatus;
+  roomId: string | null;
+  vip: boolean;
+  source: "Phone" | "Email" | "Walk-in" | "Website";
+  notes?: string | undefined;
+  createdBy: string;
+  followUps: FollowUp[];
+};
+
+export const DEMO_DATE = "2026-09-23";
+/** Minutes after the expected arrival time before reception is asked to follow up. Starting value, configurable later. */
+export const FOLLOW_UP_GRACE_MIN = 30;
+
+export const followUpLabel: Record<FollowUpOutcome, string> = {
+  coming: "Reached · still coming",
+  no_answer: "No answer",
+  cancelled: "Guest cancelled",
+  no_show: "Marked no-show",
+};
+
+export function fmtDay(iso: string) {
+  const d = new Date(`${iso}T12:00:00Z`);
+  return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+}
+
+export function addDays(iso: string, days: number) {
+  const d = new Date(`${iso}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 export type SeedState = {
   rooms: Room[];
   staff: Staff[];
@@ -456,6 +552,8 @@ export type SeedState = {
   settings: Settings;
   resolvedEscalations: string[];
   published: boolean;
+  requests: GuestRequest[];
+  reservations: Reservation[];
 };
 
 export function buildSeed(): SeedState {
@@ -488,7 +586,8 @@ export function buildSeed(): SeedState {
   const rooms: Room[] = Array.from({ length: 100 }, (_, index) => {
     const floor = Math.floor(index / 20) + 1;
     const position = (index % 20) + 1;
-    const type: RoomType = floor > 1 && position >= 19 ? "Suite" : position % 5 === 0 ? "Courtyard Room" : position % 4 === 0 ? "Twin Room" : "Heritage Room";
+    // Same split as the staff app: rooms 01–12 Standard, 13–17 Deluxe, 18–20 Suite in every wing.
+    const type: RoomType = position >= 18 ? "Suite" : position >= 13 ? "Deluxe" : "Standard";
     // Suites and every third room carry one or two heritage elements.
     const heritage: HeritageAsset[] =
       type === "Suite" || position % 3 === 0
@@ -735,5 +834,44 @@ export function buildSeed(): SeedState {
     settings: { inspectionRequired: true, passScore: 90, queueSlaMin: 15, p1AcceptMin: 10, dndWelfareHours: 24, targetCredits: 16 },
     resolvedEscalations: [],
     published: true,
+    requests: seedRequests(rooms),
+    reservations: seedReservations(rooms),
   };
+}
+
+function seedReservations(rooms: Room[]): Reservation[] {
+  const list: Reservation[] = [];
+  let n = 48210;
+  const phone = (i: number) => `+974 55${String(10 + i).padStart(2, "0")} ${String(1000 + i * 137).slice(-4)}`;
+  const add = (r: Omit<Reservation, "id" | "code" | "followUps" | "createdBy" | "expectedCheckOut"> & { expectedCheckOut?: string }) => {
+    n += 1;
+    list.push({ expectedCheckOut: "12:00", ...r, id: `res-${n}`, code: `MD-${n}`, createdBy: n % 2 ? "te" : "dm", followUps: [] });
+  };
+  // Today's arrivals that already have a room on the board.
+  rooms
+    .filter((r) => r.arrival && /^\d{1,2}:\d{2}$/.test(r.arrival.eta))
+    .forEach((r, i) => {
+      add({ guestName: r.arrival!.guest, phone: phone(i), roomType: r.type, guests: 1 + (i % 3), arrivalDate: DEMO_DATE, nights: 1 + (i % 4), expectedCheckIn: r.arrival!.eta, status: "expected", roomId: r.number, vip: !!r.vip, source: i % 3 === 0 ? "Email" : i % 3 === 1 ? "Phone" : "Website" });
+    });
+  // Late today and yesterday's no-show candidate: these need a follow-up call.
+  add({ guestName: "Mr. Karim Haddad", phone: phone(31), roomType: "Standard", guests: 2, arrivalDate: DEMO_DATE, nights: 2, expectedCheckIn: "09:30", status: "expected", roomId: null, vip: false, source: "Phone", notes: "Flying in from Amman" });
+  add({ guestName: "Ms. Aisha Rahman", phone: phone(32), roomType: "Deluxe", guests: 1, arrivalDate: DEMO_DATE, nights: 3, expectedCheckIn: "10:00", status: "expected", roomId: null, vip: false, source: "Phone" });
+  add({ guestName: "Mr. Daniel Weber", phone: phone(33), roomType: "Suite", guests: 2, arrivalDate: addDays(DEMO_DATE, -1), nights: 4, expectedCheckIn: "18:00", status: "expected", roomId: null, vip: true, source: "Email", notes: "Anniversary · flowers in room" });
+  // Upcoming.
+  add({ guestName: "Mrs. Huda Al Marri", phone: phone(34), roomType: "Suite", guests: 3, arrivalDate: addDays(DEMO_DATE, 1), nights: 2, expectedCheckIn: "15:00", status: "expected", roomId: null, vip: true, source: "Phone" });
+  add({ guestName: "Mr. Arjun Mehta", phone: phone(35), roomType: "Standard", guests: 1, arrivalDate: addDays(DEMO_DATE, 2), nights: 1, expectedCheckIn: "14:00", status: "expected", roomId: null, vip: false, source: "Website" });
+  add({ guestName: "Ms. Elena Rossi", phone: phone(36), roomType: "Deluxe", guests: 2, arrivalDate: addDays(DEMO_DATE, 4), nights: 5, expectedCheckIn: "16:30", status: "expected", roomId: null, vip: false, source: "Email" });
+  add({ guestName: "Mr. Faisal Al Nuaimi", phone: phone(37), roomType: "Standard", guests: 2, arrivalDate: addDays(DEMO_DATE, 9), nights: 3, expectedCheckIn: "13:00", status: "expected", roomId: null, vip: false, source: "Walk-in" });
+  return list;
+}
+
+function seedRequests(rooms: Room[]): GuestRequest[] {
+  const occupied = rooms.filter((r) => r.occupancy === "OCCUPIED" && !r.block);
+  const pick = (i: number) => occupied[i % Math.max(1, occupied.length)]?.number ?? "214";
+  const sup = (room: string) => (Number(room[0]) <= 3 ? "ma" : "sh");
+  return [
+    { id: "GR-104", room: pick(1), type: "towels", note: "Two extra bath towels", requestedAt: DEMO_START - 12, requestedBy: "te", status: "pending", assignedTo: sup(pick(1)) },
+    { id: "GR-103", room: pick(4), type: "late_checkout", note: "Guest leaves at 14:00, clean after", requestedAt: DEMO_START - 35, requestedBy: "dm", status: "acknowledged", assignedTo: sup(pick(4)), acknowledgedAt: DEMO_START - 30 },
+    { id: "GR-102", room: pick(7), type: "amenities", note: "Baby cot and extra pillows", requestedAt: DEMO_START - 70, requestedBy: "te", status: "completed", assignedTo: sup(pick(7)), acknowledgedAt: DEMO_START - 66, completedAt: DEMO_START - 48 },
+  ];
 }

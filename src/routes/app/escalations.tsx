@@ -1,3 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { EscalationsPage } from "@/components/hms/desktop-pages";
-export const Route = createFileRoute("/app/escalations")({ head: () => ({ meta: [{ title: "Escalations · Marsa Dhahab" }, { name: "description", content: "Housekeeping SLA breaches and risks." }, { property: "og:title", content: "Escalations · Marsa Dhahab" }, { property: "og:description", content: "Housekeeping SLA breaches and risks." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: EscalationsPage });
+import { createFileRoute, redirect } from "@tanstack/react-router";
+
+/** The Escalation Center was folded into the notification bell (2026-11-18). Old links land on the Live Board. */
+export const Route = createFileRoute("/app/escalations")({
+  beforeLoad: () => {
+    throw redirect({ to: "/app/board" });
+  },
+});

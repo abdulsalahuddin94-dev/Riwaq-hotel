@@ -7,6 +7,8 @@ import { Switch } from "@/components/ui/switch";
 import {
   fmtDuration,
   fmtTime,
+  type GuestRequestType,
+  guestRequestLabel,
   inspectionPoints,
   property,
   issueCategories,
@@ -34,6 +36,76 @@ import {
 } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { StatusChip } from "./status";
+
+/* ───────────── Guest request → floor supervisor ───────────── */
+
+const REQUEST_TYPES: GuestRequestType[] = ["towels", "amenities", "housekeeping", "late_checkout", "other"];
+
+export function SendRequestDialog({ open, onOpenChange, defaultRoom }: { open: boolean; onOpenChange: (open: boolean) => void; defaultRoom?: string | undefined }) {
+  const s = useHms();
+  const rooms = s.rooms.filter((r) => !r.block);
+  const [room, setRoom] = useState("");
+  const [type, setType] = useState<GuestRequestType>("towels");
+  const [note, setNote] = useState("");
+  const [urgent, setUrgent] = useState(false);
+  const selected = room || defaultRoom || rooms.find((r) => r.occupancy === "OCCUPIED")?.number || "";
+  const sup = s.staff.find((p) => p.active !== false && p.role === "SUPERVISOR" && (p.floors ?? []).includes(Number(selected[0])));
+  const close = () => {
+    setRoom("");
+    setType("towels");
+    setNote("");
+    setUrgent(false);
+    onOpenChange(false);
+  };
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (type === "other" && !note.trim()) {
+      toast.error("Say what the guest needs", { duration: 2500 });
+      return;
+    }
+    hms.createRequest({ room: selected, type, note: note.trim(), urgent }, actorFor(s, "desktop"));
+    toast.success(`Sent to ${sup ? sup.name : "the floor supervisor"} · Room ${selected}`, { duration: 3000 });
+    close();
+  };
+  return (
+    <Dialog open={open} onOpenChange={(o) => (o ? onOpenChange(true) : close())}>
+      <DialogContent data-platform="desktop" className="hms-dialog">
+        <DialogHeader>
+          <DialogTitle>Send a request to housekeeping</DialogTitle>
+          <DialogDescription>It goes to the floor supervisor's phone. You'll see here when they're on it and when it's done.</DialogDescription>
+        </DialogHeader>
+        <form className="form-grid form-grid-2" onSubmit={submit}>
+          <label>
+            Room
+            <select value={selected} onChange={(e) => setRoom(e.target.value)}>
+              {rooms.map((r) => (
+                <option key={r.number} value={r.number}>{r.number}{r.guest ? ` · ${r.guest}` : r.occupancy === "OCCUPIED" ? " · occupied" : ""}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Request
+            <select value={type} onChange={(e) => setType(e.target.value as GuestRequestType)}>
+              {REQUEST_TYPES.map((t) => <option key={t} value={t}>{guestRequestLabel[t]}</option>)}
+            </select>
+          </label>
+          <label className="span-2">
+            Note {type === "other" ? null : <span className="label-optional">optional</span>}
+            <input autoFocus value={note} onChange={(e) => setNote(e.target.value)} placeholder={type === "late_checkout" ? "e.g. Leaves at 14:00" : "e.g. Two extra pillows"} />
+          </label>
+          <label className="span-2 request-urgent">
+            <Switch checked={urgent} onCheckedChange={setUrgent} /> Guest is waiting for it now
+          </label>
+          <p className="muted-line span-2">Goes to <b>{sup ? sup.name : "the floor supervisor"}</b>{sup ? ` · ${wingLabel(Number(selected[0]))}` : ""}</p>
+          <DialogFooter className="span-2">
+            <Button type="button" variant="hmsGhost" size="hmsMd" onClick={close}>Cancel</Button>
+            <Button type="submit" variant="hmsPrimary" size="hmsMd" disabled={!selected}>Send request</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 /* ───────────── Queue guest ───────────── */
 
@@ -80,156 +152,6 @@ export function QueueGuestDialog({ open, onOpenChange, defaultRoom }: { open: bo
           <DialogFooter>
             <Button type="button" variant="hmsGhost" size="hmsMd" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit" variant="hmsPrimary" size="hmsMd" disabled={!selected}>Queue guest</Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-/* ───────────── Work order detail ───────────── */
-
-const woStateLabel: Record<WorkOrder["state"], string> = {
-  OPEN: "Open",
-  ACCEPTED: "Accepted",
-  IN_PROGRESS: "In progress",
-  RESOLVED: "Resolved · verify",
-  VERIFIED: "Verified · closed",
-};
-
-export function WorkOrderDialog({ id, onClose }: { id: string | null; onClose: () => void }) {
-  const s = useHms();
-  const wo = s.workOrders.find((w) => w.id === id);
-  const [resolution, setResolution] = useState("");
-  const actor = actorFor(s, "desktop");
-  const engineers = s.staff.filter((p) => p.role === "ENGINEER");
-  return (
-    <Dialog open={!!wo} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent data-platform="desktop" className="hms-dialog">
-        {wo ? (
-          <>
-            <DialogHeader>
-              <DialogTitle>
-                {wo.id} · {wo.urgency} {wo.category}
-              </DialogTitle>
-              <DialogDescription>
-                Room {wo.room} · reported by {staffName(s, wo.reportedBy)} at {fmtTime(wo.createdAt)}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="wo-steps">
-              {(["OPEN", "ACCEPTED", "IN_PROGRESS", "RESOLVED", "VERIFIED"] as const).map((st, i, arr) => (
-                <span key={st} className={cn(arr.indexOf(wo.state) >= i && "wo-step-done")}>{woStateLabel[st].split(" ·")[0]}</span>
-              ))}
-            </div>
-            <dl className="fact-grid">
-              <div><dt>Description</dt><dd>{wo.description}</dd></div>
-              <div><dt>Status</dt><dd>{woStateLabel[wo.state]}</dd></div>
-              <div><dt>Engineer</dt><dd>{wo.assignee ? staffName(s, wo.assignee) : "Unassigned"}</dd></div>
-              <div><dt>Accepted</dt><dd>{fmtTime(wo.acceptedAt)}</dd></div>
-              <div><dt>Resolved</dt><dd>{fmtTime(wo.resolvedAt)}</dd></div>
-              <div><dt>Room block</dt><dd>{s.rooms.find((r) => r.number === wo.room)?.block ? `${wo.urgency === "P1" ? "Out of order" : "Out of service"} until verified` : "Released"}</dd></div>
-              {wo.resolution ? <div><dt>Resolution</dt><dd>{wo.resolution}</dd></div> : null}
-            </dl>
-            <div className="form-grid">
-              {wo.state !== "VERIFIED" ? (
-                <label>
-                  Assign engineer
-                  <select
-                    value={wo.assignee ?? ""}
-                    onChange={(e) => {
-                      hms.woAssign(wo.id, e.target.value, actor);
-                      toast.success(`Assigned to ${staffName(s, e.target.value)}`, { duration: 2500 });
-                    }}
-                  >
-                    <option value="" disabled>Select engineer</option>
-                    {engineers.map((eng) => (
-                      <option key={eng.id} value={eng.id}>{eng.name}</option>
-                    ))}
-                  </select>
-                </label>
-              ) : null}
-              {wo.state === "ACCEPTED" || wo.state === "IN_PROGRESS" ? (
-                <label>
-                  Resolution note
-                  <input value={resolution} onChange={(e) => setResolution(e.target.value)} placeholder="What was fixed?" />
-                </label>
-              ) : null}
-            </div>
-            <DialogFooter>
-              {wo.state === "OPEN" ? (
-                <Button variant="hmsPrimary" size="hmsMd" disabled={!wo.assignee} onClick={() => { hms.woAccept(wo.id, wo.assignee ?? actor); toast.success(`${wo.id} accepted`, { duration: 2500 }); }}>
-                  Mark accepted
-                </Button>
-              ) : null}
-              {wo.state === "ACCEPTED" || wo.state === "IN_PROGRESS" ? (
-                <Button variant="hmsPrimary" size="hmsMd" onClick={() => { hms.woResolve(wo.id, wo.assignee ?? actor, resolution, true); setResolution(""); toast.success(`${wo.id} resolved — waiting for verification`, { duration: 3000 }); }}>
-                  Mark resolved
-                </Button>
-              ) : null}
-              {wo.state === "RESOLVED" ? (
-                <Button variant="hmsPrimary" size="hmsMd" onClick={() => { hms.woVerify(wo.id, actor); toast.success(`Room ${wo.room} released — post-repair clean queued`, { duration: 3500 }); }}>
-                  <CheckCircle2 aria-hidden="true" /> Verify & release room
-                </Button>
-              ) : null}
-              <Button variant="hmsGhost" size="hmsMd" onClick={onClose}>Close</Button>
-            </DialogFooter>
-          </>
-        ) : null}
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-export function NewWorkOrderDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
-  const s = useHms();
-  const [room, setRoom] = useState("");
-  const [category, setCategory] = useState<WorkOrder["category"]>("Plumbing");
-  const [urgency, setUrgency] = useState<WorkOrder["urgency"]>("P2");
-  const [description, setDescription] = useState("");
-  const submit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!s.rooms.some((r) => r.number === room)) {
-      toast.error("Choose a valid room number", { duration: 3000 });
-      return;
-    }
-    const id = hms.createWorkOrder({ room, category, urgency, description }, actorFor(s, "desktop"));
-    toast.success(`${id} created · room ${room} ${urgency === "P1" ? "Out of Order" : "Out of Service"}`, { duration: 3500 });
-    setRoom("");
-    setDescription("");
-    onOpenChange(false);
-  };
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent data-platform="desktop" className="hms-dialog">
-        <DialogHeader>
-          <DialogTitle>New work order</DialogTitle>
-          <DialogDescription>P1 blocks the room as Out of Order; P2/P3 as Out of Service.</DialogDescription>
-        </DialogHeader>
-        <form className="form-grid form-grid-2" onSubmit={submit}>
-          <label>
-            Room
-            <input list="room-numbers" value={room} onChange={(e) => setRoom(e.target.value)} placeholder="e.g. 312" autoFocus />
-            <datalist id="room-numbers">{s.rooms.map((r) => <option key={r.number} value={r.number} />)}</datalist>
-          </label>
-          <label>
-            Category
-            <select value={category} onChange={(e) => setCategory(e.target.value as WorkOrder["category"])}>
-              {issueCategories.map((c) => <option key={c}>{c}</option>)}
-            </select>
-          </label>
-          <fieldset className="segmented">
-            <legend>Urgency</legend>
-            {(["P1", "P2", "P3"] as const).map((u) => (
-              <button type="button" key={u} className={cn(urgency === u && "segmented-on")} onClick={() => setUrgency(u)}>{u}</button>
-            ))}
-          </fieldset>
-          <label className="span-2">
-            Description
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="What is wrong?" />
-          </label>
-          <DialogFooter className="span-2">
-            <Button type="button" variant="hmsGhost" size="hmsMd" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" variant="hmsPrimary" size="hmsMd">Create work order</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -352,7 +274,7 @@ export function buildReport(s: HmsState, key: ReportKey): { title: string; colum
       title: "Attendant Performance",
       columns: ["Attendant", "Assigned", "Done", "Credits", "Avg min", "Inspections", "Pass rate", "Signals"],
       rows: s.staff
-        .filter((p) => p.role === "ATTENDANT")
+        .filter((p) => p.active !== false && p.role === "ATTENDANT")
         .map((p) => {
           const rooms = s.rooms.filter((r) => r.attendant === p.id);
           const done = rooms.filter((r) => r.hk === "CLEAN" || r.hk === "INSPECTED");
@@ -439,10 +361,10 @@ export function ReportPreviewDialog({ reportKey, onClose }: { reportKey: ReportK
 
 /* ───────────── Settings ───────────── */
 
-export type SettingsKey = "property" | "checklists" | "rules" | "users";
+export type SettingsKey = "property" | "checklists" | "rules";
 
 export function SettingsDialog({ which, onClose }: { which: SettingsKey | null; onClose: () => void }) {
-  const titles: Record<SettingsKey, string> = { property: "Property", checklists: "Checklists", rules: "Inspection & SLA rules", users: "Users & roles" };
+  const titles: Record<SettingsKey, string> = { property: "Property", checklists: "Checklists", rules: "Inspection & SLA rules" };
   return (
     <Dialog open={!!which} onOpenChange={(open) => !open && onClose()}>
       <DialogContent data-platform="desktop" className="hms-dialog hms-dialog-wide">
@@ -455,7 +377,6 @@ export function SettingsDialog({ which, onClose }: { which: SettingsKey | null; 
             {which === "property" ? <PropertySettings /> : null}
             {which === "checklists" ? <ChecklistSettings /> : null}
             {which === "rules" ? <RulesSettings /> : null}
-            {which === "users" ? <UserSettings /> : null}
           </>
         ) : null}
       </DialogContent>
@@ -562,10 +483,6 @@ function RulesSettings() {
         <input type="number" min={5} max={60} value={draft.queueSlaMin} onChange={(e) => setDraft({ ...draft, queueSlaMin: Number(e.target.value) })} />
       </label>
       <label>
-        P1 accept SLA (min)
-        <input type="number" min={5} max={60} value={draft.p1AcceptMin} onChange={(e) => setDraft({ ...draft, p1AcceptMin: Number(e.target.value) })} />
-      </label>
-      <label>
         Attendant target credits
         <input type="number" min={6} max={24} value={draft.targetCredits} onChange={(e) => setDraft({ ...draft, targetCredits: Number(e.target.value) })} />
       </label>
@@ -588,44 +505,3 @@ function RulesSettings() {
   );
 }
 
-function UserSettings() {
-  const s = useHms();
-  const actor = actorFor(s, "desktop");
-  const [name, setName] = useState("");
-  const [role, setRole] = useState<Role>("ATTENDANT");
-  return (
-    <div className="settings-body">
-      <div className="dialog-table">
-        <div className="dt-row dt-head dt-3"><span>Name</span><span>Role</span><span>Rooms today</span></div>
-        {s.staff.map((p) => (
-          <div className="dt-row dt-3" key={p.id}>
-            <span className="staff-cell"><i>{p.initials}</i><b>{p.name}</b></span>
-            <span>{roleLabel[p.role]}</span>
-            <span>{p.role === "ATTENDANT" ? s.rooms.filter((r) => r.attendant === p.id).length : "—"}</span>
-          </div>
-        ))}
-      </div>
-      <form
-        className="add-item-row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const clean = name.trim();
-          if (clean.split(" ").length < 2) {
-            toast.error("Enter first and last name", { duration: 2500 });
-            return;
-          }
-          const initials = clean.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-          hms.addStaff({ name: clean, initials, role }, actor);
-          setName("");
-          toast.success(`${clean} added — PIN sent to supervisor`, { duration: 3000 });
-        }}
-      >
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" />
-        <select value={role} onChange={(e) => setRole(e.target.value as Role)}>
-          {(Object.keys(roleLabel) as Role[]).map((r) => <option key={r} value={r}>{roleLabel[r]}</option>)}
-        </select>
-        <Button type="submit" variant="hmsPrimary" size="hmsMd"><Plus aria-hidden="true" /> Add user</Button>
-      </form>
-    </div>
-  );
-}

@@ -4,13 +4,22 @@ import {
   type Anomaly,
   type AuditEvent,
   buildSeed,
+  DEMO_DATE,
+  FOLLOW_UP_GRACE_MIN,
   DEMO_START,
+  type FollowUpOutcome,
+  followUpLabel,
+  type Reservation,
   fmtDuration,
   inspectionPoints,
+  type GuestRequest,
+  guestRequestLabel,
   type Persona,
   personaStaff,
   type Room,
+  roleLabel,
   roomTypeInfo,
+  signsInOnPhone,
   type RoomStatus,
   scoreInspection,
   type SeedState,
@@ -33,7 +42,7 @@ export type HmsState = SeedState & {
 };
 
 const STORAGE_KEY = "riwaq-demo-state-v1";
-const VERSION = 5;
+const VERSION = 7;
 
 function freshState(seededAt = 0): HmsState {
   const seed = buildSeed();
@@ -126,6 +135,15 @@ export function demoNow(s: HmsState = load()) {
   // The demo clock runs in real time from 11:00 but stops at 12:30 so a long-open demo keeps
   // believable timers and charts; "Reset demo" restarts it.
   return Math.min(DEMO_START + 90, DEMO_START + Math.floor((Date.now() - s.seededAt) / 60000));
+}
+
+/** A booking whose guest is late past the grace period (or whose day has passed) and nobody closed it. */
+export function needsFollowUp(s: HmsState, res: Reservation) {
+  if (res.status !== "expected") return false;
+  if (res.arrivalDate < DEMO_DATE) return true;
+  if (res.arrivalDate > DEMO_DATE) return false;
+  const [h, m] = res.expectedCheckIn.split(":").map(Number);
+  return demoNow(s) >= (h ?? 0) * 60 + (m ?? 0) + FOLLOW_UP_GRACE_MIN;
 }
 
 export function staffName(s: HmsState, id: string | null | undefined) {
@@ -254,19 +272,7 @@ export function escalations(s: HmsState): Escalation[] {
       });
     }
   }
-  for (const wo of s.workOrders) {
-    if (wo.urgency === "P1" && wo.state === "OPEN" && now - wo.createdAt >= s.settings.p1AcceptMin) {
-      list.push({
-        id: `p1-${wo.id}`,
-        kind: "P1_UNACCEPTED",
-        room: wo.room,
-        woId: wo.id,
-        title: `${wo.category} P1 in room ${wo.room} not accepted`,
-        detail: `${wo.id} open for ${now - wo.createdAt} min · ${wo.assignee ? `assigned to ${staffName(s, wo.assignee)}` : "no engineer assigned"}`,
-        tone: "error",
-      });
-    }
-  }
+  // Maintenance (work orders, P1 acceptance) is not part of the staff app, so it raises no dashboard alerts (owner, 2026-11-18).
   return list.filter((e) => !s.resolvedEscalations.includes(e.id));
 }
 
@@ -293,6 +299,14 @@ function log(draft: HmsState, actor: string | null, roomNo: string | undefined, 
 function isOverride(draft: HmsState, r: Room, actor: string) {
   const who = draft.staff.find((p) => p.id === actor);
   return who?.role !== "ATTENDANT" || (r.attendant !== null && r.attendant !== actor);
+}
+
+function initialsOf(name: string) {
+  return name.trim().split(/\s+/).map((w) => w[0] ?? "").join("").slice(0, 2).toUpperCase();
+}
+
+function newPin() {
+  return String(1000 + Math.floor(Math.random() * 9000));
 }
 
 export const hms = {
@@ -519,7 +533,7 @@ export const hms = {
   autoAssign(actor: string) {
     let count = 0;
     set((d) => {
-      const attendants = d.staff.filter((p) => p.role === "ATTENDANT");
+      const attendants = d.staff.filter((p) => p.active !== false && p.role === "ATTENDANT");
       const load = new Map(attendants.map((a) => [a.id, 0]));
       const floorsOf = new Map(attendants.map((a) => [a.id, new Set<number>()]));
       for (const r of d.rooms) {
@@ -582,7 +596,9 @@ export const hms = {
       r.queue = undefined;
       r.arrival = undefined;
       r.taskType = "STAYOVER";
-      log(d, actor, number, "CHECKED_IN", `Checked in · ${r.guest}`);
+      const res = d.reservations.find((x) => x.roomId === number && x.status === "expected" && x.arrivalDate <= DEMO_DATE);
+      if (res) res.status = "checked_in";
+      log(d, actor, number, "CHECKED_IN", `Checked in · ${r.guest}${res ? ` · ${res.code}` : ""}`);
     });
   },
 
@@ -708,11 +724,136 @@ export const hms = {
     });
   },
 
-  addStaff(input: Omit<Staff, "id">, actor: string) {
+  /* ── Reservations ── */
+
+  createReservation(input: Omit<Reservation, "id" | "code" | "followUps" | "createdBy" | "status" | "roomId">, actor: string) {
+    let code = "";
     set((d) => {
-      const id = `${input.initials.toLowerCase()}${Date.now().toString(36).slice(-3)}`;
-      d.staff.push({ ...input, id });
-      log(d, actor, undefined, "USER_CREATED", `User created · ${input.name}`);
+      const n = 48300 + d.reservations.length;
+      code = `MD-${n}`;
+      d.reservations.unshift({ ...input, id: `res-${n}`, code, status: "expected", roomId: null, createdBy: actor, followUps: [] });
+      log(d, actor, undefined, "RESERVATION_CREATED", `Reservation ${code} · ${input.guestName} · ${input.roomType} · ${input.arrivalDate}`);
     });
+    return code;
+  },
+
+  /** Puts a today's booking on a room, so housekeeping and the board see the arrival. */
+  assignReservationRoom(id: string, roomNo: string | null, actor: string) {
+    set((d) => {
+      const res = d.reservations.find((x) => x.id === id);
+      if (!res) return;
+      if (res.roomId) {
+        const old = d.rooms.find((r) => r.number === res.roomId);
+        if (old?.arrival?.guest === res.guestName) old.arrival = undefined;
+      }
+      res.roomId = roomNo;
+      if (roomNo && res.arrivalDate === DEMO_DATE) {
+        const r = room(d, roomNo);
+        r.arrival = { guest: res.guestName, eta: res.expectedCheckIn };
+        if (res.vip) r.vip = true;
+      }
+      log(d, actor, roomNo ?? undefined, "RESERVATION_ROOM", roomNo ? `${res.code} · ${res.guestName} → room ${roomNo}` : `${res.code} · room released`);
+    });
+  },
+
+  logFollowUp(id: string, input: { outcome: FollowUpOutcome; note?: string | undefined; newTime?: string | undefined }, actor: string) {
+    set((d) => {
+      const res = d.reservations.find((x) => x.id === id);
+      if (!res) return;
+      res.followUps.push({ ...input, at: demoNow(d), by: actor });
+      if (input.outcome === "coming" && input.newTime) {
+        res.expectedCheckIn = input.newTime;
+        if (res.arrivalDate < DEMO_DATE) res.arrivalDate = DEMO_DATE;
+        const r = res.roomId ? d.rooms.find((x) => x.number === res.roomId) : undefined;
+        if (r?.arrival) r.arrival.eta = input.newTime;
+      }
+      if (input.outcome === "cancelled" || input.outcome === "no_show") {
+        res.status = input.outcome === "cancelled" ? "cancelled" : "no_show";
+        const r = res.roomId ? d.rooms.find((x) => x.number === res.roomId) : undefined;
+        if (r?.arrival?.guest === res.guestName) r.arrival = undefined;
+        res.roomId = null;
+      }
+      log(d, actor, undefined, "RESERVATION_FOLLOW_UP", `${res.code} · ${res.guestName} · ${followUpLabel[input.outcome]}${input.newTime ? ` · new time ${input.newTime}` : ""}${input.note ? ` · ${input.note}` : ""}`);
+    });
+  },
+
+  /** Reception sends a request to the floor supervisor of the room's wing. */
+  createRequest(input: { room: string; type: GuestRequest["type"]; note: string; urgent: boolean }, actor: string) {
+    let id = "";
+    set((d) => {
+      const n = 105 + d.requests.length;
+      id = `GR-${n}`;
+      const wing = Number(input.room[0]);
+      const sup = d.staff.find((p) => p.active !== false && p.role === "SUPERVISOR" && (p.floors ?? []).includes(wing));
+      d.requests.unshift({ id, ...input, requestedAt: demoNow(d), requestedBy: actor, status: "pending", assignedTo: sup?.id ?? null });
+      log(d, actor, input.room, "REQUEST_SENT", `${guestRequestLabel[input.type]} requested${input.note ? ` · ${input.note}` : ""}${sup ? ` · sent to ${sup.name}` : ""}`);
+    });
+    return id;
+  },
+
+  setRequestStatus(id: string, status: "acknowledged" | "completed" | "cancelled", actor: string) {
+    set((d) => {
+      const r = d.requests.find((x) => x.id === id);
+      if (!r) return;
+      r.status = status;
+      if (status === "acknowledged") r.acknowledgedAt = demoNow(d);
+      if (status === "completed") r.completedAt = demoNow(d);
+      log(d, actor, r.room, `REQUEST_${status.toUpperCase()}`, `${guestRequestLabel[r.type]} · ${status === "acknowledged" ? "on the way" : status}`);
+    });
+  },
+
+  /** Creates a team member. Staff-app roles get a 4-digit PIN; dashboard roles get a temporary password. Both are returned once, never shown again. */
+  addStaff(input: Omit<Staff, "id" | "initials" | "pin" | "active" | "createdAt">, actor: string) {
+    const id = `u${Date.now().toString(36)}`;
+    const phoneRole = signsInOnPhone(input.role);
+    const secret = phoneRole ? newPin() : `MD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    set((d) => {
+      d.staff.push({ ...input, id, initials: initialsOf(input.name), pin: phoneRole ? secret : undefined, active: true, createdAt: demoNow(d) });
+      log(d, actor, undefined, "USER_CREATED", `User created · ${input.name} · ${roleLabel[input.role]}`);
+    });
+    return { id, secret };
+  },
+
+  updateStaff(id: string, patch: Partial<Pick<Staff, "name" | "role" | "floors" | "shift" | "phone" | "email">>, actor: string) {
+    set((d) => {
+      const p = d.staff.find((x) => x.id === id);
+      if (!p) return;
+      Object.assign(p, patch);
+      if (patch.name) p.initials = initialsOf(patch.name);
+      if (p.role !== "SUPERVISOR") p.floors = undefined;
+      log(d, actor, undefined, "USER_UPDATED", `User updated · ${p.name}`);
+    });
+  },
+
+  resetPin(id: string, actor: string) {
+    const pin = newPin();
+    set((d) => {
+      const p = d.staff.find((x) => x.id === id);
+      if (!p) return;
+      p.pin = pin;
+      log(d, actor, undefined, "USER_PIN_RESET", `PIN reset · ${p.name}`);
+    });
+    return pin;
+  },
+
+  /** Deactivating hides the person from sign-in and assignment and returns their unfinished rooms to the pool. */
+  setStaffActive(id: string, active: boolean, actor: string) {
+    let released = 0;
+    set((d) => {
+      const p = d.staff.find((x) => x.id === id);
+      if (!p) return;
+      p.active = active;
+      if (!active) {
+        for (const r of d.rooms) {
+          if (r.attendant === id && r.hk === "DIRTY") {
+            r.attendant = null;
+            released += 1;
+          }
+        }
+        if (released) d.published = false;
+      }
+      log(d, actor, undefined, active ? "USER_ACTIVATED" : "USER_DEACTIVATED", `${active ? "User reactivated" : "User deactivated"} · ${p.name}${released ? ` · ${released} rooms back to unassigned` : ""}`);
+    });
+    return released;
   },
 };

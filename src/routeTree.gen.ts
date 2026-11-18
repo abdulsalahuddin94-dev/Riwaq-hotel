@@ -16,8 +16,10 @@ import { Route as AppBoardRouteImport } from './routes/app/board'
 import { Route as AppEscalationsRouteImport } from './routes/app/escalations'
 import { Route as AppFrontDeskRouteImport } from './routes/app/front-desk'
 import { Route as AppReportsRouteImport } from './routes/app/reports'
+import { Route as AppReservationsRouteImport } from './routes/app/reservations'
 import { Route as AppSettingsRouteImport } from './routes/app/settings'
 import { Route as AppTeamRouteImport } from './routes/app/team'
+import { Route as AppUsersRouteImport } from './routes/app/users'
 import { Route as AppWorkOrdersRouteImport } from './routes/app/work-orders'
 import { Route as MAlertsRouteImport } from './routes/m/alerts'
 import { Route as MFloorRouteImport } from './routes/m/floor'
@@ -66,6 +68,11 @@ const AppReportsRoute = AppReportsRouteImport.update({
   path: '/app/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppReservationsRoute = AppReservationsRouteImport.update({
+  id: '/app/reservations',
+  path: '/app/reservations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/app/settings',
   path: '/app/settings',
@@ -74,6 +81,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppTeamRoute = AppTeamRouteImport.update({
   id: '/app/team',
   path: '/app/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppUsersRoute = AppUsersRouteImport.update({
+  id: '/app/users',
+  path: '/app/users',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppWorkOrdersRoute = AppWorkOrdersRouteImport.update({
@@ -145,8 +157,10 @@ export interface FileRoutesByFullPath {
   '/app/escalations': typeof AppEscalationsRoute
   '/app/front-desk': typeof AppFrontDeskRoute
   '/app/reports': typeof AppReportsRoute
+  '/app/reservations': typeof AppReservationsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/team': typeof AppTeamRoute
+  '/app/users': typeof AppUsersRoute
   '/app/work-orders': typeof AppWorkOrdersRoute
   '/m/alerts': typeof MAlertsRoute
   '/m/floor': typeof MFloorRoute
@@ -168,8 +182,10 @@ export interface FileRoutesByTo {
   '/app/escalations': typeof AppEscalationsRoute
   '/app/front-desk': typeof AppFrontDeskRoute
   '/app/reports': typeof AppReportsRoute
+  '/app/reservations': typeof AppReservationsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/team': typeof AppTeamRoute
+  '/app/users': typeof AppUsersRoute
   '/app/work-orders': typeof AppWorkOrdersRoute
   '/m/alerts': typeof MAlertsRoute
   '/m/floor': typeof MFloorRoute
@@ -192,8 +208,10 @@ export interface FileRoutesById {
   '/app/escalations': typeof AppEscalationsRoute
   '/app/front-desk': typeof AppFrontDeskRoute
   '/app/reports': typeof AppReportsRoute
+  '/app/reservations': typeof AppReservationsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/team': typeof AppTeamRoute
+  '/app/users': typeof AppUsersRoute
   '/app/work-orders': typeof AppWorkOrdersRoute
   '/m/alerts': typeof MAlertsRoute
   '/m/floor': typeof MFloorRoute
@@ -217,8 +235,10 @@ export interface FileRouteTypes {
     | '/app/escalations'
     | '/app/front-desk'
     | '/app/reports'
+    | '/app/reservations'
     | '/app/settings'
     | '/app/team'
+    | '/app/users'
     | '/app/work-orders'
     | '/m/alerts'
     | '/m/floor'
@@ -240,8 +260,10 @@ export interface FileRouteTypes {
     | '/app/escalations'
     | '/app/front-desk'
     | '/app/reports'
+    | '/app/reservations'
     | '/app/settings'
     | '/app/team'
+    | '/app/users'
     | '/app/work-orders'
     | '/m/alerts'
     | '/m/floor'
@@ -263,8 +285,10 @@ export interface FileRouteTypes {
     | '/app/escalations'
     | '/app/front-desk'
     | '/app/reports'
+    | '/app/reservations'
     | '/app/settings'
     | '/app/team'
+    | '/app/users'
     | '/app/work-orders'
     | '/m/alerts'
     | '/m/floor'
@@ -287,8 +311,10 @@ export interface RootRouteChildren {
   AppEscalationsRoute: typeof AppEscalationsRoute
   AppFrontDeskRoute: typeof AppFrontDeskRoute
   AppReportsRoute: typeof AppReportsRoute
+  AppReservationsRoute: typeof AppReservationsRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppTeamRoute: typeof AppTeamRoute
+  AppUsersRoute: typeof AppUsersRoute
   AppWorkOrdersRoute: typeof AppWorkOrdersRoute
   MAlertsRoute: typeof MAlertsRoute
   MFloorRoute: typeof MFloorRoute
@@ -354,6 +380,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/reservations': {
+      id: '/app/reservations'
+      path: '/app/reservations'
+      fullPath: '/app/reservations'
+      preLoaderRoute: typeof AppReservationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/settings': {
       id: '/app/settings'
       path: '/app/settings'
@@ -366,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/app/team'
       fullPath: '/app/team'
       preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/users': {
+      id: '/app/users'
+      path: '/app/users'
+      fullPath: '/app/users'
+      preLoaderRoute: typeof AppUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/work-orders': {
@@ -463,8 +503,10 @@ const rootRouteChildren: RootRouteChildren = {
   AppEscalationsRoute: AppEscalationsRoute,
   AppFrontDeskRoute: AppFrontDeskRoute,
   AppReportsRoute: AppReportsRoute,
+  AppReservationsRoute: AppReservationsRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppTeamRoute: AppTeamRoute,
+  AppUsersRoute: AppUsersRoute,
   AppWorkOrdersRoute: AppWorkOrdersRoute,
   MAlertsRoute: MAlertsRoute,
   MFloorRoute: MFloorRoute,

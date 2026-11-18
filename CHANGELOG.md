@@ -16,6 +16,20 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Simpler dashboard that completes the cycle with Eman's staff app · @abdulsalahuddin94-dev
+- **What:**
+  - **Notification bell** replaces the Live Board's "Needs you now" strip and the Escalation Center (`notifications.tsx`, was `now-strip.tsx`). It sits top right on every page (on the welcome photo on the Live Board) and holds queue SLAs, DND welfare, guests waiting, arrivals at risk, booking follow-ups and request updates, each with its action. `/app/escalations` now redirects to the board; accountability signals moved to Team Progress.
+  - **Users page** `/app/users` (`users-page.tsx`): create, edit, deactivate/reactivate; job, shift, wings for supervisors, phone or work email. Staff-app jobs get a one-time 4-digit PIN (reset any time), dashboard jobs a one-time temporary password. New people appear on the staff sign-in, which now checks their PIN; deactivated people disappear from sign-in and assignment, and their not-started rooms go back to Unassigned. Users moved out of Settings.
+  - **Front Desk is minimal:** room status tabs, guests waiting, and **requests to housekeeping** (towels, amenities, extra housekeeping, late checkout, other) sent to the wing's floor supervisor, with Sent → On the way → Done. The supervisor answers from phone alerts (On my way / Done). Arrivals timeline removed from this page. Front Desk persona sees only Front Desk + Reservations, and a slim room drawer (readiness, supervisor check, occupancy, arrival, open requests, Check in/out, Send request).
+  - **Reservations page** `/app/reservations` (`reservations-page.tsx`): new reservation (name, phone, email, date, time, nights, guests, room type, VIP, source, notes), assign a room on the day (shows on the board as an arrival), check in, and a **Follow up** tab for guests not arrived 30 min after their time or whose day passed; log the call (still coming + new time, no answer, cancelled, no-show). Sidebar count and bell reminder.
+  - **Maintenance removed from the dashboard:** Work Orders page (`/app/work-orders` redirects), work-order dialogs, P1 alerts and the P1 setting; Engineer role hidden on Users and the staff sign-in. Room OOO/OOS blocks stay (they exist in Eman's app).
+  - **Same wings and room types as Eman's app:** Marina, Lagoon, Palm, Dune, Oasis Wing; Standard (01–12), Deluxe (13–17), Suite (18–20). Room numbers 101–520 unchanged.
+  - Live Board: dropped the duplicate Auto-assign button (it's on Assignments) and the checklist wording.
+  - Store: `VERSION` 7 (new `requests`, `reservations`, staff `shift/phone/email/pin/active`); old saves reset to the new seed.
+- **Why:** Abdul: remove "Needs you now" and show it through a notification icon; simplify the dashboard so it complements Eman's mobile app; user creation must be on the dashboard; reception only needs room state and to send requests to the supervisor; add reservations with follow-up; remove anything maintenance-related because Eman's app has none; use Eman's wing and room names.
+- **Decisions:** Five rows in `docs/decision-log.md` (2026-11-18). The 30-minute follow-up grace is an assumption. No protected decision changed (PD-01 PIN sign-in is kept and now enforced for new users). Docs: `sitemap.md`, `information-architecture.md`, `design-system.md` §7·1.
+- **PR:** #PR_NUMBER
+
 ## 2026-11-18 · English-only sidebar hotel name · @abdulsalahuddin94-dev
 - **What:** Removed the typed Arabic hotel name from the shared desktop sidebar, retaining the emblem, English name and RIWAQ credit.
 - **Why:** Abdul requested removing «مرسى ذهب» from the sidebar.

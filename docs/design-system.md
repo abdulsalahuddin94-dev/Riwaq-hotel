@@ -114,6 +114,12 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 | Desktop sign-in (split: courtyard scene + night form) | `mobile-pages.tsx` `DesktopLoginPage` | `.login-*` |
 | Mobile sign-in (job picture → face → PIN) | `mobile-pages.tsx` `MobileLoginPage` | `.m-login-*`, `.m-role-card`, `.m-face-grid` |
 
+## 7·1. Added 2026-11-18
+- **Notification bell** (`notifications.tsx`, `.notif-bell`): 44px round button, top right of every page heading; glass variant `.notif-bell-photo` on the Live Board welcome photo. Count badge is orange (navy text); red when an item is an error. Opens a 440px popover of `now-item` rows (icon + title + detail + one primary action + Room link). The aria-label states the count, so the badge is never colour alone.
+- **Request / booking state pills** (`.request-state` + `.req-pending|ack|done|cancelled`): icon + text + tint, e.g. Sent (clock), On the way (walking), Done (check), Not arrived (phone).
+- **Users table** (`.users-row`) and **one-time PIN reveal** (`.pin-reveal`): four large digit tiles, shown once.
+- **Reservation rows** (`.res-row`): time column, guest + details, room select + status chip, state pill, actions. Late rows get a soft warning wash plus the "Not arrived" pill.
+
 ## 7a. Pictures and illustrations
 Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP files in `src/assets/photos/` (fictional property, no people, no text, no real hotel); pictograms, staff avatars, job pictures and empty states are original inline SVG. No stock or real hotel imagery, in the juss/brass/mud palette plus a night palette (`--night-*`) for the login and welcome hero.
 - **Field staff read little:** on mobile, every list row and choice carries a picture: room thumbnails show the room type and the bed state (messy → in progress → made), checklist items get a pictogram tinted by zone, issue categories, pause and skip reasons get icons, staff pick themselves by illustrated face.
@@ -132,7 +138,7 @@ Mobile scroll behavior: standard headers compact from 88px to 56px after scrolli
 - EN / ع uses two fixed 44px targets in a segmented track. Component-scoped sizing prevents settings-row button rules from stretching the selection; the settings row uses a direction-aware grid.
 
 ## 8. States every screen needs
-Room drawers use `RoomDrawerHeader` with photographs resolved by the existing floor-to-wing assignment in `wing-photos.ts`. Najdi, Palm Garden, Fort Tower and Royal have distinct generated photographs; Courtyard Wing retains its existing courtyard image. The image fades into the semantic background, with compact room-type/task tags and conditional existing badges. No changes to room assignments or operational state.
+Room drawers use `RoomDrawerHeader` with photographs resolved by the existing floor-to-wing assignment in `wing-photos.ts`. Wings 2–5 (Lagoon, Palm, Dune, Oasis since 2026-11-18; the photo files keep their older names) have distinct generated photographs; wing 1 (Marina) retains the courtyard image. The image fades into the semantic background, with compact room-type/task tags and conditional existing badges. No changes to room assignments or operational state.
 
 Default · loading/skeleton · empty · error with retry · success feedback (toast via sonner).
 

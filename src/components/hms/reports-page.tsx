@@ -108,7 +108,7 @@ function derive(s: HmsState, floor: string, period: Period) {
   });
 
   const attendants = s.staff
-    .filter((p) => p.role === "ATTENDANT")
+    .filter((p) => p.active !== false && p.role === "ATTENDANT")
     .map((p) => {
       const mine = completed.filter((r) => r.attendant === p.id);
       const avg = mine.length ? mine.reduce((a, r) => a + (activeMinutes(s, r) ?? 0), 0) / mine.length : 0;
