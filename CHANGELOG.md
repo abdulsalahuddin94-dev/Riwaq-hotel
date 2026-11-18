@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · English-only sidebar hotel name · @abdulsalahuddin94-dev
+- **What:** Removed the typed Arabic hotel name from the shared desktop sidebar, retaining the emblem, English name and RIWAQ credit.
+- **Why:** Abdul requested removing «مرسى ذهب» from the sidebar.
+- **Decisions:** None; hotel-first branding (PD-05), sign-in logo, mobile and property data remain unchanged.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Sign-in logo: English name and HOTEL in white · @abdulsalahuddin94-dev
 - **What:** In `src/assets/marsa-dhahab-logo-on-dark.png`, "MARSA DHAHAB" and "HOTEL" are now white; «مرسى ذهب» stays `#E48B20`, and the thin rules beside HOTEL stay orange.
 - **Why:** Abdul: the English text wasn't visible on the photo.
