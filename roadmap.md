@@ -1,5 +1,6 @@
 # Roadmap — Riwaq demo
 
+- [x] Verify coastal navy/sky-blue overlays on desktop sign-in and Live Board without changing photographs or mobile styling
 - [x] TrianglZ HMS demo: boards, checklist, inspection, work orders, reports
 - [x] Rebrand to Riwaq: mark, warm heritage palette, wings, Gulf staff and guests
 - [x] Heritage elements per room with "awaiting specialist approval" notices, plus a heritage check step

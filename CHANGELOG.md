@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Remove legacy tints from coastal photography · @abdulsalahuddin94-dev
+- **What:** Desktop sign-in and Live Board photo overlays now use Marsa Dhahab navy and sky-blue tokens. Sign-in uses the same vertical gradient as the sidebar; removed old purple/brown veils and the brown corner glow. Photographs, layout, mobile palette and sign-in behavior are unchanged.
+- **Why:** The regenerated photographs were still tinted by old CSS overlays; this was not established to be a browser-cache problem.
+- **Decisions:** Share the coastal gradient and photo-overlay tokens in the desktop theme so image edits cannot be masked by legacy hues.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Hero's dark zone recoloured to the sidebar navy gradient · @abdulsalahuddin94-dev
 - **What:** `src/assets/photos/majlis-luxury.jpg` (Live Board welcome hero) edited in place — the dark left third now uses the sidebar's exact navy `#012947` → Gulf blue `#1C82AB` gradient instead of a generic dark overlay, so the banner reads as a continuous extension of the sidebar. Same file name, format and 1920×768 size; no code, layout or colour changes. The rest of the scene (coastal majlis, turquoise water, dhow, orange lantern accents) is untouched.
 - **Why:** Abdul: "ممكن الجزئ الغامق اللي على شمال الصورة يبقى بنفس درجات الأزرق اللي في الـSidebar".

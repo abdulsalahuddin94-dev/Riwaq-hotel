@@ -1181,6 +1181,9 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
    The raw scales (--brass-*, --neutral-*, status) are remapped so every existing rule follows. */
 :root:has(.desktop-shell),:root:has(.login-screen),[data-platform="desktop"]{
   --md-primary:#e99023;--md-primary-container:#fdf0dc;--md-navy:#012947;--md-sky:#1c82ab;--md-sky-soft:#83aec8;--md-sand:#f3dfb8;
+  --md-coastal-gradient:linear-gradient(180deg,var(--md-navy) 0%,var(--md-navy) 45%,var(--md-sky) 100%);
+  --md-photo-overlay:linear-gradient(90deg,color-mix(in srgb,var(--md-navy) 90%,transparent) 0%,color-mix(in srgb,var(--md-navy) 52%,transparent) 40%,transparent 72%);
+  --night-950:var(--md-navy);--night-900:var(--md-navy);--night-800:var(--md-sky);--night-700:var(--md-sky);
   --brass-50:#fef8ef;--brass-100:#fdf0dc;--brass-200:#fadcb0;--brass-300:#f5c27e;--brass-400:#efa84d;--brass-500:#e99023;--brass-600:#c97814;--brass-700:#a15f10;--brass-800:#7a4810;--brass-900:#5a350d;--brass-950:#3b2208;
   --neutral-50:#f7f9fb;--neutral-100:#eef3f7;--neutral-200:#cfdbe6;--neutral-300:#aebccb;--neutral-400:#8f9bab;--neutral-500:#6b7a8f;--neutral-600:#45546b;--neutral-700:#2c3e55;--neutral-800:#1a3150;--neutral-900:#012947;--neutral-950:#011a2e;
   --success-50:#effaf8;--success-100:#ccf0eb;--success-200:#a3e2d9;--success-300:#5cc6b8;--success-500:#0d9488;--success-600:#0b7d73;--success-700:#0a6560;--success-800:#0b4f4b;
@@ -1212,7 +1215,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .msym-glyph{font-family:"Material Symbols Rounded";font-size:24px;font-weight:400;font-feature-settings:"liga";-webkit-font-feature-settings:"liga";letter-spacing:normal;text-transform:none}
 
 /* Sidebar: navy → Gulf blue gradient with soft glows, card-style links (Eman's AppShell) */
-.desktop-shell .desktop-sidebar{overflow:hidden;background:linear-gradient(180deg,#012947 0%,#012947 45%,#1c82ab 100%);backdrop-filter:none;color:#fff;box-shadow:none}
+.desktop-shell .desktop-sidebar{overflow:hidden;background:var(--md-coastal-gradient);backdrop-filter:none;color:#fff;box-shadow:none}
 .desktop-shell .desktop-sidebar::before{content:"";pointer-events:none;position:absolute;bottom:-96px;left:-64px;width:288px;height:288px;border-radius:50%;background:rgb(233 144 35 / .3);filter:blur(64px)}
 .desktop-shell .desktop-sidebar::after{content:"";pointer-events:none;position:absolute;top:-80px;right:-40%;width:224px;height:224px;border-radius:50%;background:rgb(243 223 184 / .2);filter:blur(64px)}
 .desktop-shell .desktop-sidebar>*{position:relative;z-index:1}
@@ -1263,3 +1266,15 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .desktop-shell .sidebar-brand .sidebar-mark{width:84px;height:58px}
 .desktop-shell .desktop-sidebar-collapsed .sidebar-brand .sidebar-mark{width:48px;height:34px}
 .login-screen .login-mark{width:84px;height:58px;filter:drop-shadow(0 0 18px rgb(233 144 35 / .35))}
+
+/* Keep coastal photographs coastal: legacy purple/brown veils must not tint them. */
+.login-screen .login-side{background:var(--md-coastal-gradient)}
+.login-screen .login-visual:after{background:linear-gradient(90deg,transparent 55%,var(--md-navy)),linear-gradient(0deg,color-mix(in srgb,var(--md-navy) 45%,transparent),transparent 50%)}
+.login-screen .login-visual-copy{text-shadow:0 2px 24px color-mix(in srgb,var(--md-navy) 60%,transparent)}
+.login-screen .hotel-lockup [lang="ar"]{color:var(--md-sand)}
+.desktop-shell .welcome-hero{background:var(--md-navy);box-shadow:var(--lift-2)}
+.desktop-shell .welcome-hero:before{background:var(--md-photo-overlay)!important}
+.desktop-shell .welcome-copy p{color:var(--secondary-foreground)}
+.desktop-shell .welcome-copy b{color:var(--md-sand)}
+.desktop-shell .welcome-gauge{background:color-mix(in srgb,var(--md-navy) 65%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--secondary-foreground) 18%,transparent)}
+@media(max-width:900px){.login-screen .login-visual:after{background:linear-gradient(180deg,transparent 50%,var(--md-navy))}}
