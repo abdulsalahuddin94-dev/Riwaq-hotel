@@ -5,6 +5,12 @@ What changed, **who** changed it, and **why**. Newest first. Every merge into `m
 Entry format:
 
 ```
+## 2026-11-18 · Staff photos on Create / Edit user · @abdulsalahuddin94-dev
+- **What:** The Users dialog has a **Photo** block (upload, or take one on a phone/tablet camera; change or remove). The picture is cropped square and shrunk to 160px before it is saved. It shows in the Users table, on the staff app's "Tap your photo" sign-in, the staff Me page and the dashboard account menu. People without a photo keep the illustrated avatar. Files: `users-page.tsx`, `illustrations.tsx` (`StaffAvatar` renders `staff.photo` when set), `desktop-shell.tsx`, `demo-data.ts` (`Staff.photo`), `hms-store.ts`, `styles.css`.
+- **Why:** Abdul: add an avatar photo like Eman's mobile app, whose sign-in is face → PIN.
+- **Decisions:** Photo is optional. Placeholder portraits of real strangers (Eman's app uses randomuser.me) are not used; seeded staff keep illustrated avatars.
+- **PR:** #PR_NUMBER
+
 ## 2026-11-18 · Reservations timeline (@abdulsalahuddin94-dev)
 - Reservations page: filter tabs became a 4-card summary strip; bookings grouped under hourly timeline markers. Presentation only.
 

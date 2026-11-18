@@ -49,7 +49,7 @@ Sidebar order as in `desktop-shell.tsx`. Personas: Manager (all pages), Front De
 | `/app/assign` | Assignments (`AssignPage`) | Manager | Assign and re-assign rooms to attendants by wing; auto-assign; publish. |
 | `/app/team` | Team Progress (`TeamPage`) | Manager | Each attendant's rooms done / in progress, supervisors by wing, accountability signals. Opens **Staff day** dialog. |
 | `/app/reports` | Reports (`ReportsPage` → `ReportsContent`) | Manager | Charts (turn times, pass rate, re-cleans), PNG/CSV export, report preview. |
-| `/app/users` | Users (`users-page.tsx`) | Manager / Admin | Create, edit, deactivate/reactivate team members; job, shift, wings (supervisors), phone or work email. Staff-app jobs get a one-time 4-digit PIN (reset any time); dashboard jobs get a one-time temporary password. |
+| `/app/users` | Users (`users-page.tsx`) | Manager / Admin | Create, edit, deactivate/reactivate team members; photo (upload or camera, optional; shown on staff sign-in), job, shift, wings (supervisors), phone or work email. Staff-app jobs get a one-time 4-digit PIN (reset any time); dashboard jobs get a one-time temporary password. |
 | `/app/settings` | Settings (`SettingsPage`) | Admin | Property, checklists, inspection rules: inspection required, pass score, queue-guest SLA, attendant credit target. |
 | `/app/escalations`, `/app/work-orders` | redirect to `/app/board` | — | Removed 2026-11-18 (bell replaces Escalations; maintenance isn't in the staff app). Kept as redirects so old links don't break. |
 | `/login` | Desktop sign-in (`DesktopLoginPage`) | All | Split screen: courtyard illustration + night form (no real auth). |

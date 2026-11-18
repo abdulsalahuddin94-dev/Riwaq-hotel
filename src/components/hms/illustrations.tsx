@@ -414,7 +414,8 @@ const uniform: Record<Staff["role"], string> = {
 };
 
 /** Illustrated staff portrait. Always shown with the person's name next to it. */
-export function StaffAvatar({ staff, className }: { staff: Pick<Staff, "id" | "role" | "initials">; className?: string }) {
+export function StaffAvatar({ staff, className }: { staff: Pick<Staff, "id" | "role" | "initials"> & { photo?: string | undefined }; className?: string }) {
+  if (staff.photo) return <img src={staff.photo} alt="" className={cn("staff-avatar staff-avatar-photo", className)} width={64} height={64} />;
   const l = looks[staff.id] ?? { look: "short" as Look, skin: 2, tint: C.juss };
   const skin = skins[l.skin] ?? skins[2];
   const hair = "#2A1D16";

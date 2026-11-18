@@ -9,6 +9,8 @@ import {
   UserCheck,
   UserPlus,
   UserX,
+  Camera,
+  Trash2,
 } from "./msym";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -33,6 +35,7 @@ import { actorFor, hms, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
 import { DesktopShell } from "./desktop-shell";
+import { StaffAvatar } from "./illustrations";
 
 /** Maintenance isn't in the staff app yet, so the Engineer role is not offered here (owner, 2026-11-18). */
 const ROLE_ORDER: Role[] = ["ATTENDANT", "SUPERVISOR", "FRONT_DESK", "MANAGER", "ADMIN"];
@@ -174,7 +177,7 @@ function UsersContent() {
               return (
                 <div className={cn("table-row users-row", off && "users-row-off")} key={p.id}>
                   <span className="staff-cell">
-                    <i>{p.initials}</i>
+                    <StaffAvatar staff={p} className="users-avatar" />
                     <span className="users-name">
                       <b>{p.name}</b>
                       {(p.email ?? p.phone) ? <small dir="ltr">{p.email ?? p.phone}</small> : null}
@@ -300,6 +303,7 @@ function UserForm({
   const [floors, setFloors] = useState<number[]>(user?.floors ?? []);
   const [phone, setPhone] = useState(user?.phone ?? "");
   const [email, setEmail] = useState(user?.email ?? "");
+  const [photo, setPhoto] = useState<string | undefined>(user?.photo);
   const onPhone = signsInOnPhone(role);
   const [error, setError] = useState<string | null>(null);
 
@@ -322,6 +326,7 @@ function UserForm({
       phone: phone.trim() || undefined,
       email: onPhone ? undefined : email.trim().toLowerCase(),
       floors: role === "SUPERVISOR" ? [...floors].sort() : undefined,
+      photo,
     };
     if (user) {
       hms.updateStaff(user.id, fields, actor);
@@ -345,6 +350,23 @@ function UserForm({
         </DialogDescription>
       </DialogHeader>
       <form className="form-grid form-grid-2" onSubmit={submit} noValidate>
+        <AvatarPicker
+          photo={photo}
+          preview={{
+            id: user?.id ?? "new",
+            role,
+            initials:
+              name
+                .trim()
+                .split(/\s+/)
+                .map((w) => w[0] ?? "")
+                .join("")
+                .slice(0, 2)
+                .toUpperCase() || "?",
+          }}
+          onChange={setPhoto}
+          onPhone={onPhone}
+        />
         <label className="span-2">
           Full name
           <input
@@ -518,5 +540,104 @@ function PinDialog({ info, onClose }: { info: SecretInfo | null; onClose: () => 
         ) : null}
       </DialogContent>
     </Dialog>
+  );
+}
+
+/* ───────────── Photo ───────────── */
+
+/** Crops the picked image to a centred square and shrinks it to 160px, so it stays small in local storage. */
+function toAvatar(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const size = 160;
+      const side = Math.min(img.width, img.height);
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("no canvas"));
+      ctx.drawImage(
+        img,
+        (img.width - side) / 2,
+        (img.height - side) / 2,
+        side,
+        side,
+        0,
+        0,
+        size,
+        size,
+      );
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", 0.82));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("not an image"));
+    };
+    img.src = url;
+  });
+}
+
+function AvatarPicker({
+  photo,
+  preview,
+  onChange,
+  onPhone,
+}: {
+  photo: string | undefined;
+  preview: { id: string; role: Role; initials: string };
+  onChange: (photo: string | undefined) => void;
+  onPhone: boolean;
+}) {
+  const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Choose a photo (JPG or PNG)", { duration: 2500 });
+      return;
+    }
+    try {
+      onChange(await toAvatar(file));
+    } catch {
+      toast.error("That photo couldn't be read. Try another one.", { duration: 2500 });
+    }
+  };
+  return (
+    <div className="span-2 avatar-picker">
+      <StaffAvatar staff={{ ...preview, photo }} className="avatar-picker-img" />
+      <div className="avatar-picker-text">
+        <strong>Photo</strong>
+        <span>
+          {onPhone
+            ? "Shown on the staff app sign-in, so they can find their face."
+            : "Shown next to their name on the dashboard."}
+        </span>
+        <div className="avatar-picker-actions">
+          <label className="avatar-upload">
+            <Camera aria-hidden="true" /> {photo ? "Change photo" : "Upload or take photo"}
+            <input
+              type="file"
+              accept="image/*"
+              capture="user"
+              onChange={pick}
+              className="sr-only"
+            />
+          </label>
+          {photo ? (
+            <Button
+              type="button"
+              variant="hmsGhost"
+              size="hmsSm"
+              onClick={() => onChange(undefined)}
+            >
+              <Trash2 aria-hidden="true" /> Remove
+            </Button>
+          ) : null}
+        </div>
+      </div>
+    </div>
   );
 }

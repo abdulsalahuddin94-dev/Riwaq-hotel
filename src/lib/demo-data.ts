@@ -53,6 +53,8 @@ export type Staff = {
   /** Dashboard sign-in (manager, front desk, admin). */
   email?: string | undefined;
   pin?: string | undefined;
+  /** Small square portrait (data URL, ~160px) used on the staff sign-in face grid. Unset → illustrated avatar. */
+  photo?: string | undefined;
   active?: boolean | undefined;
   createdAt?: number | undefined;
 };
