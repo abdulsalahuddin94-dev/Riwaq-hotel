@@ -5,6 +5,12 @@ What changed, **who** changed it, and **why**. Newest first. Every merge into `m
 Entry format:
 
 ```
+## 2026-11-18 · Sidebar rosette turns as one ornament · @abdulsalahuddin94-dev
+- **What:** The sidebar rosette now has a single rotation. `mandala.tsx` puts every ring, petal, dot and star in one `<g class="mandala-spin">` that turns clockwise once every 240 s; the brass girih core stayed inside it as a colour-only group (`.mandala-core`) with no animation. `styles.css` drops `.mandala-outer` / `.mandala-inner` and the counter-clockwise keyframes, and the `prefers-reduced-motion` stop now targets `.mandala-spin`. Files: `mandala.tsx`, `styles.css`.
+- **Why:** Abdul saw two mandalas turning in the sidebar and asked for one. Two layers spinning in opposite directions read as two independent patterns.
+- **Decisions:** Geometry, size (760px, `opacity:.19`; collapsed 150px medallion at `.3`), placement behind the nav and the `aria-hidden` / `pointer-events:none` presentation-only rules are unchanged. Verified at 1280×1800: exactly one element inside the SVG carries an animation, open and collapsed, and the rosette reads as a single construction.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Oriental rosette behind the sidebar nav · @abdulsalahuddin94-dev
 - **What:** The desktop sidebar has a faint oriental rosette painted behind the navigation: `src/components/hms/mandala.tsx` draws it as inline SVG geometry (a 12-fold petal-and-dot outer ornament over an 8-fold girih star), and `styles.css` sizes it 760px so only its centre shows inside the rail, at `opacity:.19` in sidebar navy with a brass inner star. The outer ornament turns clockwise once every 240 s, the inner star counter-clockwise every 168 s, and both stop under `prefers-reduced-motion`. Collapsed, the rail carries a 150px medallion at `.3` with `stroke-width:2.7`. Files: `mandala.tsx` (new), `desktop-shell.tsx`, `styles.css`.
 - **Why:** Abdul asked for an oriental mandala at low opacity rotating very slowly in the sidebar, then for it bigger and more visible with only its centre showing in the rail.

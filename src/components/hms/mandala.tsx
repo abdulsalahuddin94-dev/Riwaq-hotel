@@ -3,9 +3,11 @@ import { cn } from "@/lib/utils";
 /**
  * Decorative oriental rosette for the desktop sidebar.
  *
- * Pure geometry — an 12/8-fold girih-style mandala drawn from polar coordinates,
- * never a photograph or a brand mark. Two layers turn in opposite directions at
- * very different speeds so the pattern never looks like a looping GIF.
+ * Pure geometry — a 12/8-fold girih-style mandala drawn from polar coordinates,
+ * never a photograph or a brand mark. It is one ornament: every ring, petal and
+ * star belongs to the same group and turns together, clockwise, once every four
+ * minutes. The inner girih star keeps its brass tint, but it no longer has its
+ * own rotation — two layers turning in opposite directions read as two mandalas.
  *
  * Presentation only: aria-hidden, pointer-events none, painted behind the nav.
  */
@@ -37,8 +39,8 @@ export function SidebarMandala({ className }: { className?: string }) {
       aria-hidden="true"
       focusable="false"
     >
-      {/* outer ornament — turns clockwise, ~4 minutes a revolution */}
-      <g className="mandala-spin mandala-outer" fill="none" stroke="currentColor" strokeWidth={1}>
+      {/* one ornament, one turn — everything below rotates together */}
+      <g className="mandala-spin" fill="none" stroke="currentColor" strokeWidth={1}>
         <circle cx={C} cy={C} r={193} />
         <circle cx={C} cy={C} r={181} strokeDasharray="1 7" strokeLinecap="round" />
         {Array.from({ length: 12 }, (_, i) => (
@@ -59,24 +61,18 @@ export function SidebarMandala({ className }: { className?: string }) {
             upper and lower points reach the visible band, so it decorates without
             laying a lattice of long diagonals behind the nav labels */}
         <polygon points={star(12, 152, 5)} />
-      </g>
 
-      {/* inner girih star — turns the other way, even slower */}
-      <g
-        className="mandala-spin mandala-inner"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1}
-        strokeLinejoin="round"
-      >
-        <polygon points={star(8, 116, 3)} />
-        <circle cx={C} cy={C} r={104} />
-        <circle cx={C} cy={C} r={76} strokeDasharray="3 6" strokeLinecap="round" />
-        {Array.from({ length: 8 }, (_, i) => (
-          <path key={`inner-${i}`} d={INNER_PETAL} transform={`rotate(${i * 45} ${C} ${C})`} />
-        ))}
-        <circle cx={C} cy={C} r={26} />
-        <polygon points={star(6, 15, 5)} />
+        {/* brass core — same rotation, colour only */}
+        <g className="mandala-core" strokeLinejoin="round">
+          <polygon points={star(8, 116, 3)} />
+          <circle cx={C} cy={C} r={104} />
+          <circle cx={C} cy={C} r={76} strokeDasharray="3 6" strokeLinecap="round" />
+          {Array.from({ length: 8 }, (_, i) => (
+            <path key={`inner-${i}`} d={INNER_PETAL} transform={`rotate(${i * 45} ${C} ${C})`} />
+          ))}
+          <circle cx={C} cy={C} r={26} />
+          <polygon points={star(6, 15, 5)} />
+        </g>
       </g>
     </svg>
   );

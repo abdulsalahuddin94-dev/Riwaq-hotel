@@ -446,13 +446,13 @@ h1,h2,h3,.desktop-title-group h1{letter-spacing:-.018em}
 /* Collapsed rail: a small medallion. Shrinking the SVG shrinks its strokes with it,
    so the stroke is thickened back to ~1px and the pattern raised a little in contrast. */
 .desktop-shell .desktop-sidebar.desktop-sidebar-collapsed>.sidebar-mandala{width:150px;height:150px;opacity:.3;stroke-width:2.7}
-.mandala-inner{color:var(--brass-600);opacity:.8}
-.mandala-spin{transform-box:view-box;transform-origin:50% 50%}
+/* One ornament, one turn: the whole rosette belongs to a single group that rotates
+   clockwise. The brass core only tints — it has no animation of its own, because two
+   layers turning in opposite directions read as two mandalas. */
+.mandala-core{color:var(--brass-600);opacity:.8}
+.mandala-spin{transform-box:view-box;transform-origin:50% 50%;animation:mandala-turn 240s linear infinite}
 @keyframes mandala-turn{to{transform:rotate(360deg)}}
-@keyframes mandala-turn-back{to{transform:rotate(-360deg)}}
-.mandala-outer{animation:mandala-turn 240s linear infinite}
-.mandala-inner{animation:mandala-turn-back 168s linear infinite}
-@media (prefers-reduced-motion:reduce){.mandala-outer,.mandala-inner{animation:none}}
+@media (prefers-reduced-motion:reduce){.mandala-spin{animation:none}}
 
 /* ── Top bar: frosted ── */
 .desktop-topbar{background:var(--frost);backdrop-filter:blur(20px) saturate(180%);border-bottom:0;box-shadow:0 .5px 0 oklch(0.26 0.025 46 / .1)}
