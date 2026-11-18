@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Real Marsa Dhahab emblem replaces the interim mark · @abdulsalahuddin94-dev
+- **What:** `HotelMark` now renders @EmG38's emblem (`src/assets/marsa-dhahab-emblem.png`, transparent 400×275, sent by Abdul) instead of the interim dhow drawing, on the desktop sidebar, desktop sign-in and the staff app badge. Wide emblem is contained, never stretched (`.hotel-mark-img`).
+- **Why:** Abdul: "مش نفس اللوجو"; the first version used a placeholder because the file lived only on Eman's Lovable CDN.
+- **Decisions:** None new (PD-05 text updated to name the file).
+- **PR:** #15
+
 ## 2026-11-18 · Dashboard adopts Eman's Marsa Dhahab design system; drawer shows the supervisor's check, not the checklist · @abdulsalahuddin94-dev
 - **What:** Desktop (`/app/*`, `/login`, room drawer) now uses @EmG38's design system from `EmG38/hotel-hearth-ops` (its README tokens and `styles.css`; that repo has no Design.md): orange `#E99023` primary, navy `#012947`, sky `#1C82AB`, cool slate surfaces, status Dirty red / Cleaning amber / Inspect blue / Ready teal, Inter, pill buttons, 16–20px cards. One scoped layer at the end of `src/styles.css` remaps the colour scales. Icons are Google Material Symbols Rounded via new `src/components/hms/msym.tsx` (same export names as lucide, so desktop files changed only their import). Sidebar copies Eman's look: navy → blue gradient, centred hotel mark, card links with icon tiles. The hotel is renamed **Marsa Dhahab «مرسى ذهب»** everywhere (`property`, `HotelMark`/`HotelBadge`, tab titles) with an interim original dhow mark. The room drawer drops the attendant checklist (tab and fact row) and shows a **Supervisor check** box: passed/failed, score, who confirmed and when, from the phone or remote; tabs are now Supervisor checks + Timeline.
 - **Why:** Abdul asked to apply Eman's colours, styles, icons, logo and sidebar to his dashboard, and said reception doesn't need the checklist, only the room state the supervisor confirmed from their phone.

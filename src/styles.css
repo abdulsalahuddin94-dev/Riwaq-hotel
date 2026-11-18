@@ -1258,3 +1258,8 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .room-drawer[data-platform="desktop"]{background:#f7f9fb!important;box-shadow:0 2px 4px rgb(20 35 63 / .05),0 24px 64px rgb(20 35 63 / .18)!important}
 .login-screen .login-submit{border-radius:999px!important;background:#e99023!important;color:#012947!important;box-shadow:0 10px 30px rgb(233 144 35 / .35)}
 .login-screen .login-submit:hover{background:#d9801a!important}
+/* Eman's Marsa Dhahab emblem (wide transparent PNG): always contained, never stretched */
+.hotel-mark-img{object-fit:contain;display:block}
+.desktop-shell .sidebar-brand .sidebar-mark{width:84px;height:58px}
+.desktop-shell .desktop-sidebar-collapsed .sidebar-brand .sidebar-mark{width:48px;height:34px}
+.login-screen .login-mark{width:84px;height:58px;filter:drop-shadow(0 0 18px rgb(233 144 35 / .35))}
