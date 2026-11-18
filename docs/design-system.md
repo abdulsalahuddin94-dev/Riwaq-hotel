@@ -123,7 +123,7 @@ Defined once in `statusMeta` (`src/lib/demo-data.ts`) and rendered by `StatusChi
 - **Reservation rows** (`.res-row`): time column, guest + details, room select + status chip, state pill, actions. Late rows get a soft warning wash plus the "Not arrived" pill.
 
 ## 7a. Pictures and illustrations
-Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP files in `src/assets/photos/` (fictional property, no people, no text, no real hotel); pictograms, staff avatars, job pictures and empty states are original inline SVG. No stock or real hotel imagery, in the juss/brass/mud palette plus a night palette (`--night-*`) for the login and welcome hero.
+Art lives in `illustrations.tsx`. Scene and room photos are AI-generated WebP files in `src/assets/photos/` (fictional property, no people, no text, no real hotel); pictograms, job pictures and empty states are original inline SVG. Staff avatars show the uploaded photo, else a sample human portrait from randomuser.me (`portraitFor`, same picking rule as Eman's staff app), else the illustrated SVG avatar if the image fails to load. No stock or real hotel imagery, in the juss/brass/mud palette plus a night palette (`--night-*`) for the login and welcome hero.
 - **Field staff read little:** on mobile, every list row and choice carries a picture: room thumbnails show the room type and the bed state (messy → in progress → made), checklist items get a pictogram tinted by zone, issue categories, pause and skip reasons get icons, staff pick themselves by illustrated face.
 - A picture never replaces words or status: status chips (colour + icon + text) stay next to it.
 - Decorative SVG is `aria-hidden`; the text label beside it is the accessible name.

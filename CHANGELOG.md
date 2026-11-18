@@ -5,6 +5,23 @@ What changed, **who** changed it, and **why**. Newest first. Every merge into `m
 Entry format:
 
 ```
+## YYYY-MM-DD · <short title> · @<github-login>
+- **What:** the change, in plain words (screens/files touched).
+- **Why:** the reason or the request behind it. Link a decision if there is one.
+- **Decisions:** any choice made along the way (also add it to docs/decision-log.md). "None" if none.
+- **PR:** #<number>
+```
+
+Use `@<login>` of the person who asked for the change, even when Claude wrote the code. Lovable edits made directly in the Lovable editor appear as `gpt-engineer-app[bot]` in git; add an entry for them the next time you work, if they matter.
+
+---
+
+## 2026-11-18 · Settings removed, mobile switch hidden, human staff portraits · @abdulsalahuddin94-dev
+- **What:** Removed Settings from the sidebar. `/app/settings` now redirects to the Live Board, and `SettingsPage` and `PropertySettings` are deleted. Each Live Board wing heading shows its room count ("Marina Wing 20 rooms"). Admin now sees Users, Live Board and Reports. The floating desktop/mobile switch (orange phone button, Ctrl+M) is gone from every page, and so is the "Open the staff app" link on the dashboard sign-in. Staff without an uploaded photo now show a human portrait from randomuser.me, picked the same way as Eman's app (first name → men/women set, id hash → number). If the image can't load, they fall back to the illustrated avatar. The account menu uses the same avatar. Files: `desktop-shell.tsx`, `desktop-pages.tsx`, `desktop-dialogs.tsx`, `routes/app/settings.tsx`, `room-components.tsx`, `demo-chrome.tsx`, `mobile-pages.tsx`, `illustrations.tsx` (`portraitFor`, `StaffAvatar`), `styles.css`.
+- **Why:** Abdul agreed that a read-only property page isn't settings, and said "شيلها". Room credits and standard times are details for the supervisor. He then asked to hide the mobile button everywhere, because staff use Eman's mobile app, and to use human avatars like hers.
+- **Decisions:** Logged in `docs/decision-log.md`. This supersedes the 2026-11-18 "Settings = property only" row and the "no stranger portraits" choice from PR #20. The `/m` routes stay reachable by URL, and narrow screens opening `/login` still go to the staff sign-in. Uploaded photos always win over the sample portrait.
+- **PR:** #22
+
 ## 2026-11-18 · Sidebar rosette turns as one ornament · @abdulsalahuddin94-dev
 - **What:** The sidebar rosette now has a single rotation. `mandala.tsx` puts every ring, petal, dot and star in one `<g class="mandala-spin">` that turns clockwise once every 240 s; the brass girih core stayed inside it as a colour-only group (`.mandala-core`) with no animation. `styles.css` drops `.mandala-outer` / `.mandala-inner` and the counter-clockwise keyframes, and the `prefers-reduced-motion` stop now targets `.mandala-spin`. Files: `mandala.tsx`, `styles.css`.
 - **Why:** Abdul saw two mandalas turning in the sidebar and asked for one. Two layers spinning in opposite directions read as two independent patterns.
@@ -32,16 +49,6 @@ Entry format:
 ## 2026-11-18 · Reservations timeline (@abdulsalahuddin94-dev)
 - Reservations page: filter tabs became a 4-card summary strip; bookings grouped under hourly timeline markers. Presentation only.
 
-## YYYY-MM-DD · <short title> · @<github-login>
-- **What:** the change, in plain words (screens/files touched).
-- **Why:** the reason or the request behind it. Link a decision if there is one.
-- **Decisions:** any choice made along the way (also add it to docs/decision-log.md). "None" if none.
-- **PR:** #<number>
-```
-
-Use `@<login>` of the person who asked for the change, even when Claude wrote the code. Lovable edits made directly in the Lovable editor appear as `gpt-engineer-app[bot]` in git; add an entry for them the next time you work, if they matter.
-
----
 
 ## 2026-11-18 · Simpler dashboard that completes the cycle with Eman's staff app · @abdulsalahuddin94-dev
 - **What:**

@@ -44,7 +44,6 @@ import {
   EventLogDialog,
   QueueGuestDialog,
   SendRequestDialog,
-  PropertySettings,
   StaffDayDialog,
 } from "./desktop-dialogs";
 import { DesktopShell, useDesktop } from "./desktop-shell";
@@ -592,27 +591,3 @@ function FrontDeskContent() {
   );
 }
 
-/* ───────────────────────── Settings ───────────────────────── */
-
-export function SettingsPage() {
-  return (
-    <DesktopShell title="Settings" eyebrow="Property">
-      <SettingsContent />
-    </DesktopShell>
-  );
-}
-
-function SettingsContent() {
-  const s = useHms();
-  return (
-    <section className="content-panel">
-      <div className="section-heading">
-        <div>
-          <h2>{property.name}</h2>
-          <p>5 wings · {s.rooms.length} rooms · Standard, Deluxe and Suite. The same wings and room types as the staff app.</p>
-        </div>
-      </div>
-      <PropertySettings />
-    </section>
-  );
-}
