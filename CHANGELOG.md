@@ -5,6 +5,12 @@ What changed, **who** changed it, and **why**. Newest first. Every merge into `m
 Entry format:
 
 ```
+## 2026-11-18 · Settings shows the property only · @abdulsalahuddin94-dev
+- **What:** `/app/settings` is now a single Property panel: the 5 wings with room counts, and the room types with credits and standard times. The Checklists editor and the Inspection & SLA rules dialog are removed, along with `SettingsDialog`, `ChecklistSettings` and `RulesSettings` in `desktop-dialogs.tsx`. Values stay in the store at their current defaults (pass 90%, inspection required, queue SLA 15 min, DND welfare 24 h, 16 credits).
+- **Why:** Abdul asked whether these details are needed now. Eman's staff app has its checklists and inspection points built in, with no editor, so editing them on the dashboard would change nothing on her app.
+- **Decisions:** Logged in `docs/decision-log.md`. Bring the editors back when the staff app reads checklists and rules from shared data.
+- **PR:** #21
+
 ## 2026-11-18 · Staff photos on Create / Edit user · @abdulsalahuddin94-dev
 - **What:** The Users dialog has a **Photo** block (upload, or take one on a phone/tablet camera; change or remove). The picture is cropped square and shrunk to 160px before it is saved. It shows in the Users table, on the staff app's "Tap your photo" sign-in, the staff Me page and the dashboard account menu. People without a photo keep the illustrated avatar. Files: `users-page.tsx`, `illustrations.tsx` (`StaffAvatar` renders `staff.photo` when set), `desktop-shell.tsx`, `demo-data.ts` (`Staff.photo`), `hms-store.ts`, `styles.css`.
 - **Why:** Abdul: add an avatar photo like Eman's mobile app, whose sign-in is face → PIN.
