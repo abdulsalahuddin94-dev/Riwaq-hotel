@@ -814,7 +814,7 @@ export const hms = {
     return { id, secret };
   },
 
-  updateStaff(id: string, patch: Partial<Pick<Staff, "name" | "role" | "floors" | "shift" | "phone" | "email">>, actor: string) {
+  updateStaff(id: string, patch: Partial<Pick<Staff, "name" | "role" | "floors" | "shift" | "phone" | "email" | "photo">>, actor: string) {
     set((d) => {
       const p = d.staff.find((x) => x.id === id);
       if (!p) return;

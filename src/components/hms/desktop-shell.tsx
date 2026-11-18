@@ -81,7 +81,7 @@ function UserMenu({ persona, onSwitch, collapsed }: { persona: keyof typeof pers
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
        <Button variant="hmsGhost" className="user-menu-trigger" aria-label="Account menu" title={collapsed ? `${me?.name ?? persona} · Switch account` : undefined}>
-        <span className="user-avatar" aria-hidden="true">{me?.initials}</span>
+        <span className="user-avatar" aria-hidden="true">{me?.photo ? <img src={me.photo} alt="" className="user-avatar-img" /> : me?.initials}</span>
         {!collapsed ? <span className="user-menu-text">
           <strong>{me?.name}</strong>
           <small>{personaAccount[persona].title}</small>
@@ -96,7 +96,7 @@ function UserMenu({ persona, onSwitch, collapsed }: { persona: keyof typeof pers
           const p = person(k);
           return (
             <DropdownMenuItem key={key} onSelect={() => onSwitch(key)} className={cn(key === persona && "user-menu-current")}>
-              <span className="user-avatar user-avatar-sm" aria-hidden="true">{p?.initials}</span>
+              <span className="user-avatar user-avatar-sm" aria-hidden="true">{p?.photo ? <img src={p.photo} alt="" className="user-avatar-img" /> : p?.initials}</span>
               <span className="user-menu-text">
                 <strong>{p?.name}</strong>
                 <small>{personaAccount[k].title}</small>

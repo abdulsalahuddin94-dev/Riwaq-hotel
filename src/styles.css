@@ -1438,3 +1438,17 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 [data-platform="desktop"] .res-hour .res-actions{display:grid;gap:8px;justify-items:stretch}
 [data-platform="desktop"] .res-hour .res-actions>*{inline-size:100%;justify-content:center}
 @media (max-width:1100px){[data-platform="desktop"] .res-hour .res-row{grid-template-columns:72px minmax(0,1fr) auto}}
+
+/* Staff photos (2026-11-18): uploaded portrait replaces the illustrated avatar wherever StaffAvatar is used */
+img.staff-avatar-photo{display:block;border-radius:50%;object-fit:cover;background:var(--neutral-100)}
+.users-avatar{width:36px;height:36px;flex:none}
+.avatar-picker{display:flex;align-items:center;gap:16px;padding:12px;border-radius:16px;background:oklch(0.26 0.025 46 / .035)}
+.avatar-picker-img{width:76px;height:76px;flex:none;box-shadow:0 0 0 3px #fff,var(--lift-1)}
+.avatar-picker-text{display:grid;gap:4px;min-width:0}
+.avatar-picker-text strong{font-size:13px}
+.avatar-picker-text>span{color:var(--neutral-600);font-size:12.5px;font-weight:400}
+.avatar-picker-actions{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px}
+.avatar-upload{display:inline-flex!important;grid-auto-flow:column;align-items:center;gap:6px!important;height:34px;padding:0 14px;border-radius:999px;background:var(--md-navy,#012947);color:#fff;font-size:13px!important;font-weight:600;cursor:pointer}
+.avatar-upload:focus-within{outline:3px solid var(--md-sky,#1C82AB);outline-offset:2px}
+.avatar-upload svg{width:18px;height:18px}
+.user-avatar-img{width:100%;height:100%;border-radius:50%;object-fit:cover}.user-avatar:has(.user-avatar-img){overflow:hidden;padding:0}
