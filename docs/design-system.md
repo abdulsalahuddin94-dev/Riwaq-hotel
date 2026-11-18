@@ -1,5 +1,5 @@
 # Design system
- 
+
 Desktop photography overlays and sign-in backgrounds use `--md-photo-overlay` and `--md-coastal-gradient`, shared with the sidebar. Do not apply legacy purple/brown night veils over the coastal images. Photo files and mobile styling remain independent.
 
 The working reference for anyone (or any Claude) touching the UI. Three files, one system:
