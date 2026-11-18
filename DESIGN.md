@@ -4,6 +4,7 @@
 #   card: "#ffffff", border: "#cfdbe6", ready: "#0d9488", inspect: "#4389b1", cleaning: "#d97706", dirty: "#dc2626",
 #   ooo: "#1e2a3e", oos: "#9aa6b4", font: Inter, icons: Material Symbols Rounded }
 # Welcome readiness gauge: soft sky → sky ring with soft-sky check icon; status colors unchanged.
+# Desktop sidebar: hotel emblem and English hotel name only; other brand placements unchanged.
 # The values below are the staff app's (mobile) palette.
 colors:
   plaster: "#f6f1e8"              # page background (juss)

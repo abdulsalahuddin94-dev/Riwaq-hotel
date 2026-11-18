@@ -144,7 +144,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
             <HotelMark className="sidebar-mark" />
             {!collapsed ? (
               <div>
-                <strong><span lang="ar">{property.nameAr}</span> {property.name}</strong>
+                <strong>{property.name}</strong>
                 <span>Powered by RIWAQ Systems</span>
               </div>
             ) : null}
