@@ -75,7 +75,7 @@ Example reply (Egyptian Arabic, the way Claude would answer @EmG38 or Abdul):
 
 ## PD-05 · Hotel brand first: «مرسى ذهب · Marsa Dhahab», "Powered by RIWAQ SYSTEMS" small
 - **Decided:** 2026-11-12, hotel renamed 2026-11-18 (supersedes the Dar Al Majlis version, see "Superseded"). By @abdulsalahuddin94-dev. **Owner sign-off.**
-- **What:** Staff app and desktop (sign-in, sidebar, tab titles, exports) lead with the Marsa Dhahab hotel mark (dhow under a setting sun on Gulf water, orange and navy; interim drawing until @EmG38's emblem PNG is added). Riwaq appears only as a small "Powered by RIWAQ SYSTEMS" credit (`PoweredByRiwaq`). The hotel is fictional; no real hotel's name or brand is used.
+- **What:** Staff app and desktop (sign-in, sidebar, tab titles, exports) lead with the Marsa Dhahab hotel mark, @EmG38's dhow-and-sun emblem (`src/assets/marsa-dhahab-emblem.png`, orange and navy). Riwaq appears only as a small "Powered by RIWAQ SYSTEMS" credit (`PoweredByRiwaq`). The hotel is fictional; no real hotel's name or brand is used.
 - **Why:** Hotel staff should feel they are using their hotel's tool (white-label is how hotel software is sold). The owner chose Eman's hotel brand so both projects share one design system.
 - **Basis:** White-label practice in hospitality software; decision log rows of 2026-11-12 (PRs #10, #11) and 2026-11-18.
 - **If changed:** the product looks like a vendor demo, not the hotel's own app; using a real hotel's name is a legal risk.
