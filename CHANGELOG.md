@@ -22,10 +22,10 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **Decisions:** Logged in `docs/decision-log.md`. This supersedes the 2026-11-18 "Settings = property only" row and the "no stranger portraits" choice from PR #20. The `/m` routes stay reachable by URL, and narrow screens opening `/login` still go to the staff sign-in. Uploaded photos always win over the sample portrait.
 - **PR:** #22
 
-## 2026-11-18 · Sign-in logo moved to the right · @abdulsalahuddin94-dev
-- **What:** On the desktop sign-in screen (`/login`) the hotel logo card now sits at the right edge of the photo panel instead of the left: `.login-logo-card` changed from `justify-self:start` to `justify-self:end` in `styles.css`. Files: `styles.css`.
-- **Why:** Abdul asked to move the logo to the right on the sign-in screen.
-- **Decisions:** Presentation only — the logo file, its size clamp (`220–320px`), the navy drop shadow and the form are untouched. Verified at 1903×950 and 700×900: the logo clears the panel edge by 56px, stays fully readable over the navy gradient, and does not overlap the form or clip at the narrow stacked layout.
+## 2026-11-18 · Sign-in logo moved above the heading, on the right · @abdulsalahuddin94-dev
+- **What:** On the desktop sign-in screen (`/login`) the hotel logo left the photo panel and now sits above the "Nice to see you" heading, at the right edge of the sign-in panel. `mobile-pages.tsx` moves `.login-logo-card` from `.login-visual-copy` into the form as its first child (the empty `.login-visual-copy` was dropped), and `styles.css` keeps `justify-self:end` with the width clamp down to `150–190px` (150px under 900px). Files: `mobile-pages.tsx`, `styles.css`.
+- **Why:** Abdul first asked for the logo on the right, then clarified he meant the top of the sign-in side — above "Nice to see you" — not on the photograph.
+- **Decisions:** Presentation only — the logo file, its navy drop shadow, the heading, the inputs and the sign-in action are untouched. Verified at 1903×950 and 700×900: the logo clears the heading, lines up with the right edge of the inputs and the Sign in button, and nothing clips or overlaps in the stacked narrow layout.
 - **PR:** Not created; direct Lovable edit.
 
 ## 2026-11-18 · Sidebar rosette turns as one ornament · @abdulsalahuddin94-dev

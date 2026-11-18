@@ -441,11 +441,6 @@ export function DesktopLoginPage() {
     <div className="login-screen" data-platform="desktop">
       <section className="login-visual" aria-hidden="true">
         <img src={photos.courtyardDusk} alt="" className="login-scene" />
-        <div className="login-visual-copy">
-          <div className="login-logo-card">
-            <img src={marsaLogo} alt="" width={900} height={664} />
-          </div>
-        </div>
       </section>
       <section className="login-side">
         <form
@@ -456,6 +451,9 @@ export function DesktopLoginPage() {
             void navigate({ to: "/app/board" });
           }}
         >
+          <div className="login-logo-card">
+            <img src={marsaLogo} alt="" width={900} height={664} />
+          </div>
           <h1>Nice to see you</h1>
           <p>Sign in to run today's house at {property.name}.</p>
           <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>
