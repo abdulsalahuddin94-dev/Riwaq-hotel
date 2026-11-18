@@ -28,7 +28,7 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
   - Store: `VERSION` 7 (new `requests`, `reservations`, staff `shift/phone/email/pin/active`); old saves reset to the new seed.
 - **Why:** Abdul: remove "Needs you now" and show it through a notification icon; simplify the dashboard so it complements Eman's mobile app; user creation must be on the dashboard; reception only needs room state and to send requests to the supervisor; add reservations with follow-up; remove anything maintenance-related because Eman's app has none; use Eman's wing and room names.
 - **Decisions:** Five rows in `docs/decision-log.md` (2026-11-18). The 30-minute follow-up grace is an assumption. No protected decision changed (PD-01 PIN sign-in is kept and now enforced for new users). Docs: `sitemap.md`, `information-architecture.md`, `design-system.md` §7·1.
-- **PR:** #PR_NUMBER
+- **PR:** #19
 
 ## 2026-11-18 · English-only sidebar hotel name · @abdulsalahuddin94-dev
 - **What:** Removed the typed Arabic hotel name from the shared desktop sidebar, retaining the emblem, English name and RIWAQ credit.
