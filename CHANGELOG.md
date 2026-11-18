@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Larger left-aligned sign-in logo · @abdulsalahuddin94-dev
+- **What:** Enlarged the desktop sign-in logo from 128px to 190px wide.
+- **Why:** Abdul asked for a bigger logo above the greeting.
+- **Decisions:** Kept left alignment and the 24px heading gap; other logo placements and sign-in behavior unchanged.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Settings removed, mobile switch hidden, human staff portraits · @abdulsalahuddin94-dev
 - **What:** Removed Settings from the sidebar. `/app/settings` now redirects to the Live Board, and `SettingsPage` and `PropertySettings` are deleted. Each Live Board wing heading shows its room count ("Marina Wing 20 rooms"). Admin now sees Users, Live Board and Reports. The floating desktop/mobile switch (orange phone button, Ctrl+M) is gone from every page, and so is the "Open the staff app" link on the dashboard sign-in. Staff without an uploaded photo now show a human portrait from randomuser.me, picked the same way as Eman's app (first name → men/women set, id hash → number). If the image can't load, they fall back to the illustrated avatar. The account menu uses the same avatar. Files: `desktop-shell.tsx`, `desktop-pages.tsx`, `desktop-dialogs.tsx`, `routes/app/settings.tsx`, `room-components.tsx`, `demo-chrome.tsx`, `mobile-pages.tsx`, `illustrations.tsx` (`portraitFor`, `StaffAvatar`), `styles.css`.
 - **Why:** Abdul agreed that a read-only property page isn't settings, and said "شيلها". Room credits and standard times are details for the supervisor. He then asked to hide the mobile button everywhere, because staff use Eman's mobile app, and to use human avatars like hers.

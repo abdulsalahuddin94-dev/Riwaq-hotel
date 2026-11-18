@@ -1314,7 +1314,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 @media(max-width:767px){.desktop-shell .desktop-menu-floating{position:fixed;z-index:35;top:12px;left:12px;box-shadow:var(--lift-1)}.desktop-shell .desktop-content{padding-top:68px}.desktop-shell .sidebar-account .user-menu-text{display:grid}}
 
 /* Compact hotel mark above the form, anchored to the heading and fields' left edge. */
-.login-logo-card{justify-self:start;width:128px;max-width:100%;padding:0;margin:0 0 8px;background:none}
+.login-logo-card{justify-self:start;width:190px;max-width:100%;padding:0;margin:0 0 8px;background:none}
 .login-logo-card img{display:block;width:100%;height:auto}
 .login-screen .login-panel h1{margin:0;line-height:1.2}
 
