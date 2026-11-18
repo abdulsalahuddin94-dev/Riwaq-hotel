@@ -1,5 +1,6 @@
 # Roadmap — Riwaq demo
 
+- [x] Add a low-opacity oriental rosette turning slowly behind the desktop sidebar nav
 - [x] Verify coastal navy/sky-blue overlays on desktop sign-in and Live Board without changing photographs or mobile styling
 - [x] Remove desktop header, move user switching to the sidebar bottom, and move date/Live time below the banner name
 - [x] TrianglZ HMS demo: boards, checklist, inspection, work orders, reports

@@ -5,6 +5,12 @@ What changed, **who** changed it, and **why**. Newest first. Every merge into `m
 Entry format:
 
 ```
+## 2026-11-18 · Oriental rosette behind the sidebar nav · @abdulsalahuddin94-dev
+- **What:** The desktop sidebar has a faint oriental rosette painted behind the navigation: `src/components/hms/mandala.tsx` draws it as inline SVG geometry (a 12-fold petal-and-dot outer ornament over an 8-fold girih star), and `styles.css` sets it at `opacity:.12` in sidebar navy with a brass inner star. The outer ornament turns clockwise once every 240 s, the inner star counter-clockwise every 168 s, and both stop under `prefers-reduced-motion`. Files: `mandala.tsx` (new), `desktop-shell.tsx`, `styles.css`.
+- **Why:** Abdul asked for an oriental mandala at low opacity rotating very slowly in the sidebar.
+- **Decisions:** Decoration only — `aria-hidden`, `pointer-events:none`, never carries status or text. It sits *behind* the nav, so its rule is written as `.desktop-shell .desktop-sidebar>.sidebar-mandala` to beat the existing `> * {z-index:1}` lift, and the sidebar gets `overflow:hidden; isolation:isolate` to crop it (the account menu is portaled, so it still opens past the edge). Verified at 1440×900 and 1280×1800: nav labels, hotel name and account row stay readable.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Settings shows the property only · @abdulsalahuddin94-dev
 - **What:** `/app/settings` is now a single Property panel: the 5 wings with room counts, and the room types with credits and standard times. The Checklists editor and the Inspection & SLA rules dialog are removed, along with `SettingsDialog`, `ChecklistSettings` and `RulesSettings` in `desktop-dialogs.tsx`. Values stay in the store at their current defaults (pass 90%, inspection required, queue SLA 15 min, DND welfare 24 h, 16 credits).
 - **Why:** Abdul asked whether these details are needed now. Eman's staff app has its checklists and inspection points built in, with no editor, so editing them on the dashboard would change nothing on her app.

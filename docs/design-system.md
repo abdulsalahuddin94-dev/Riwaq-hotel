@@ -6,6 +6,8 @@ Desktop workspaces have no topbar: account switching lives at the sidebar bottom
 
 The Live Board welcome readiness gauge uses `--md-sky-soft` → `--md-sky` for its ring and soft sky blue for its check icon; room-status colors remain unchanged.
 
+The desktop sidebar carries a decorative oriental rosette (`mandala.tsx`): inline SVG geometry, 12-fold outer ornament over an 8-fold girih star, painted behind the nav at `opacity:.12` (navy `--sidebar`, inner star in `--brass-600`). The outer ring turns clockwise in 240 s and the inner star counter-clockwise in 168 s; both stop under `prefers-reduced-motion`. It is `aria-hidden`, `pointer-events:none`, cropped by the sidebar's `overflow:hidden`, and must never carry status, meaning or text.
+
 The working reference for anyone (or any Claude) touching the UI. Three files, one system:
 
 | File | Role |

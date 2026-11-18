@@ -438,6 +438,20 @@ h1,h2,h3,.desktop-title-group h1{letter-spacing:-.018em}
 .sidebar-property strong{color:var(--neutral-900)}.sidebar-property span,.sidebar-property small{color:var(--neutral-500)}
 .sidebar-close{color:var(--neutral-600)!important}
 
+/* ── Sidebar ornament: oriental rosette, very slow turn ── */
+/* Specificity must beat `.desktop-shell .desktop-sidebar>*{z-index:1}`, which lifts every
+   sidebar child above the nav — the rosette has to stay behind it. */
+.desktop-sidebar{overflow:hidden;isolation:isolate}
+.desktop-shell .desktop-sidebar>.sidebar-mandala{position:absolute;z-index:-1;inset-block-start:clamp(240px,42%,420px);inset-inline-start:50%;translate:-50% -50%;width:430px;height:430px;pointer-events:none;opacity:.12;color:var(--sidebar)}
+.desktop-shell .desktop-sidebar.desktop-sidebar-collapsed>.sidebar-mandala{width:330px;height:330px}
+.mandala-inner{color:var(--brass-600);opacity:.8}
+.mandala-spin{transform-box:view-box;transform-origin:50% 50%}
+@keyframes mandala-turn{to{transform:rotate(360deg)}}
+@keyframes mandala-turn-back{to{transform:rotate(-360deg)}}
+.mandala-outer{animation:mandala-turn 240s linear infinite}
+.mandala-inner{animation:mandala-turn-back 168s linear infinite}
+@media (prefers-reduced-motion:reduce){.mandala-outer,.mandala-inner{animation:none}}
+
 /* ── Top bar: frosted ── */
 .desktop-topbar{background:var(--frost);backdrop-filter:blur(20px) saturate(180%);border-bottom:0;box-shadow:0 .5px 0 oklch(0.26 0.025 46 / .1)}
 .desktop-title-group h1{font-size:26px}

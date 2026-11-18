@@ -5,6 +5,8 @@
 #   ooo: "#1e2a3e", oos: "#9aa6b4", font: Inter, icons: Material Symbols Rounded }
 # Welcome readiness gauge: soft sky → sky ring with soft-sky check icon; status colors unchanged.
 # Desktop sidebar: hotel emblem and English hotel name only; other brand placements unchanged.
+# Desktop sidebar ornament: faint oriental rosette (12-fold outer, 8-fold girih inner) at opacity .12,
+#   navy with brass inner star, turning 240 s / 168 s in opposite directions; decoration only, never status.
 # The values below are the staff app's (mobile) palette.
 colors:
   plaster: "#f6f1e8"              # page background (juss)

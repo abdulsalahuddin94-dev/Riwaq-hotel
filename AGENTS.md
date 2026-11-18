@@ -44,6 +44,7 @@ Each person installs them in Claude Code once (not auto-enabled from this repo):
 - Keep immersive mobile room photography in the app-host layer and scrolling content above it, so back navigation and the collapsed title remain reachable independently of scroll position.
 - Opt mobile screens into refined room photography explicitly; do not change desktop wing-photo mapping when refreshing mobile visuals.
 - Resolve room-drawer photographs through the wing-photo map using existing room floor assignments, independently of room-type icons, so visual changes cannot alter operational grouping.
+- Keep the sidebar rosette presentational only: aria-hidden, behind the nav, slow rotation that stops under prefers-reduced-motion, so decoration can never carry status or meaning.
 - Keep everything client-side (`src/lib/hms-store.ts` uses localStorage). Don't add a server, database, auth provider or real PMS without the owner's approval.
 - Label every simulated thing as simulated: sync, server receipt, PMS confirmation. Never show demo data as confirmed by an external system.
 - Never invent heritage conservation instructions. Heritage assets show "awaiting specialist approval" and tell staff to report, not treat.

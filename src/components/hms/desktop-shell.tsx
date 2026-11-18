@@ -34,6 +34,7 @@ import { hms, needsFollowUp, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { RoomDrawer } from "./room-drawer";
 import { NotificationBell } from "./notifications";
+import { SidebarMandala } from "./mandala";
 
 const navItems = [
   { to: "/app/board", label: "Live Board", icon: LayoutGrid },
@@ -141,6 +142,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
         <a className="skip-link" href="#main-content">Skip to content</a>
         {mobileNav ? <button className="sidebar-scrim" type="button" aria-label="Close menu" onClick={() => setMobileNav(false)} /> : null}
         <aside className={cn("desktop-sidebar", collapsed && "desktop-sidebar-collapsed", mobileNav && "desktop-sidebar-open")}>
+          <SidebarMandala />
           <div className="sidebar-brand">
             <HotelMark className="sidebar-mark" />
             {!collapsed ? (
