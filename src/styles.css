@@ -442,8 +442,10 @@ h1,h2,h3,.desktop-title-group h1{letter-spacing:-.018em}
 /* Specificity must beat `.desktop-shell .desktop-sidebar>*{z-index:1}`, which lifts every
    sidebar child above the nav — the rosette has to stay behind it. */
 .desktop-sidebar{overflow:hidden;isolation:isolate}
-.desktop-shell .desktop-sidebar>.sidebar-mandala{position:absolute;z-index:-1;inset-block-start:clamp(240px,42%,420px);inset-inline-start:50%;translate:-50% -50%;width:430px;height:430px;pointer-events:none;opacity:.12;color:var(--sidebar)}
-.desktop-shell .desktop-sidebar.desktop-sidebar-collapsed>.sidebar-mandala{width:330px;height:330px}
+.desktop-shell .desktop-sidebar>.sidebar-mandala{position:absolute;z-index:-1;inset-block-start:clamp(240px,42%,420px);inset-inline-start:50%;translate:-50% -50%;width:760px;height:760px;pointer-events:none;opacity:.19;color:var(--sidebar)}
+/* Collapsed rail: a small medallion. Shrinking the SVG shrinks its strokes with it,
+   so the stroke is thickened back to ~1px and the pattern raised a little in contrast. */
+.desktop-shell .desktop-sidebar.desktop-sidebar-collapsed>.sidebar-mandala{width:150px;height:150px;opacity:.3;stroke-width:2.7}
 .mandala-inner{color:var(--brass-600);opacity:.8}
 .mandala-spin{transform-box:view-box;transform-origin:50% 50%}
 @keyframes mandala-turn{to{transform:rotate(360deg)}}

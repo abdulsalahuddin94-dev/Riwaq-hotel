@@ -55,6 +55,10 @@ export function SidebarMandala({ className }: { className?: string }) {
             transform={`rotate(${i * 30 + 15} ${C} ${C})`}
           />
         ))}
+        {/* the {12/5} girih star rides the outer ring: at sidebar size only its
+            upper and lower points reach the visible band, so it decorates without
+            laying a lattice of long diagonals behind the nav labels */}
+        <polygon points={star(12, 152, 5)} />
       </g>
 
       {/* inner girih star — turns the other way, even slower */}
@@ -65,7 +69,6 @@ export function SidebarMandala({ className }: { className?: string }) {
         strokeWidth={1}
         strokeLinejoin="round"
       >
-        <polygon points={star(12, 152, 5)} />
         <polygon points={star(8, 116, 3)} />
         <circle cx={C} cy={C} r={104} />
         <circle cx={C} cy={C} r={76} strokeDasharray="3 6" strokeLinecap="round" />
