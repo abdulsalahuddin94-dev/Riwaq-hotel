@@ -22,6 +22,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **Decisions:** Logged in `docs/decision-log.md`. This supersedes the 2026-11-18 "Settings = property only" row and the "no stranger portraits" choice from PR #20. The `/m` routes stay reachable by URL, and narrow screens opening `/login` still go to the staff sign-in. Uploaded photos always win over the sample portrait.
 - **PR:** #22
 
+## 2026-11-18 · Sign-in logo moved to the right · @abdulsalahuddin94-dev
+- **What:** On the desktop sign-in screen (`/login`) the hotel logo card now sits at the right edge of the photo panel instead of the left: `.login-logo-card` changed from `justify-self:start` to `justify-self:end` in `styles.css`. Files: `styles.css`.
+- **Why:** Abdul asked to move the logo to the right on the sign-in screen.
+- **Decisions:** Presentation only — the logo file, its size clamp (`220–320px`), the navy drop shadow and the form are untouched. Verified at 1903×950 and 700×900: the logo clears the panel edge by 56px, stays fully readable over the navy gradient, and does not overlap the form or clip at the narrow stacked layout.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Sidebar rosette turns as one ornament · @abdulsalahuddin94-dev
 - **What:** The sidebar rosette now has a single rotation. `mandala.tsx` puts every ring, petal, dot and star in one `<g class="mandala-spin">` that turns clockwise once every 240 s; the brass girih core stayed inside it as a colour-only group (`.mandala-core`) with no animation. `styles.css` drops `.mandala-outer` / `.mandala-inner` and the counter-clockwise keyframes, and the `prefers-reduced-motion` stop now targets `.mandala-spin`. Files: `mandala.tsx`, `styles.css`.
 - **Why:** Abdul saw two mandalas turning in the sidebar and asked for one. Two layers spinning in opposite directions read as two independent patterns.
