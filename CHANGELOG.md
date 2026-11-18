@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Full Marsa Dhahab logo on the desktop sign-in · @abdulsalahuddin94-dev
+- **What:** `/login` now shows Eman's full logo (`src/assets/marsa-dhahab-logo.png`: emblem, «مرسى ذهب», MARSA DHAHAB, HOTEL) on a white card over the photo, in place of the typed hotel lockup. The small emblem above "Nice to see you" is removed so the brand shows once. Files: `mobile-pages.tsx` (`DesktopLoginPage`), `styles.css` (`.login-logo-card`).
+- **Why:** Abdul asked to use the Marsa Dhahab logo on the dashboard sign-in screen.
+- **Decisions:** The logo's navy wordmark is unreadable on the dark navy panel or the photo, so it sits on a light card. Keeps PD-05 (hotel brand first).
+- **PR:** #PRNUM
+
 ## 2026-11-18 · Coastal blue welcome readiness gauge · @abdulsalahuddin94-dev
 - **What:** Replaced the welcome gauge's sand/green gradient with existing soft-sky/sky tokens and made its check icon soft sky blue.
 - **Why:** Abdul requested blue instead of green on the selected gauge.
