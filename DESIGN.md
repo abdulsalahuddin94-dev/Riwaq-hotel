@@ -51,7 +51,7 @@ Operate mode. A calm, warm console that lets the work lead. One signature move: 
 System sans for UI, tabular numbers wherever a count or time appears. Cormorant Garamond only for the hotel name and the RIWAQ credit. The hotel («مرسى ذهب · Marsa Dhahab», since 2026-11-18) is the front brand. Desktop uses Inter and Material Symbols Rounded; Riwaq is "Powered by Riwaq Systems". Thmanyah for Arabic, loaded from the user's machine via `local()`.
 
 ## Layout
-Desktop sign-in: a compact 128px hotel logo stays above the heading at the right edge of the 400px form, with a 24px gap and no floating card or shadow.
+Desktop sign-in: a compact 128px hotel logo stays above the heading at the left edge of the 400px form, with a 24px gap and no floating card or shadow.
 Desktop: sidebar, sticky top bar (title first, date beneath), content. The board opens with the readiness ribbon, then rooms grouped by wing. Mobile: header, scroll area, bottom nav or a 64px footer action.
 
 ## Elevation & Depth

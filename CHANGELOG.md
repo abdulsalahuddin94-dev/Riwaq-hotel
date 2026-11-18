@@ -22,6 +22,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **Decisions:** Logged in `docs/decision-log.md`. This supersedes the 2026-11-18 "Settings = property only" row and the "no stranger portraits" choice from PR #20. The `/m` routes stay reachable by URL, and narrow screens opening `/login` still go to the staff sign-in. Uploaded photos always win over the sample portrait.
 - **PR:** #22
 
+## 2026-11-18 · Left-align sign-in logo above greeting · @abdulsalahuddin94-dev
+- **What:** Aligned the compact sign-in logo with the left edge of the greeting and fields.
+- **Why:** Abdul clarified that the logo should be left-aligned above "Nice to see you", not right-aligned.
+- **Decisions:** Presentation only; dimensions, spacing, mobile sign-in and sign-in behavior unchanged.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Balanced sign-in logo alignment · @abdulsalahuddin94-dev
 - **What:** Reduced the sign-in logo to a stable 128px width, removed obsolete card/shadow overrides, and normalized the heading margin with a 24px logo-to-heading gap.
 - **Why:** The oversized right-aligned logo looked disconnected from the form in Abdul's screenshot.

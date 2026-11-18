@@ -14,7 +14,7 @@
 - [x] Fix language switch sizing and verify English/Arabic selection at phone and desktop-preview widths
 - [x] Compact mobile header on scroll, hide navigation while scrolling and restore on idle, reduce room-card height
 - [x] Unify all mobile roles with housekeeping photo cards, shared details and modern controls; verify role flows
-- [x] Put the hotel logo at the top right of the desktop sign-in panel, above "Nice to see you"
+- [x] Align the hotel logo left above "Nice to see you" on the desktop sign-in panel
 - [ ] Full Arabic RTL with a language switch
 - [ ] Simulated offline outbox with spec §14 sync states
 - [ ] Clearly labelled mock PMS acknowledgement
