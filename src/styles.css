@@ -1277,6 +1277,7 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .desktop-shell .welcome-copy p{color:var(--secondary-foreground)}
 .desktop-shell .welcome-copy b{color:var(--md-sand)}
 .desktop-shell .welcome-gauge{background:color-mix(in srgb,var(--md-navy) 65%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--secondary-foreground) 18%,transparent)}
+.desktop-shell .welcome-gauge>div svg{color:var(--md-sky-soft)}
 @media(max-width:900px){.login-screen .login-visual:after{background:linear-gradient(180deg,transparent 50%,var(--md-navy))}}
 
 /* Headerless desktop workspace: account stays reachable in the sidebar footer. */

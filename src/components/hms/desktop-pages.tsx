@@ -95,8 +95,8 @@ function WelcomeHero() {
         <svg viewBox="0 0 128 128" aria-hidden="true">
           <defs>
             <linearGradient id="gauge-grad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#F3D9A2" />
-              <stop offset="1" stopColor="#3FA37A" />
+              <stop offset="0" stopColor="var(--md-sky-soft)" />
+              <stop offset="1" stopColor="var(--md-sky)" />
             </linearGradient>
           </defs>
           <circle cx="64" cy="64" r={r} fill="none" stroke="rgba(255,255,255,.12)" strokeWidth="10" />

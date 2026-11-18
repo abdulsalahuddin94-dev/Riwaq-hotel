@@ -4,6 +4,8 @@ Desktop photography overlays and sign-in backgrounds use `--md-photo-overlay` an
 
 Desktop workspaces have no topbar: account switching lives at the sidebar bottom, opening upward and reducing to an avatar in the collapsed sidebar. Live Board shows its date and simulated Live clock beneath the banner name. Other pages use an unframed content heading. At narrow widths a floating Menu button keeps navigation accessible.
 
+The Live Board welcome readiness gauge uses `--md-sky-soft` → `--md-sky` for its ring and soft sky blue for its check icon; room-status colors remain unchanged.
+
 The working reference for anyone (or any Claude) touching the UI. Three files, one system:
 
 | File | Role |

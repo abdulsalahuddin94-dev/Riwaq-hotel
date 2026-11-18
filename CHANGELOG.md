@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Coastal blue welcome readiness gauge · @abdulsalahuddin94-dev
+- **What:** Replaced the welcome gauge's sand/green gradient with existing soft-sky/sky tokens and made its check icon soft sky blue.
+- **Why:** Abdul requested blue instead of green on the selected gauge.
+- **Decisions:** None; readiness calculations, room status colors, layout and mobile styling are unchanged.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Headerless dashboard and sidebar account switching · @abdulsalahuddin94-dev
 - **What:** Removed the shared desktop topbar, its room search and Live clock. Account switching replaces the property card at the bottom of the sidebar, opens upward, and remains available as an avatar when collapsed. Live Board date and simulated Live clock sit below the user's banner name; other pages retain an unframed page heading. Narrow-screen navigation retains a floating menu button.
 - **Why:** Abdul requested no header and account switching at the lower left. Existing account choices, navigation restrictions and demo data are unchanged.

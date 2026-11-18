@@ -3,6 +3,7 @@
 # desktop: { primary: "#e99023", on-primary: "#012947", navy: "#012947", sky: "#1c82ab", surface: "#f7f9fb",
 #   card: "#ffffff", border: "#cfdbe6", ready: "#0d9488", inspect: "#4389b1", cleaning: "#d97706", dirty: "#dc2626",
 #   ooo: "#1e2a3e", oos: "#9aa6b4", font: Inter, icons: Material Symbols Rounded }
+# Welcome readiness gauge: soft sky → sky ring with soft-sky check icon; status colors unchanged.
 # The values below are the staff app's (mobile) palette.
 colors:
   plaster: "#f6f1e8"              # page background (juss)
