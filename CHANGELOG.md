@@ -16,6 +16,13 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Headerless dashboard and sidebar account switching · @abdulsalahuddin94-dev
+- **What:** Removed the shared desktop topbar, its room search and Live clock. Account switching replaces the property card at the bottom of the sidebar, opens upward, and remains available as an avatar when collapsed. Live Board date and simulated Live clock sit below the user's banner name; other pages retain an unframed page heading. Narrow-screen navigation retains a floating menu button.
+- **Why:** Abdul requested no header and account switching at the lower left. Existing account choices, navigation restrictions and demo data are unchanged.
+- **Checks:** Coastal sweep read photo surfaces across desktop and staff routes, then opened all eight desktop pages and a room drawer: shared navy/sky gradient and cool-white drawer fade, no broken images or runtime errors. Staff palette remains separate by the existing design decision.
+- **Decisions:** Keep account switching in the shared sidebar footer so it is reachable across desktop pages without a topbar.
+- **PR:** Not created; direct Lovable edit.
+
 ## 2026-11-18 · Remove legacy tints from coastal photography · @abdulsalahuddin94-dev
 - **What:** Desktop sign-in and Live Board photo overlays now use Marsa Dhahab navy and sky-blue tokens. Sign-in uses the same vertical gradient as the sidebar; removed old purple/brown veils and the brown corner glow. Photographs, layout, mobile palette and sign-in behavior are unchanged.
 - **Why:** The regenerated photographs were still tinted by old CSS overlays; this was not established to be a browser-cache problem.

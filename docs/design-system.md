@@ -2,6 +2,8 @@
 
 Desktop photography overlays and sign-in backgrounds use `--md-photo-overlay` and `--md-coastal-gradient`, shared with the sidebar. Do not apply legacy purple/brown night veils over the coastal images. Photo files and mobile styling remain independent.
 
+Desktop workspaces have no topbar: account switching lives at the sidebar bottom, opening upward and reducing to an avatar in the collapsed sidebar. Live Board shows its date and simulated Live clock beneath the banner name. Other pages use an unframed content heading. At narrow widths a floating Menu button keeps navigation accessible.
+
 The working reference for anyone (or any Claude) touching the UI. Three files, one system:
 
 | File | Role |

@@ -37,6 +37,7 @@ Each person installs them in Claude Code once (not auto-enabled from this repo):
 ```
 
 ## Rules
+- Keep desktop account switching in the shared sidebar footer with an avatar trigger when collapsed, so it remains accessible without a topbar.
 - Keep desktop photo veils and sign-in backgrounds on the shared coastal theme tokens, so legacy overlays cannot recolour updated photography.
 - Reuse mobile-task-card photo/content primitives for inspection and maintenance, keeping presentation shared without coupling operational state.
 - Handle mobile scroll chrome in MobileShell with passive listeners and cleaned-up idle timers so all staff roles share compact headers and idle-restored navigation.

@@ -85,6 +85,7 @@ function WelcomeHero() {
       <div className="welcome-copy">
         <span>{hello},</span>
         <h2>{me?.name ?? "Welcome back"}</h2>
+        <p className="welcome-date"><CalendarDays aria-hidden="true" /> {DAY}<span aria-hidden="true">·</span><span>Live · {fmtTime(now)} <small>(simulated)</small></span></p>
         <p>
           {waiting ? <><b>{waiting} guest{waiting > 1 ? "s" : ""}</b> waiting in the lobby. </> : null}
           <b>{arrivals}</b> arrivals still need a room today.

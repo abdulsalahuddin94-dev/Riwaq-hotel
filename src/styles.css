@@ -1278,3 +1278,21 @@ button.arr-row:focus-visible{outline:2px solid var(--brass-600);outline-offset:1
 .desktop-shell .welcome-copy b{color:var(--md-sand)}
 .desktop-shell .welcome-gauge{background:color-mix(in srgb,var(--md-navy) 65%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--secondary-foreground) 18%,transparent)}
 @media(max-width:900px){.login-screen .login-visual:after{background:linear-gradient(180deg,transparent 50%,var(--md-navy))}}
+
+/* Headerless desktop workspace: account stays reachable in the sidebar footer. */
+.desktop-shell .sidebar-account{flex:none;margin:0 12px 18px}
+.desktop-shell .sidebar-account .user-menu-trigger{width:100%;height:64px;padding:10px;gap:10px;justify-content:flex-start;border:1px solid var(--sidebar-accent);border-radius:16px;background:var(--sidebar-accent);color:var(--sidebar-foreground);box-shadow:none}
+.desktop-shell .sidebar-account .user-menu-trigger:hover,.desktop-shell .sidebar-account .user-menu-trigger[data-state="open"]{background:color-mix(in srgb,var(--sidebar-foreground) 20%,transparent)}
+.desktop-shell .sidebar-account .user-menu-text{display:grid;min-width:0;flex:1}
+.desktop-shell .sidebar-account .user-menu-text strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.desktop-shell .sidebar-account .user-menu-text small,.desktop-shell .sidebar-account .user-menu-trigger>svg{color:color-mix(in srgb,var(--sidebar-foreground) 75%,transparent)}
+.desktop-shell .sidebar-account .user-avatar{background:var(--md-navy);color:var(--md-sand)}
+.desktop-shell .desktop-sidebar-collapsed .sidebar-account{margin-inline:12px}
+.desktop-shell .desktop-sidebar-collapsed .sidebar-account .user-menu-trigger{height:52px;padding:0;justify-content:center}
+.desktop-page-heading{margin:0 0 24px}
+.desktop-page-heading h1{margin:0;font-size:26px}
+.desktop-page-heading p{margin:6px 0 0;color:var(--muted-foreground);font-size:13px}
+.desktop-shell .welcome-date{display:flex;align-items:center;flex-wrap:wrap;gap:8px;max-width:none;margin:0 0 12px;font-size:12px;color:var(--secondary-foreground)}
+.welcome-date>svg{width:16px;height:16px;flex:none}
+.welcome-date small{font-size:10px}
+@media(max-width:767px){.desktop-shell .desktop-menu-floating{position:fixed;z-index:35;top:12px;left:12px;box-shadow:var(--lift-1)}.desktop-shell .desktop-content{padding-top:68px}.desktop-shell .sidebar-account .user-menu-text{display:grid}}

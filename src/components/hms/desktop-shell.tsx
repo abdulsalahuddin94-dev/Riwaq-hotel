@@ -13,7 +13,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   RotateCcw,
-  Search,
   Settings,
   Users,
   Wrench,
@@ -30,8 +29,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { fmtTime, type Persona, property } from "@/lib/demo-data";
-import { demoNow, escalations, hms, useHms } from "@/lib/hms-store";
+import { type Persona, property } from "@/lib/demo-data";
+import { escalations, hms, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { RoomDrawer } from "./room-drawer";
 
@@ -72,22 +71,24 @@ const personaAccount: Record<"Manager" | "Front Desk" | "Admin", { id: string; t
   Admin: { id: "km", title: "System Admin" },
 };
 
-function UserMenu({ persona, onSwitch }: { persona: keyof typeof personaAccount; onSwitch: (next: Persona) => void }) {
+function UserMenu({ persona, onSwitch, collapsed }: { persona: keyof typeof personaAccount; onSwitch: (next: Persona) => void; collapsed: boolean }) {
   const s = useHms();
   const navigate = useNavigate();
   const person = (key: keyof typeof personaAccount) => s.staff.find((m) => m.id === personaAccount[key].id);
   const me = person(persona);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="user-menu-trigger" aria-label="Account menu">
+      <DropdownMenuTrigger asChild>
+       <Button variant="hmsGhost" className="user-menu-trigger" aria-label="Account menu" title={collapsed ? `${me?.name ?? persona} · Switch account` : undefined}>
         <span className="user-avatar" aria-hidden="true">{me?.initials}</span>
-        <span className="user-menu-text">
+        {!collapsed ? <span className="user-menu-text">
           <strong>{me?.name}</strong>
           <small>{personaAccount[persona].title}</small>
-        </span>
-        <ChevronDown aria-hidden="true" />
+        </span> : null}
+        {!collapsed ? <ChevronDown aria-hidden="true" /> : null}
+       </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="user-menu">
+      <DropdownMenuContent side="top" align="start" sideOffset={8} className="user-menu" data-platform="desktop">
         <DropdownMenuLabel>Switch account</DropdownMenuLabel>
         {personas.map((key) => {
           const k = key as keyof typeof personaAccount;
@@ -122,7 +123,6 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
   const [collapsed, setCollapsed] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
   const [openRoom, setOpenRoom] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
   const persona = (personas.includes(s.desktopPersona) ? s.desktopPersona : "Manager") as keyof typeof personaNav;
   const allowed = personaNav[persona];
   const escalationCount = escalations(s).length;
@@ -132,18 +132,6 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
     const home = personaHome[next as keyof typeof personaHome];
     toast.success(`Signed in as ${personaAccount[next as keyof typeof personaAccount]?.title ?? next}`, { duration: 2500 });
     if (home && !personaNav[next as keyof typeof personaNav].includes(pathname as NavPath)) void navigate({ to: home });
-  };
-
-  const submitSearch = (event: React.FormEvent) => {
-    event.preventDefault();
-    const value = search.trim();
-    if (!value) return;
-    if (s.rooms.some((r) => r.number === value)) {
-      setOpenRoom(value);
-      setSearch("");
-    } else {
-      toast.error(`Room ${value} not found`, { duration: 3000 });
-    }
   };
 
   return (
@@ -191,42 +179,18 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
             {collapsed ? <PanelLeftOpen aria-hidden="true" /> : <PanelLeftClose aria-hidden="true" />}
             {!collapsed ? <span>Collapse</span> : null}
           </Button>
-          {!collapsed ? (
-            <div className="sidebar-property">
-              <strong>{property.name}</strong>
-              <small>{property.location} · {s.rooms.length} keys</small>
-            </div>
-          ) : null}
+          <div className="sidebar-account">
+            <UserMenu persona={persona} onSwitch={changePersona} collapsed={collapsed} />
+          </div>
         </aside>
         <div className="desktop-main">
-          <header className="desktop-topbar">
-            <div className="desktop-title-group">
-              <Button className="desktop-menu" variant="hmsGhost" size="hmsIcon" type="button" aria-label="Menu" onClick={() => setMobileNav(true)}>
-                <Menu aria-hidden="true" />
-              </Button>
-              <div className="min-w-0">
-                <h1>{title}</h1>
-                <p>{eyebrow}</p>
-              </div>
-            </div>
-            <div className="desktop-actions">
-              <form className="room-search" onSubmit={submitSearch} role="search">
-                <Search aria-hidden="true" />
-                <input
-                  aria-label="Search room number"
-                  placeholder="Room # + Enter"
-                  inputMode="numeric"
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-              </form>
-              <span className="sync-pill" title="Board time">
-                <span /> Live · {fmtTime(demoNow(s))}
-              </span>
-              <UserMenu persona={persona} onSwitch={changePersona} />
-            </div>
-          </header>
-          <main className="desktop-content" id="main-content" tabIndex={-1}>{children}</main>
+          <Button className="desktop-menu desktop-menu-floating" variant="hmsSecondary" size="hmsIcon" type="button" aria-label="Menu" onClick={() => setMobileNav(true)}>
+            <Menu aria-hidden="true" />
+          </Button>
+          <main className="desktop-content" id="main-content" tabIndex={-1}>
+            {pathname !== "/app/board" ? <div className="desktop-page-heading"><h1>{title}</h1><p>{eyebrow}</p></div> : null}
+            {children}
+          </main>
         </div>
         <RoomDrawer number={openRoom} onClose={() => setOpenRoom(null)} />
       </div>
