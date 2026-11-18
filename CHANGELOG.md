@@ -16,6 +16,12 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 
 ---
 
+## 2026-11-18 · Sign-in logo: English name and HOTEL in white · @abdulsalahuddin94-dev
+- **What:** In `src/assets/marsa-dhahab-logo-on-dark.png`, "MARSA DHAHAB" and "HOTEL" are now white; «مرسى ذهب» stays `#E48B20`, and the thin rules beside HOTEL stay orange.
+- **Why:** Abdul: the English text wasn't visible on the photo.
+- **Decisions:** None.
+- **PR:** #18
+
 ## 2026-11-18 · Sign-in logo without card, orange wordmark · @abdulsalahuddin94-dev
 - **What:** `/login` logo sits directly on the photo (white card removed) using a new variant `src/assets/marsa-dhahab-logo-on-dark.png` whose wordmark («مرسى ذهب», MARSA DHAHAB, HOTEL) is `#E48B20`; the emblem keeps its colours. Soft navy drop shadow for legibility. The "Heritage Hotel · فندق تراثي" line is removed. The unused navy-wordmark file was dropped.
 - **Why:** Abdul's comment on the sign-in screenshot: remove the white background, make the text #E48B20 so it shows, remove the tagline.
