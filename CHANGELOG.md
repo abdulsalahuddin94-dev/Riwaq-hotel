@@ -20,7 +20,7 @@ Use `@<login>` of the person who asked for the change, even when Claude wrote th
 - **What:** `/login` logo sits directly on the photo (white card removed) using a new variant `src/assets/marsa-dhahab-logo-on-dark.png` whose wordmark («مرسى ذهب», MARSA DHAHAB, HOTEL) is `#E48B20`; the emblem keeps its colours. Soft navy drop shadow for legibility. The "Heritage Hotel · فندق تراثي" line is removed. The unused navy-wordmark file was dropped.
 - **Why:** Abdul's comment on the sign-in screenshot: remove the white background, make the text #E48B20 so it shows, remove the tagline.
 - **Decisions:** None.
-- **PR:** #PRNUM
+- **PR:** #17
 
 ## 2026-11-18 · Full Marsa Dhahab logo on the desktop sign-in · @abdulsalahuddin94-dev
 - **What:** `/login` now shows Eman's full logo (`src/assets/marsa-dhahab-logo.png`: emblem, «مرسى ذهب», MARSA DHAHAB, HOTEL) on a white card over the photo, in place of the typed hotel lockup. The small emblem above "Nice to see you" is removed so the brand shows once. Files: `mobile-pages.tsx` (`DesktopLoginPage`), `styles.css` (`.login-logo-card`).
