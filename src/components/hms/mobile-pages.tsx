@@ -18,6 +18,7 @@ import {
 import { setLang, useMobileT } from "@/lib/mobile-i18n";
 import { cn } from "@/lib/utils";
 import { EmptyState } from "./demo-states";
+import marsaLogo from "@/assets/marsa-dhahab-logo.png";
 import { HotelBadge, HotelMark, PoweredByRiwaq } from "./hotel-mark";
 import { EmptyArt, Picto, RoleArt, RoomArt, RoomPhoto, StaffAvatar, categoryIcon, photos } from "./illustrations";
 import { useMobileAlerts } from "./mobile-alerts";
@@ -434,10 +435,9 @@ export function DesktopLoginPage() {
       <section className="login-visual" aria-hidden="true">
         <img src={photos.courtyardDusk} alt="" className="login-scene" />
         <div className="login-visual-copy">
-          <strong className="hotel-lockup">
-            <span lang="ar">{property.nameAr}</span>
-            <span>{property.name}</span>
-          </strong>
+          <div className="login-logo-card">
+            <img src={marsaLogo} alt="" width={900} height={664} />
+          </div>
           <em>Heritage Hotel · <span lang="ar">فندق تراثي</span></em>
         </div>
       </section>
@@ -450,7 +450,6 @@ export function DesktopLoginPage() {
             void navigate({ to: "/app/board" });
           }}
         >
-          <HotelMark className="login-mark" />
           <h1>Nice to see you</h1>
           <p>Sign in to run today's house at {property.name}.</p>
           <label>Email<input type="email" placeholder="name@property.example" defaultValue="hessa@property.example" /></label>

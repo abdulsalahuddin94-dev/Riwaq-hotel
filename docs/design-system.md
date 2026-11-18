@@ -32,6 +32,7 @@ The desktop app (`/app/*`, `/login`, room drawer) uses @EmG38's design system fr
 - **Icons:** Google Material Symbols Rounded (Google Fonts). `src/components/hms/msym.tsx` draws each ligature inside an `<svg>` and keeps the old lucide export names, so desktop files switch by import only. Filled variant for active nav and solid status icons. The staff app still uses lucide.
 - **Sidebar:** navy → sky gradient with soft orange/sand glows; centred hotel emblem (`marsa-dhahab-emblem.png`, 84×58, contained) and name; each link is a 16px-radius card with a 40px icon tile (orange tile + white-glass card when active).
 - **Shape:** cards 16–20px radius, soft navy-tinted shadows, pill buttons (`--btn-radius: 999px`).
+- **Sign-in (`/login`):** full logo `marsa-dhahab-logo.png` on a white `.login-logo-card` over the photo (navy wordmark needs a light ground).
 - **Room drawer:** no checklist; a "Supervisor check" box shows the state the supervisor confirmed on their phone (`.supervisor-check`).
 
 ## 1. Principles
