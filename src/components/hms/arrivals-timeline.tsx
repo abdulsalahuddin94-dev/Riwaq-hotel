@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, Clock, Crown, Timer } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock, Crown, Timer } from "./msym";
 import { fmtTime } from "@/lib/demo-data";
 import { demoNow, type HmsState } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";

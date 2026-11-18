@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   Wrench,
   Zap,
-} from "lucide-react";
+} from "./msym";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { fmtTime, statusMeta } from "@/lib/demo-data";

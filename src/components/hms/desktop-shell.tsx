@@ -18,7 +18,7 @@ import {
   Users,
   Wrench,
   X,
-} from "lucide-react";
+} from "./msym";
 import { toast } from "sonner";
 import { HotelMark } from "./hotel-mark";
 import { Button } from "@/components/ui/button";
@@ -180,7 +180,7 @@ export function DesktopShell({ title, eyebrow, children }: { title: string; eyeb
                     className={cn("sidebar-link", isActive && "sidebar-link-active")}
                     title={collapsed ? item.label : undefined}
                   >
-                    <Icon aria-hidden="true" />
+                    <span className="sidebar-link-icon"><Icon aria-hidden="true" filled={isActive} /></span>
                     {!collapsed ? <span>{item.label}</span> : null}
                     {item.to === "/app/escalations" && escalationCount ? <b className="nav-count">{escalationCount}</b> : null}
                   </Link>

@@ -73,13 +73,13 @@ Example reply (Egyptian Arabic, the way Claude would answer @EmG38 or Abdul):
 - **If changed:** removing pictures hurts low-literacy staff; using pictures without words breaks accessibility.
 - **Where:** `src/components/hms/illustrations.tsx`, `room-hero.tsx`, mobile pages.
 
-## PD-05 · Hotel brand first: «دار المجلس · Dar Al Majlis», "Powered by RIWAQ SYSTEMS" small
-- **Decided:** 2026-11-12. By @abdulsalahuddin94-dev. **Owner sign-off.**
-- **What:** Staff app and desktop (sign-in, sidebar, tab titles, exports) lead with the Dar Al Majlis hotel mark (khatam star + dallah, palm green and brass). Riwaq appears only as a small "Powered by RIWAQ SYSTEMS" credit (`PoweredByRiwaq`). The hotel is fictional; no real hotel's name or brand is used.
-- **Why:** Hotel staff should feel they are using their hotel's tool (white-label is how hotel software is sold). A hotel website is planned with the same brand. Real hotel brands cannot be used.
-- **Basis:** White-label practice in hospitality software; decision log rows of 2026-11-10 (fictional property) and 2026-11-12 (own hotel mark; hotel is the front brand, PRs #10 and #11).
+## PD-05 · Hotel brand first: «مرسى ذهب · Marsa Dhahab», "Powered by RIWAQ SYSTEMS" small
+- **Decided:** 2026-11-12, hotel renamed 2026-11-18 (supersedes the Dar Al Majlis version, see "Superseded"). By @abdulsalahuddin94-dev. **Owner sign-off.**
+- **What:** Staff app and desktop (sign-in, sidebar, tab titles, exports) lead with the Marsa Dhahab hotel mark (dhow under a setting sun on Gulf water, orange and navy; interim drawing until @EmG38's emblem PNG is added). Riwaq appears only as a small "Powered by RIWAQ SYSTEMS" credit (`PoweredByRiwaq`). The hotel is fictional; no real hotel's name or brand is used.
+- **Why:** Hotel staff should feel they are using their hotel's tool (white-label is how hotel software is sold). The owner chose Eman's hotel brand so both projects share one design system.
+- **Basis:** White-label practice in hospitality software; decision log rows of 2026-11-12 (PRs #10, #11) and 2026-11-18.
 - **If changed:** the product looks like a vendor demo, not the hotel's own app; using a real hotel's name is a legal risk.
-- **Where:** `src/components/hms/hotel-mark.tsx` (`HotelMark`, `HotelBadge`, `PoweredByRiwaq`), `desktop-shell.tsx`.
+- **Where:** `src/components/hms/hotel-mark.tsx` (`HotelMark`, `HotelBadge`, `PoweredByRiwaq`), `property` in `src/lib/demo-data.ts`, `desktop-shell.tsx`, route titles.
 
 ## PD-06 · Front-end demo only: no backend, mock data in localStorage
 - **Decided:** 2026-11-10. By @abdulsalahuddin94-dev. **Owner sign-off.**
@@ -116,4 +116,14 @@ Example reply (Egyptian Arabic, the way Claude would answer @EmG38 or Abdul):
 When a choice was argued for (research, owner discussion, a standard) and a later person could reasonably "simplify" it away, add a `PD-xx` entry here with What, Why, Basis, If changed and Where, and a row in `docs/decision-log.md`. Use the next free number; never reuse one.
 
 ## Superseded
-None yet.
+### PD-05 (2026-11-12 version) · Dar Al Majlis «دار المجلس»
+Superseded 2026-11-18 by @abdulsalahuddin94-dev (renamed to Marsa Dhahab to share @EmG38's design system). The old text:
+
+> ## PD-05 · Hotel brand first: «دار المجلس · Dar Al Majlis», "Powered by RIWAQ SYSTEMS" small
+> - **Decided:** 2026-11-12. By @abdulsalahuddin94-dev. **Owner sign-off.**
+> - **What:** Staff app and desktop (sign-in, sidebar, tab titles, exports) lead with the Dar Al Majlis hotel mark (khatam star + dallah, palm green and brass). Riwaq appears only as a small "Powered by RIWAQ SYSTEMS" credit (`PoweredByRiwaq`). The hotel is fictional; no real hotel's name or brand is used.
+> - **Why:** Hotel staff should feel they are using their hotel's tool (white-label is how hotel software is sold). A hotel website is planned with the same brand. Real hotel brands cannot be used.
+> - **Basis:** White-label practice in hospitality software; decision log rows of 2026-11-10 (fictional property) and 2026-11-12 (own hotel mark; hotel is the front brand, PRs #10 and #11).
+> - **If changed:** the product looks like a vendor demo, not the hotel's own app; using a real hotel's name is a legal risk.
+> - **Where:** `src/components/hms/hotel-mark.tsx` (`HotelMark`, `HotelBadge`, `PoweredByRiwaq`), `desktop-shell.tsx`.
+

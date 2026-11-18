@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { AlertTriangle, CheckCircle2, Download, Plus, Printer, Search, Trash2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Download, Plus, Printer, Search, Trash2 } from "./msym";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";

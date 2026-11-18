@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { AlertTriangle, Camera, CheckCircle2, Circle, CircleSlash, ClipboardCheck, LogIn, LogOut, RotateCcw, ShieldCheck, UserRoundCog, Wrench, XCircle, Zap } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ClipboardCheck, Clock, LogIn, LogOut, RotateCcw, ShieldCheck, UserRoundCog, Wrench, XCircle, Zap } from "./msym";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { fmtDuration, fmtTime, hkLabel, inspectionPoints, zoneLabel, type Zone } from "@/lib/demo-data";
+import { fmtDuration, fmtTime, hkLabel, inspectionPoints } from "@/lib/demo-data";
 import {
   activeMinutes,
   actorFor,
   anomalyLabel,
-  checklistFor,
-  checklistProgress,
   displayStatus,
   hms,
   isReady,
@@ -47,8 +45,6 @@ function RoomDrawerBody({ number }: { number: string }) {
   const status = displayStatus(room, s.settings);
   const ready = isReady(s, room);
   const reasons = notReadyReasons(s, room);
-  const progress = checklistProgress(s, room);
-  const list = checklistFor(s, room);
   const events = roomEvents(s, number).slice().reverse();
   const inspection = lastInspection(room);
   const minutes = activeMinutes(s, room);
@@ -56,7 +52,6 @@ function RoomDrawerBody({ number }: { number: string }) {
   const attendants = s.staff.filter((p) => p.role === "ATTENDANT");
   const isManager = persona === "Manager" || persona === "Admin";
   const isFrontDesk = persona === "Front Desk" || persona === "Manager";
-  const zones = Array.from(new Set(list.map((it) => it.zone))) as Zone[];
 
   return (
     <div className="drawer-body">
@@ -71,17 +66,17 @@ function RoomDrawerBody({ number }: { number: string }) {
         </div>
       </div>
 
+      <SupervisorCheck inspection={inspection} by={inspection ? staffName(s, inspection.by) : ""} hk={hkLabel[room.hk]} />
+
       <HeritageNotice room={room} compact />
 
       <dl className="fact-grid">
         <div><dt>Occupancy</dt><dd>{room.occupancy === "OCCUPIED" ? `Occupied${room.guest ? ` · ${room.guest}` : ""}` : "Vacant"}</dd></div>
         <div><dt>Housekeeping</dt><dd>{hkLabel[room.hk]}{room.pauseReason ? ` · ${room.pauseReason}` : ""}</dd></div>
         <div><dt>Attendant</dt><dd>{room.attendant ? staffName(s, room.attendant) : "Unassigned"}</dd></div>
-        <div><dt>Checklist</dt><dd>{progress.done}/{progress.total}{progress.skipped ? ` · ${progress.skipped} skipped` : ""}</dd></div>
         <div><dt>Started</dt><dd>{fmtTime(room.startedAt)}</dd></div>
         <div><dt>Finished</dt><dd>{fmtTime(room.completedAt)}</dd></div>
         <div><dt>Active time</dt><dd>{minutes === undefined ? "—" : `${fmtDuration(minutes)} (std ${stdMinutes(room)} min)`}</dd></div>
-        <div><dt>Inspection</dt><dd>{inspection ? `${inspection.result === "PASSED" ? "Passed" : "Failed"} · ${inspection.score}% · ${staffName(s, inspection.by)}` : "—"}</dd></div>
         {room.arrival ? <div><dt>Arrival</dt><dd>{room.arrival.guest} · {room.arrival.eta}</dd></div> : null}
         {room.note ? <div><dt>Note</dt><dd>{room.note}</dd></div> : null}
       </dl>
@@ -159,40 +154,11 @@ function RoomDrawerBody({ number }: { number: string }) {
         ) : null}
       </div>
 
-      <Tabs defaultValue="checklist" className="drawer-tabs">
+      <Tabs defaultValue="inspection" className="drawer-tabs">
         <TabsList>
-          <TabsTrigger value="checklist">Checklist</TabsTrigger>
+          <TabsTrigger value="inspection">Supervisor checks ({room.inspections.length})</TabsTrigger>
           <TabsTrigger value="timeline">Timeline ({events.length})</TabsTrigger>
-          <TabsTrigger value="inspection">Inspection</TabsTrigger>
         </TabsList>
-
-        <TabsContent value="checklist">
-          {!room.startedAt && !Object.keys(room.items).length ? <p className="muted-line">Not started yet — items will appear here with who ticked them and when.</p> : null}
-          {zones.map((zone) => (
-            <section className="check-zone" key={zone}>
-              <h4>{zoneLabel[zone]}</h4>
-              {list
-                .filter((it) => it.zone === zone)
-                .map((it) => {
-                  const res = room.items[it.id];
-                  return (
-                    <div className={cn("check-row", res?.status === "DONE" && "check-done", res?.status === "SKIPPED" && "check-skipped")} key={it.id}>
-                      {res?.status === "DONE" ? <CheckCircle2 aria-label="Done" /> : res?.status === "SKIPPED" ? <CircleSlash aria-label="Skipped" /> : <Circle aria-label="Not done" />}
-                      <span className="check-label">
-                        {it.label}
-                        {it.mandatory ? <em>Required</em> : null}
-                        {res?.skipReason ? <small> · Skipped: {res.skipReason}</small> : null}
-                      </span>
-                      <span className="check-meta">
-                        {res?.photo ? <Camera aria-label="Photo attached" /> : it.photo ? <Camera className="photo-missing" aria-label="Photo required" /> : null}
-                        {res ? `${staffName(s, res.by).split(" ")[0]} · ${fmtTime(res.at)}` : "—"}
-                      </span>
-                    </div>
-                  );
-                })}
-            </section>
-          ))}
-        </TabsContent>
 
         <TabsContent value="timeline">
           <ol className="audit-list">
@@ -237,6 +203,38 @@ function RoomDrawerBody({ number }: { number: string }) {
 
       <QueueGuestDialog open={queueOpen} onOpenChange={setQueueOpen} defaultRoom={number} />
       <WorkOrderDialog id={woOpen} onClose={() => setWoOpen(null)} />
+    </div>
+  );
+}
+
+/**
+ * The room state as the supervisor confirmed it on their phone. Reception sees this, not the attendant's
+ * checklist (owner, 2026-11-18): the supervisor's inspection is the confirmation that matters at the desk.
+ */
+function SupervisorCheck({ inspection, by, hk }: { inspection: ReturnType<typeof lastInspection>; by: string; hk: string }) {
+  if (!inspection) {
+    return (
+      <div className="supervisor-check supervisor-check-pending">
+        <Clock aria-hidden="true" />
+        <div>
+          <span className="supervisor-check-eyebrow">Supervisor check</span>
+          <strong>Not confirmed yet</strong>
+          <p>No supervisor has inspected this room today. Housekeeping status: {hk}.</p>
+        </div>
+      </div>
+    );
+  }
+  const passed = inspection.result === "PASSED";
+  return (
+    <div className={cn("supervisor-check", passed ? "supervisor-check-pass" : "supervisor-check-fail")}>
+      {passed ? <ShieldCheck aria-hidden="true" /> : <XCircle aria-hidden="true" />}
+      <div>
+        <span className="supervisor-check-eyebrow">Supervisor check</span>
+        <strong>{passed ? "Inspected · passed" : "Inspected · failed, sent back"} · {inspection.score}%</strong>
+        <p>
+          {inspection.remote ? "Remotely approved by" : "Confirmed from phone by"} {by} at {fmtTime(inspection.at)}
+        </p>
+      </div>
     </div>
   );
 }

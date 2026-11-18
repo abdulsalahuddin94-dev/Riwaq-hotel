@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { Download, Eye, FileSpreadsheet, ImageDown, Printer, Table2 } from "lucide-react";
+import { Download, Eye, FileSpreadsheet, ImageDown, Printer, Table2 } from "./msym";
 import {
   Area,
   AreaChart,

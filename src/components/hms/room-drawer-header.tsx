@@ -1,4 +1,4 @@
-import { BedDouble, BedSingle, Building2, Crown, Landmark, Trees } from "lucide-react";
+import { BedDouble, BedSingle, Building2, Crown, Landmark, Trees } from "./msym";
 import { SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { taskLabel, wingLabel, type Room, type RoomStatus, type RoomType } from "@/lib/demo-data";
 import { RoomBadges } from "./room-components";
