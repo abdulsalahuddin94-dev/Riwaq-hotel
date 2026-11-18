@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Clock3, Delete, Languages, LogOut, ShieldCheck, Smartphone, Wifi, Wrench, Zap } from "lucide-react";
+import { AlertTriangle, Bell, ChevronLeft, ChevronRight, CircleUserRound, Clock3, Delete, Languages, LogOut, ShieldCheck, Wifi, Wrench, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { personaStaff, property, type Room } from "@/lib/demo-data";
@@ -465,7 +465,6 @@ export function DesktopLoginPage() {
             Remember me on this computer
           </label>
           <Button type="submit" variant="hmsPrimary" size="hmsLg" className="login-submit">Sign in</Button>
-          <Link to="/m/login" className="login-alt"><Smartphone aria-hidden="true" /> On shift with a phone? <b>Open the staff app</b></Link>
         </form>
         <footer className="login-foot">
           <span>© 2026 {property.name} Hotel</span>

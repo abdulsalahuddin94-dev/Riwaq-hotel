@@ -1,17 +1,17 @@
-import { useCallback, useEffect } from "react";
-import { Monitor, Smartphone } from "lucide-react";
+import { useEffect } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { initialSignInPath, signInPath } from "@/lib/entry-flow";
+import { initialSignInPath } from "@/lib/entry-flow";
 
+/**
+ * App-level chrome. The floating desktop/mobile switch was removed on
+ * 2026-11-18: staff use Eman's mobile app, so the dashboard no longer offers
+ * a way into the /m routes. Narrow screens opening /login still land on the
+ * staff sign-in.
+ */
 export function DemoChrome({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const navigate = useNavigate();
   const isMobileView = pathname.startsWith("/m");
-
-  const toggle = useCallback(() => {
-    void navigate({ to: signInPath(!isMobileView) });
-  }, [isMobileView, navigate]);
 
   useEffect(() => {
     if (pathname === "/login" && initialSignInPath(window.innerWidth) === "/m/login") {
@@ -23,34 +23,9 @@ export function DemoChrome({ children }: { children: React.ReactNode }) {
     try {
       window.localStorage.setItem("riwaq-demo-view", isMobileView ? "mobile" : "desktop");
     } catch {
-      // Demo view preference is optional.
+      // View preference is optional.
     }
   }, [isMobileView]);
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "m") {
-        event.preventDefault();
-        toggle();
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [toggle]);
-
-  return (
-    <>
-      {children}
-      <Button
-        className="demo-fab group"
-        size="icon"
-        type="button"
-        aria-label={isMobileView ? "Switch to Desktop view" : "Switch to Mobile view"}
-        onClick={toggle}
-      >
-        {isMobileView ? <Monitor aria-hidden="true" /> : <Smartphone aria-hidden="true" />}
-        <span className="demo-fab-tooltip">{isMobileView ? "Switch to Desktop view (Ctrl+M)" : "Switch to Mobile view (Ctrl+M)"}</span>
-      </Button>
-    </>
-  );
+  return <>{children}</>;
 }

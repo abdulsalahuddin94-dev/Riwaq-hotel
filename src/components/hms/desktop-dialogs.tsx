@@ -358,33 +358,3 @@ export function ReportPreviewDialog({ reportKey, onClose }: { reportKey: ReportK
     </Dialog>
   );
 }
-
-/* ───────────── Settings ───────────── */
-
-/**
- * Settings shows the property only. Checklists and inspection rules live in the staff app
- * (EmG38/hotel-hearth-ops has them built in, with no editor), so the dashboard no longer edits them (owner, 2026-11-18).
- */
-export function PropertySettings() {
-  const s = useHms();
-  return (
-    <div className="settings-body">
-      <div className="mini-kpis">
-        {[1, 2, 3, 4, 5].map((f) => (
-          <div key={f}><strong>{s.rooms.filter((r) => r.floor === f).length}</strong><span>{wingLabel(f)}</span></div>
-        ))}
-      </div>
-      <div className="dialog-table">
-        <div className="dt-row dt-head dt-4"><span>Room type</span><span>Rooms</span><span>Credits</span><span>Std. departure / stayover</span></div>
-        {(Object.keys(roomTypeInfo) as (keyof typeof roomTypeInfo)[]).map((t) => (
-          <div className="dt-row dt-4" key={t}>
-            <span><b>{t}</b></span>
-            <span>{s.rooms.filter((r) => r.type === t).length}</span>
-            <span>{roomTypeInfo[t].credits}</span>
-            <span>{roomTypeInfo[t].departure} / {roomTypeInfo[t].stayover} min</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}

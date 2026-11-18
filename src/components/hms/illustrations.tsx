@@ -4,7 +4,7 @@
  * juss/brass/mud tokens in DESIGN.md. Pictures always sit next to a text label:
  * they help people who read little, they never carry status on their own.
  */
-import { useId } from "react";
+import { useId, useState } from "react";
 import {
   AirVent,
   Archive,
@@ -414,8 +414,27 @@ const uniform: Record<Staff["role"], string> = {
 };
 
 /** Illustrated staff portrait. Always shown with the person's name next to it. */
-export function StaffAvatar({ staff, className }: { staff: Pick<Staff, "id" | "role" | "initials"> & { photo?: string | undefined }; className?: string }) {
-  if (staff.photo) return <img src={staff.photo} alt="" className={cn("staff-avatar staff-avatar-photo", className)} width={64} height={64} />;
+/** First names read as male when picking a sample portrait (matches Eman's staff app, plus our seed team). */
+const MALE_FIRST_NAMES = new Set(["khalid", "ahmed", "omar", "ali", "raj", "jose", "mohammed", "salem", "ramesh", "tariq", "sultan", "faisal", "mansoor", "yousef"]);
+
+/** Sample human portrait for a staff member without an uploaded photo, chosen the same way as Eman's app. */
+export function portraitFor(p: { id: string; name?: string }) {
+  const first = (p.name?.split(" ")[0] ?? "").toLowerCase();
+  const set = MALE_FIRST_NAMES.has(first) ? "men" : "women";
+  let h = 0;
+  for (const c of p.id) h = (h * 31 + c.charCodeAt(0)) % 90;
+  return `https://randomuser.me/api/portraits/${set}/${h + 1}.jpg`;
+}
+
+export function StaffAvatar({ staff, className }: { staff: Pick<Staff, "id" | "role" | "initials"> & { name?: string; photo?: string | undefined }; className?: string }) {
+  const [failed, setFailed] = useState<string | null>(null);
+  const src = staff.photo || (staff.name ? portraitFor(staff) : undefined);
+  if (src && failed !== src)
+    return <img src={src} alt="" className={cn("staff-avatar staff-avatar-photo", className)} width={64} height={64} loading="lazy" referrerPolicy="no-referrer" onError={() => setFailed(src)} />;
+  return <IllustratedAvatar staff={staff} className={className} />;
+}
+
+function IllustratedAvatar({ staff, className }: { staff: Pick<Staff, "id" | "role" | "initials">; className?: string | undefined }) {
   const l = looks[staff.id] ?? { look: "short" as Look, skin: 2, tint: C.juss };
   const skin = skins[l.skin] ?? skins[2];
   const hair = "#2A1D16";

@@ -1,3 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { SettingsPage } from "@/components/hms/desktop-pages";
-export const Route = createFileRoute("/app/settings")({ head: () => ({ meta: [{ title: "Settings · Marsa Dhahab" }, { name: "description", content: "Configure property, checklists, rules, and users." }, { property: "og:title", content: "Settings · Marsa Dhahab" }, { property: "og:description", content: "Configure property, checklists, rules, and users." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: SettingsPage });
+import { createFileRoute, redirect } from "@tanstack/react-router";
+
+/** Settings was removed (2026-11-18): it held read-only property info, and wing room counts now sit on the Live Board. Old links land there. */
+export const Route = createFileRoute("/app/settings")({
+  beforeLoad: () => {
+    throw redirect({ to: "/app/board" });
+  },
+});

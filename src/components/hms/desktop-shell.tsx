@@ -13,7 +13,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   RotateCcw,
-  Settings,
   UserRoundCog,
   Users,
   X,
@@ -34,6 +33,7 @@ import { hms, needsFollowUp, useHms } from "@/lib/hms-store";
 import { cn } from "@/lib/utils";
 import { RoomDrawer } from "./room-drawer";
 import { NotificationBell } from "./notifications";
+import { StaffAvatar } from "./illustrations";
 import { SidebarMandala } from "./mandala";
 
 const navItems = [
@@ -44,7 +44,6 @@ const navItems = [
   { to: "/app/team", label: "Team Progress", icon: Users },
   { to: "/app/reports", label: "Reports", icon: BarChart3 },
   { to: "/app/users", label: "Users", icon: UserRoundCog },
-  { to: "/app/settings", label: "Settings", icon: Settings },
 ] as const;
 
 type NavPath = (typeof navItems)[number]["to"];
@@ -52,7 +51,7 @@ type NavPath = (typeof navItems)[number]["to"];
 const personaNav: Record<"Manager" | "Front Desk" | "Admin", NavPath[]> = {
   Manager: navItems.map((n) => n.to),
   "Front Desk": ["/app/front-desk", "/app/reservations"],
-  Admin: ["/app/users", "/app/settings", "/app/board", "/app/reports"],
+  Admin: ["/app/users", "/app/board", "/app/reports"],
 };
 
 export const personaHome: Record<"Manager" | "Front Desk" | "Admin", NavPath> = {
@@ -82,7 +81,7 @@ function UserMenu({ persona, onSwitch, collapsed }: { persona: keyof typeof pers
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
        <Button variant="hmsGhost" className="user-menu-trigger" aria-label="Account menu" title={collapsed ? `${me?.name ?? persona} · Switch account` : undefined}>
-        <span className="user-avatar" aria-hidden="true">{me?.photo ? <img src={me.photo} alt="" className="user-avatar-img" /> : me?.initials}</span>
+        <span className="user-avatar" aria-hidden="true">{me ? <StaffAvatar staff={me} className="user-avatar-img" /> : null}</span>
         {!collapsed ? <span className="user-menu-text">
           <strong>{me?.name}</strong>
           <small>{personaAccount[persona].title}</small>
@@ -97,7 +96,7 @@ function UserMenu({ persona, onSwitch, collapsed }: { persona: keyof typeof pers
           const p = person(k);
           return (
             <DropdownMenuItem key={key} onSelect={() => onSwitch(key)} className={cn(key === persona && "user-menu-current")}>
-              <span className="user-avatar user-avatar-sm" aria-hidden="true">{p?.photo ? <img src={p.photo} alt="" className="user-avatar-img" /> : p?.initials}</span>
+              <span className="user-avatar user-avatar-sm" aria-hidden="true">{p ? <StaffAvatar staff={p} className="user-avatar-img" /> : null}</span>
               <span className="user-menu-text">
                 <strong>{p?.name}</strong>
                 <small>{personaAccount[k].title}</small>

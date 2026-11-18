@@ -15,7 +15,6 @@ flowchart TD
     team["/app/team · Team Progress"]
     reports["/app/reports · Reports"]
     users["/app/users · Users"]
-    set["/app/settings · Settings"]
   end
   login["/login · Desktop sign-in"]
   subgraph m["Phone app /m/* (MobileShell)"]
@@ -39,7 +38,7 @@ flowchart TD
 Entry starts at sign-in. Switching desktop/phone also opens the destination sign-in screen. These are simulated client-side preview flows, not real authentication; existing workspace links remain directly accessible.
 
 ## Desktop console (`/app/*`)
-Sidebar order as in `desktop-shell.tsx`. Personas: Manager (all pages), Front Desk (Front Desk + Reservations only), Admin (Users, Settings, Live Board, Reports); switch in the account menu. Every page has the **notification bell** (top right of the page heading; on the Live Board it sits on the welcome photo). Since 2026-11-18 the dashboard only covers what the staff app (EmG38/hotel-hearth-ops) also covers, so maintenance is not on the dashboard.
+Sidebar order as in `desktop-shell.tsx`. Personas: Manager (all pages), Front Desk (Front Desk + Reservations only), Admin (Users, Live Board, Reports); switch in the account menu. Every page has the **notification bell** (top right of the page heading; on the Live Board it sits on the welcome photo). Since 2026-11-18 the dashboard only covers what the staff app (EmG38/hotel-hearth-ops) also covers, so maintenance is not on the dashboard.
 
 | URL | Screen (component) | Main persona | What it answers / does |
 |---|---|---|---|
@@ -50,8 +49,7 @@ Sidebar order as in `desktop-shell.tsx`. Personas: Manager (all pages), Front De
 | `/app/team` | Team Progress (`TeamPage`) | Manager | Each attendant's rooms done / in progress, supervisors by wing, accountability signals. Opens **Staff day** dialog. |
 | `/app/reports` | Reports (`ReportsPage` → `ReportsContent`) | Manager | Charts (turn times, pass rate, re-cleans), PNG/CSV export, report preview. |
 | `/app/users` | Users (`users-page.tsx`) | Manager / Admin | Create, edit, deactivate/reactivate team members; photo (upload or camera, optional; shown on staff sign-in), job, shift, wings (supervisors), phone or work email. Staff-app jobs get a one-time 4-digit PIN (reset any time); dashboard jobs get a one-time temporary password. |
-| `/app/settings` | Settings (`SettingsPage`) | Admin | Property only: wings with room counts, room types with credits and standard times. Checklist and inspection-rule editors removed 2026-11-18 (the staff app has them built in). |
-| `/app/escalations`, `/app/work-orders` | redirect to `/app/board` | — | Removed 2026-11-18 (bell replaces Escalations; maintenance isn't in the staff app). Kept as redirects so old links don't break. |
+| `/app/escalations`, `/app/work-orders`, `/app/settings` | redirect to `/app/board` | — | Removed 2026-11-18 (bell replaces Escalations; maintenance isn't in the staff app; Settings held only read-only property info, wing room counts are on the Live Board). Kept as redirects so old links don't break. |
 | `/login` | Desktop sign-in (`DesktopLoginPage`) | All | Split screen: courtyard illustration + night form (no real auth). |
 
 **Overlays on desktop** (not URLs): Notification bell popover (`notifications.tsx`), Room drawer (`room-drawer.tsx`: readiness, supervisor-confirmed state, facts, actions, Supervisor checks + Timeline tabs; no attendant checklist since 2026-11-18; Front Desk sees only readiness, supervisor check, occupancy/arrival/open requests and Check in / Check out / Send request), Send request, Queue guest, Staff day, Event log, Report preview (`desktop-dialogs.tsx`), Create/Edit user + one-time PIN (`users-page.tsx`), New reservation + Follow-up call (`reservations-page.tsx`), Account menu (account switch, restore sample data).

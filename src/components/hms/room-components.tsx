@@ -174,7 +174,7 @@ export function FloorBoard({
           return (
             <section className="floor-block" key={floor} aria-label={wingLabel(floor)}>
               <header className="floor-head">
-                <strong>{wingLabel(floor)}</strong>
+                <strong>{wingLabel(floor)} <small className="floor-total">{floorRooms.length} rooms</small></strong>
                 <span className="floor-counts">
                   {floorSummary.map((group) => {
                     const count = floorRooms.filter((room) => group.statuses.includes(displayStatus(room, s.settings))).length;
